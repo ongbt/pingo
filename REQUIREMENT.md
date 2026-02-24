@@ -61,6 +61,13 @@ townhalls, and casual group play.
 - Triggering the game start from the lobby.
 - Manual "End Game" override at any point.
 
+### Session Management
+
+- **Lobby Timeout**: If the host does not start the game within a configurable
+  time period, the lobby is automatically cancelled.
+- **Game Timeout**: If the game does not start (or remains inactive) within a
+  configurable time period, the game session is automatically terminated.
+
 ### Access & Authentication
 
 - **Guest Play**: Players can join and play games using a room code without

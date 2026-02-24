@@ -72,8 +72,11 @@
 - [ ] Dark mode consistency audit.
 - [ ] Replace `<img>` with `next/image` for performance.
 
-## Phase 5: Trigger (Deployment)
+## Phase 6: Session Robustness 🏗️
 
-- [ ] Deploy to Cloudflare Pages / Vercel.
-- [ ] Link to cloud Supabase project.
-- [ ] Finalize Maintenance Log in `gemini.md`.
+- [ ] Lobby Timeout: Auto-cancel lobbies if not started within configurable
+      time.
+- [ ] Game Timeout: Auto-terminate games if they remain inactive/not started.
+- [ ] Configurable thresholds in Game Settings.
+
+## Phase 7: Deployment
