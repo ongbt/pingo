@@ -18,17 +18,18 @@ export default function LobbyPage() {
 
   useEffect(() => {
     if (!id) return;
+    const gameId = String(id);
 
     const fetchData = async () => {
       // Fetch Game
       const { data: gameData, error: gameError } = await supabase
         .from('game')
         .select('*')
-        .eq('id', id)
+        .eq('id', gameId)
         .single();
 
       if (gameData?.status === 'active') {
-        router.push(`/game/${id}`);
+        router.push(`/game/${gameId}`);
         return;
       }
 
@@ -42,7 +43,7 @@ export default function LobbyPage() {
       const { data: playersData, error: playersError } = await supabase
         .from('player')
         .select('*')
-        .eq('game_id', id);
+        .eq('game_id', gameId);
 
       if (playersError) {
         console.error('Error fetching players:', playersError);
@@ -53,9 +54,10 @@ export default function LobbyPage() {
       setPlayers(pList);
 
       // Detect current player
-      const savedPlayerId = localStorage.getItem(`pingo_player_${id}`);
+      const savedPlayerId = localStorage.getItem(`pingo_player_${gameId}`);
       if (savedPlayerId) {
-        setCurrentPlayer(pList.find(p => p.id === savedPlayerId) || null);
+        const found = pList.find(p => p.id === savedPlayerId) || null;
+        setCurrentPlayer(found);
       } else {
         // Fallback: if there's only one player and we just created it, it might be us
         // Real logic should use session/cookies
@@ -69,18 +71,18 @@ export default function LobbyPage() {
 
     // 1. Subscription for Game Status changes (to auto-start for all players)
     const gameChannel = supabase
-      .channel(`game_status:${id}`)
+      .channel(`game_status:${gameId}`)
       .on(
         'postgres_changes',
         {
           event: 'UPDATE',
           schema: 'public',
           table: 'game',
-          filter: `id=eq.${id}`,
+          filter: `id=eq.${gameId}`,
         },
         (payload) => {
           if (payload.new.status === 'active') {
-            router.push(`/game/${id}`);
+            router.push(`/game/${gameId}`);
           }
         }
       )
@@ -88,14 +90,14 @@ export default function LobbyPage() {
 
     // 2. Real-time subscription for players
     const channel = supabase
-      .channel(`lobby_players:${id}`)
+      .channel(`lobby_players:${gameId}`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'player',
-          filter: `game_id=eq.${id}`,
+          filter: `game_id=eq.${gameId}`,
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
@@ -118,12 +120,25 @@ export default function LobbyPage() {
   }, [id, router]);
 
   const handleStartGame = async () => {
-    if (!currentPlayer?.is_host) return;
+    if (!currentPlayer?.is_host) {
+      console.error('Cannot start game: current player is not host', { currentPlayer });
+      return;
+    }
     
-    await supabase
+    const gameId = String(id);
+    const { error } = await supabase
       .from('game')
       .update({ status: 'active' })
-      .eq('id', id);
+      .eq('id', gameId);
+
+    if (error) {
+      console.error('Error starting game:', error);
+      alert('Failed to start game. Check console for details.');
+      return;
+    }
+
+    // Navigate host immediately (other players navigate via realtime subscription)
+    router.push(`/game/${gameId}`);
   };
 
   if (loading) {

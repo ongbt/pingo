@@ -32,6 +32,7 @@ export interface Player {
   nickname: string
   is_host: boolean
   board_state: Json
+  board_layout: number[] | null
   score: number
   is_winner: boolean
   created_at: string
