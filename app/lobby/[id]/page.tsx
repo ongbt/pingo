@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Share2, ArrowLeft, Send, Smile, UserPlus, Star } from 'lucide-react';
+import { Copy, ArrowLeft, Send, Smile, UserPlus, Star, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LobbyPage() {
@@ -15,6 +15,7 @@ export default function LobbyPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  const [showCopied, setShowCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -174,6 +175,18 @@ export default function LobbyPage() {
     router.push(`/game/${gameId}`);
   };
 
+  const handleCopy = async () => {
+    if (!game) return;
+    
+    try {
+      await navigator.clipboard.writeText(game.room_code);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
@@ -220,13 +233,48 @@ export default function LobbyPage() {
             Game ID: #{id?.toString().slice(0, 5)}
           </p>
         </div>
-        <button className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <Share2 size={20} />
+        <button 
+          onClick={handleCopy}
+          className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary active:scale-95 transition-transform"
+        >
+          <Copy size={20} />
         </button>
       </div>
 
       {/* Scrollable Content Area */}
       <div className="flex-1 overflow-y-auto pb-40 relative z-10">
+        {/* Sharing Card */}
+        <div className="p-4 pt-6">
+          <motion.div 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 shadow-xl shadow-slate-200/50 dark:shadow-none border border-white/50 dark:border-slate-800 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Copy size={80} className="rotate-12" />
+            </div>
+            
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Invite Friends</p>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-6 uppercase tracking-tight">Ready to Play?</h2>
+            
+            <div className="flex items-stretch gap-3">
+              <div 
+                onClick={handleCopy}
+                className="flex-1 bg-slate-50 dark:bg-background-dark rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 p-4 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors"
+              >
+                <span className="text-4xl font-black tracking-[0.3em] text-primary">{game?.room_code}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase mt-1">Click to Copy Code</span>
+              </div>
+              <button 
+                onClick={handleCopy}
+                className="aspect-square bg-primary text-white rounded-2xl flex items-center justify-center px-4 shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+              >
+                <Copy size={24} />
+              </button>
+            </div>
+          </motion.div>
+        </div>
+
         {/* Player Status Summary */}
         <div className="p-4 grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1 rounded-2xl p-4 border border-white/50 bg-white/40 dark:bg-slate-900/50 backdrop-blur-sm">
@@ -319,6 +367,21 @@ export default function LobbyPage() {
           </div>
         </div>
       </div>
+
+      {/* Copy Notification */}
+      <AnimatePresence>
+        {showCopied && (
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3 rounded-full font-black uppercase text-xs tracking-widest shadow-2xl flex items-center gap-2"
+          >
+            <CheckCircle className="text-green-500" size={16} />
+            Room Code Copied!
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Sticky Bottom Section */}
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 space-y-4 pb-8 z-20">

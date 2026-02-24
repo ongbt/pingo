@@ -42,19 +42,21 @@
       players + game status.
 - [x] Game Board page: fetches game with sheet, realtime subscription for player
       updates.
-- [x] Room code generation (random 5-char alphanumeric).
-- [x] Player session via `localStorage` (`pingo_player_{gameId}`).
+- [x] Room code generation (random 6-char alphanumeric, curated set).
+- [x] Uniqueness check loop for room codes.
+- [x] Player session via `localStorage`.
+- [x] Nickname persistence (localStorage + Supabase profiles).
 
 ### Layer 4: Core Logic — Remaining 🏗️
 
 - [x] Bingo win detection (horizontal, vertical, diagonal line check).
 - [x] Cell marking + score sync to Supabase.
 - [x] Host "Start Game" — transitions lobby to active.
-- [ ] Board randomization — shuffle sheet items per player (currently all
-      players see same order).
-- [ ] Nickname prompt for host on Create page (currently hardcoded as "Host").
-- [ ] Bingo claim broadcast — notify all players when someone wins.
-- [ ] End game logic — handle "First Bingo Wins" vs "Casual" mode from config.
+- [x] Board randomization — shuffle sheet items per player.
+- [x] Host nickname prompt on Create/Join pages.
+- [x] Bingo claim broadcast — visual/audio victory celebration (Confetti +
+      Modal).
+- [x] End game logic — handle "First Bingo Wins" status updates.
 - [ ] Anti-cheat mode — multi-player verification for marked squares.
 
 ## Phase 4: Stylize (UI/UX) 🏗️
@@ -62,8 +64,10 @@
 - [x] Landing page styled with Pingo brand identity.
 - [x] Create page — sheet carousel, custom sheet form, settings toggles.
 - [x] Join page — keypad room code entry, nickname step with animations.
-- [x] Lobby page — player grid, mock chat, host controls.
-- [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications.
+- [x] Lobby page — player grid, mock chat, host controls, copy-to-clipboard
+      card.
+- [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications,
+      confetti.
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.
 - [ ] Replace `<img>` with `next/image` for performance.

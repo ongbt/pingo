@@ -63,19 +63,41 @@ largely complete:
 - **Game Board**: Fetches game with sheet, realtime subscription for player
   board_state updates, bingo win detection (H/V/D), toast notifications.
 
+### Major Milestones
+
+- **Game Completion Engine**:
+  - Implemented `handleBingo` with realtime status synchronization.
+  - Added visual victory celebration using `canvas-confetti` and `framer-motion`
+    modals.
+  - Implemented board randomization via `board_layout` (unique shuffle per
+    player).
+- **Alphanumeric Room System**:
+  - Successfully transitioned from 5-digit numeric to **6-character
+    alphanumeric** codes.
+  - Implemented curated character set (excluding ambiguous characters like 0/O,
+    1/I).
+  - Built a uniqueness check loop to prevent code collisions in high-traffic
+    scenarios.
+- **Persistence & Profiles**:
+  - Created `profile` table in Supabase to store persistent user data
+    (nickname).
+  - Implemented `localStorage` syncing for guest and authenticated players.
+  - Added nickname loading/auto-filling in create and join flows.
+- **Improved Join Flow**:
+  - Replaced numeric keypad with high-fidelity alphanumeric input.
+  - Added "Copy to Clipboard" utility card in the lobby for easy sharing.
+
 ### Current State
 
 - **Phase 1 (Blueprint)**: ✅ Complete
-- **Phase 2 (Link)**: ✅ Complete — local Supabase running, DB connected
-- **Phase 3 (Architect)**: 🏗️ ~80% — pages + wiring done, missing board
-  randomization, host nickname, bingo broadcast, end game logic
-- **Phase 4 (Stylize)**: 🏗️ ~85% — all pages styled, needs responsive + dark
-  mode audit
+- **Phase 2 (Link)**: ✅ Complete
+- **Phase 3 (Architect)**: ✅ Complete — Core MVP logic and data sync finished.
+- **Phase 4 (Stylize)**: 🏗️ ~95% — All pages styled and interactive. Refinement
+  phase active.
 
 ### Next Steps
 
-1. Add host nickname prompt on Create page (currently hardcoded as "Host").
-2. Board randomization — shuffle sheet items per player.
-3. Bingo claim broadcast — notify all players when someone wins.
-4. End game logic — "First Bingo Wins" vs "Casual" mode.
-5. Replace `<img>` with `next/image` for dicebear avatars.
+1. Anti-cheat mode (verification logic).
+2. Replace `<img>` with `next/image` for dicebear avatars.
+3. Responsive layout audit for desktop.
+4. Final dark mode contrast review.

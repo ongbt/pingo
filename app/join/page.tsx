@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,29 @@ export default function JoinGamePage() {
   const [isJoining, setIsJoining] = useState(false);
   const [nickname, setNickname] = useState('');
   const [step, setStep] = useState<'code' | 'nickname'>('code');
+
+  useEffect(() => {
+    // 1. Check localStorage
+    const saved = localStorage.getItem('pingo_nickname');
+    if (saved) setNickname(saved);
+
+    // 2. Check Profile if logged in
+    const checkProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profile')
+          .select('nickname')
+          .eq('id', user.id)
+          .single();
+        if (profile?.nickname) {
+          setNickname(profile.nickname);
+          localStorage.setItem('pingo_nickname', profile.nickname);
+        }
+      }
+    };
+    checkProfile();
+  }, []);
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
@@ -78,6 +101,15 @@ export default function JoinGamePage() {
         .single();
 
       if (playerError) throw playerError;
+
+      // Sync Nickname
+      localStorage.setItem('pingo_nickname', nickname.trim());
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from('profile')
+          .upsert({ id: user.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
+      }
 
       localStorage.setItem(`pingo_player_${game.id}`, newPlayer.id);
       router.push(`/lobby/${game.id}`);

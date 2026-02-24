@@ -14,6 +14,7 @@ export default function CreateGamePage() {
   const [selectedSheetId, setSelectedSheetId] = useState<string | null>(null);
   const [customTitle, setCustomTitle] = useState('');
   const [customItems, setCustomItems] = useState('');
+  const [nickname, setNickname] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [settings, setSettings] = useState({
     firstBingoWins: true,
@@ -34,10 +35,33 @@ export default function CreateGamePage() {
       }
     };
     fetchSheets();
+
+    // Load Nickname
+    const saved = localStorage.getItem('pingo_nickname');
+    if (saved) setNickname(saved);
+
+    const checkProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profile')
+          .select('nickname')
+          .eq('id', user.id)
+          .single();
+        if (profile?.nickname) {
+          setNickname(profile.nickname);
+          localStorage.setItem('pingo_nickname', profile.nickname);
+        }
+      }
+    };
+    checkProfile();
   }, []);
 
   const handleCreate = async () => {
-    if (isCreating) return;
+    if (isCreating || !nickname.trim()) {
+      if (!nickname.trim()) alert('Please enter a nickname.');
+      return;
+    }
     setIsCreating(true);
 
     try {
@@ -109,13 +133,22 @@ export default function CreateGamePage() {
         .from('player')
         .insert({
           game_id: game.id,
-          nickname: 'Host', // Should be dynamic
+          nickname: nickname.trim(),
           is_host: true,
         })
         .select()
         .single();
 
       if (playerError) throw playerError;
+
+      // Sync Nickname
+      localStorage.setItem('pingo_nickname', nickname.trim());
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from('profile')
+          .upsert({ id: user.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
+      }
 
       // Save to localStorage for lobby/game session
       localStorage.setItem(`pingo_player_${game.id}`, hostPlayer.id);
@@ -268,6 +301,20 @@ export default function CreateGamePage() {
               description="Only people with the unique room code can join." 
               enabled={settings.privateLobby}
               onToggle={() => setSettings(s => ({ ...s, privateLobby: !s.privateLobby }))}
+            />
+          </div>
+        </section>
+
+        {/* Section: Your Nickname */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-black px-1 uppercase tracking-tight">Your Nickname</h2>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 p-5 shadow-xl shadow-slate-200/50 dark:shadow-none">
+            <input 
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className="w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-background-dark border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-bold" 
+              placeholder="e.g. BingoHost" 
+              type="text"
             />
           </div>
         </section>
