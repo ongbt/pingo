@@ -29,15 +29,21 @@ export default function JoinGamePage() {
     setIsJoining(true);
 
     try {
-      const roomCode = code.join('').toUpperCase();
+      const roomCode = code.join('');
       const { data: game, error: gameError } = await supabase
         .from('game')
-        .select('*')
+        .select('id, status')
         .eq('room_code', roomCode)
         .single();
 
       if (gameError || !game) {
         alert('Game not found. Please check the code.');
+        setIsJoining(false);
+        return;
+      }
+
+      if (game.status !== 'lobby') {
+        alert('This game has already started or ended.');
         setIsJoining(false);
         return;
       }
@@ -56,14 +62,15 @@ export default function JoinGamePage() {
     setIsJoining(true);
 
     try {
-      const roomCode = code.join('').toUpperCase();
+      const roomCode = code.join('');
       const { data: game } = await supabase
         .from('game')
-        .select('id')
+        .select('id, status')
         .eq('room_code', roomCode)
         .single();
 
-      if (!game) throw new Error('Game missing');
+      if (!game) throw new Error('Game not found');
+      if (game.status !== 'lobby') throw new Error('Game already started');
 
       const { data: newPlayer, error: playerError } = await supabase
         .from('player')
@@ -77,13 +84,12 @@ export default function JoinGamePage() {
 
       if (playerError) throw playerError;
 
-      // Save to localStorage
       localStorage.setItem(`pingo_player_${game.id}`, newPlayer.id);
-
       router.push(`/lobby/${game.id}`);
     } catch (error) {
       console.error('Error joining game:', error);
-      alert('Failed to join. Nickname might be taken or game full.');
+      const message = error instanceof Error ? error.message : 'Failed to join game.';
+      alert(message);
     } finally {
       setIsJoining(false);
     }

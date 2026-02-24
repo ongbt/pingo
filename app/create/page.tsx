@@ -67,7 +67,7 @@ export default function CreateGamePage() {
       }
 
       // Create Game
-      const roomCode = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const roomCode = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
       const { data: game, error: gameError } = await supabase
         .from('game')
         .insert({
