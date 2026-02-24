@@ -78,7 +78,10 @@ export default function GamePage() {
             if (newState.length > oldState.length) {
               const newIndex = newState.find(idx => !oldState.includes(idx));
               if (newIndex !== undefined && gameRef.current) {
-                setLastMarked({ nickname: updated.nickname, item: gameRef.current.sheet.items[newIndex] });
+                // Resolve item name through the updated player's own board_layout
+                const layout = updated.board_layout as number[] | null;
+                const itemIndex = layout ? layout[newIndex] : newIndex;
+                setLastMarked({ nickname: updated.nickname, item: gameRef.current.sheet.items[itemIndex] });
                 setTimeout(() => setLastMarked(null), 3000);
               }
             }
@@ -92,7 +95,18 @@ export default function GamePage() {
     };
   }, [id]);
 
-  // 2. Bingo Logic
+  // 2. Build board items from player's shuffled layout
+  const boardItems = useMemo(() => {
+    if (!game) return [];
+    const layout = currentPlayer?.board_layout as number[] | null;
+    if (layout && layout.length === 25) {
+      return layout.map(idx => game.sheet.items[idx]);
+    }
+    // Fallback: use sheet items in original order
+    return game.sheet.items.slice(0, 25);
+  }, [game, currentPlayer]);
+
+  // 3. Bingo Logic
   const hasBingo = useMemo(() => {
     const wins = [
       [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24], // Horizontal
@@ -226,7 +240,7 @@ export default function GamePage() {
       {/* Bingo Grid */}
       <main className="px-4 pb-32 max-w-md mx-auto w-full flex-grow">
         <div className="grid grid-cols-5 gap-2.5 sm:gap-4 p-4 rounded-[2.5rem] bg-white/30 dark:bg-white/5 backdrop-blur-sm shadow-inner border border-white/20">
-          {game.sheet.items.slice(0, 25).map((item, i) => {
+          {boardItems.map((item, i) => {
             const isCenter = i === 12;
             const isMarked = marked.includes(i) || isCenter;
 

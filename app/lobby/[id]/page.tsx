@@ -126,6 +126,39 @@ export default function LobbyPage() {
     }
     
     const gameId = String(id);
+
+    // Generate a unique shuffled board layout for each player
+    // Fisher-Yates shuffle of indices [0..24], keeping index 12 (center/free space) fixed
+    const generateShuffledLayout = (): number[] => {
+      const indices = Array.from({ length: 25 }, (_, i) => i);
+      // Shuffle all positions except the center (index 12)
+      for (let i = indices.length - 1; i > 0; i--) {
+        if (i === 12) continue;
+        let j: number;
+        do {
+          j = Math.floor(Math.random() * (i + 1));
+        } while (j === 12);
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+      return indices;
+    };
+
+    // Assign a shuffled layout to each player
+    for (const player of players) {
+      const layout = generateShuffledLayout();
+      const { error: layoutError } = await supabase
+        .from('player')
+        .update({ board_layout: layout })
+        .eq('id', player.id);
+
+      if (layoutError) {
+        console.error(`Error assigning layout to player ${player.nickname}:`, layoutError);
+        alert('Failed to assign board layouts. Check console for details.');
+        return;
+      }
+    }
+
+    // Set game to active
     const { error } = await supabase
       .from('game')
       .update({ status: 'active' })
