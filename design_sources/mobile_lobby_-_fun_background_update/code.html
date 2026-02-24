@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f47b25",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221710",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .no-shadow {
+            box-shadow: none !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-[#E8F4F8] dark:bg-background-dark"><div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<!-- Radial Sunburst -->
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#ffffff_0%,_#d0eaf5_100%)] opacity-80"></div>
+<!-- Background Logo/Text Overlay -->
+<div class="absolute inset-0 flex items-center justify-center opacity-10">
+<h2 class="text-8xl font-black text-primary rotate-[-10deg] select-none">BINGO</h2>
+</div>
+<!-- Bingo Balls at bottom -->
+<div class="absolute bottom-0 left-0 right-0 h-1/2 flex items-end justify-center">
+<img alt="Bingo balls background" class="w-full object-contain object-bottom opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHv9x_gR86qD2q_z3_PAnY7hV7v8K_q7Bv9S8w"/>
+</div>
+<!-- Decorative Stars -->
+<span class="material-symbols-outlined absolute top-[15%] left-[10%] text-yellow-400 opacity-40 text-xl">star</span>
+<span class="material-symbols-outlined absolute top-[5%] right-[20%] text-yellow-400 opacity-40 text-2xl">star</span>
+<span class="material-symbols-outlined absolute top-[25%] right-[5%] text-primary opacity-30 text-lg">star</span>
+<span class="material-symbols-outlined absolute middle-y left-[5%] text-blue-400 opacity-30 text-xl">star</span>
+<span class="material-symbols-outlined absolute bottom-[20%] right-[15%] text-yellow-400 opacity-40 text-2xl">star</span>
+<span class="material-symbols-outlined absolute bottom-[35%] left-[15%] text-primary opacity-30 text-lg">star</span>
+</div>
+<!-- Top App Bar -->
+<div class="flex items-center p-4 border-b border-slate-200 dark:border-slate-800 relative">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex-1 px-4 text-center">
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Corporate Catchphrases</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Lobby ID: #29402</p>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[24px]">share</span>
+</button>
+</div>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto pb-32 relative bg-transparent">
+<!-- Player Status Summary -->
+<div class="p-4 grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1 rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Players Joined</p>
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-bold">8/12</p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Game Mode</p>
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-bold">Classic</p>
+</div>
+</div>
+<!-- Player Grid -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider mb-3">Lobby Participants</h3>
+<div class="grid grid-cols-4 gap-4">
+<!-- Host -->
+<div class="flex flex-col items-center gap-2">
+<div class="relative">
+<div class="size-14 rounded-full border-2 border-primary p-0.5">
+<img alt="Host avatar" class="w-full h-full rounded-full object-cover" data-alt="Cartoon avatar of the game host" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFWGEwr--q_sme5vMa98ZXRKRlyIfSRGHCmukfXUjZ8-bVcptCCWxI20DcaB1E-dkLrDw1qulp3aEURlJHTiNZ9npXXmOcQRPL5oaFCdS7J2irJRgxd0bR4xPGGGO7aiBoGOoOcrH_zFE-K34yzBLvpaJUBVLsyqhXrNtHp6JngZ1Rso1UNyd2m97qNIjFUWF-61NuAqi8FUzKRHvIadw5ibjr4lsRYEjZXDFXOJwi3L9ZUoFAeO9W9pCvodgk3dQgSBbtIjXlrxw"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase">Host</div>
+</div>
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">Alex M.</span>
+</div>
+<!-- Other Players -->
+<div class="flex flex-col items-center gap-2">
+<img alt="Player avatar" class="size-14 rounded-full border border-slate-200 dark:border-slate-800" data-alt="Cartoon avatar of a joined player" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRL7OSV2_W5itKwv0l9BDI-BoUjYrqMaxi81w75-XTNTgmH_NjbvgqK5i3uCWMKGwL1KMbxxPoiSOv4f8qW-Cd1QiabQkjP-0pwab-OriWgXngvtQ8KrgFlgdgvODc1pE_n6xQUyMKlFw87ygun_DXmmCBVv9DwQDraZ-Is7gUmp1BBxdIgDrQrF2sdT-coumgVT1iTJxI2gegH3CtEdxsw-i27WYjb7RZvbjbtsQEPofFuqA6oXRhV4YGHySEM--iMKb7y4tmBdA"/>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-400">Sarah K.</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<img alt="Player avatar" class="size-14 rounded-full border border-slate-200 dark:border-slate-800" data-alt="Cartoon avatar of a joined player" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw8glZxv8p5o_9_bV21vt9SM-MxlbIOoaB42A4w7V7B2q3D1Z5nSvKmjiQR1qV5k4txDAPobQuv5ok1psGfw4A0sWbZAzS0rHKyId1pKBQyAVNuCHR1yOatiZvSmKUsyllTIAoTAwhaRh49xkRplJMWsIbtVPM4i_5cRVHP9RDz--VpOhK5eQ1qHFC2OJlb6xivMRMrXqw4rcQt7DczM3hc0xUEKh5S8mOKlThXcLKS8NDcPQ9bbHZ468FXz-6Fp2KhfTADR2ZU3I"/>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-400">Jordan</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<img alt="Player avatar" class="size-14 rounded-full border border-slate-200 dark:border-slate-800" data-alt="Cartoon avatar of a joined player" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE7UQ48QtbLqDgnhS4qVZ9AL6fwD0Fff4Gj9Nwq7faV1ytEN1Qd4a2R4GI_H2ScEldz2Xb01DpqAg8qoy_M6vIiAhGHT1XwcruKG9RPe0rth02Kfi8vmaq-2-XuOyp-sd8XdhmmORNsG8KJQD9is1eZW8GpyOz5djS55WSWLIdgBrIXrx-TkLGUckY5E2y2CUhHYMVeZegAcwkzavPD20Wfei4pQznwpLx9xdMc_ehpZhsQ4vWVsq2POTAuRYUEGDChA_Wt2dkrnk"/>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-400">Riley P.</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<img alt="Player avatar" class="size-14 rounded-full border border-slate-200 dark:border-slate-800" data-alt="Cartoon avatar of a joined player" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5kKnlyQr1NCiNnYdFJOV9bSJ0Dpvwllv92qCpNGNnKZXraZb6_8MEngGlM0Zag2n8tFQcZc-SJcRfRt_cya1CzHtBZmMxl974x5RVX3wDvt8RWQk-kWTNROqOtrkzJv2EToi-T8WXzLCRcFn_uvESXg-sdtZxaua3d8PZOY9ptmYEJ25BrO9YYnbLQdbRm6gvl1_UD6NhWE5NN9dLGR96H5Sa-Sd46f8XIsNY5_815CUIpqhjkqsHB1pfr49mfdR3_9A93ASEr0s"/>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-400">Chris L.</span>
+</div>
+<div class="flex flex-col items-center gap-2 opacity-50">
+<div class="size-14 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person_add</span>
+</div>
+<span class="text-xs font-medium text-slate-400">Waiting...</span>
+</div>
+</div>
+</div>
+<!-- Sheet Preview -->
+<!-- Lobby Chat -->
+<div class="p-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider mb-3">Lobby Chat</h3>
+<div class="space-y-3">
+<div class="flex gap-3">
+<img alt="Sarah" class="size-8 rounded-full" data-alt="Mini avatar for chat message" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1AvTsrxBRngz39UWzzozZ3JTJzSy1lKajzYhJZixAkKvWmjv5j8inzoeq7GEO20pkP8isbXBddVbE4MKcEH7JyqoP8w42W3ZRJgxuZnBvjKhg5v3YTIsbmNP5rXqrBx9jDLEw5R94_uaqrs3NKFb7T3rIliT99tix3jjDvYNXOsaRevOF9NUEpXIV8OzVpRvzS-nfGG-FniA2vMV8TBEO28YKbJAlMUV29OoB17cBIrgtKKbS18aQvW1YiUa0DlF_3uDT3e9KrgE"/>
+<div class="flex-1 bg-slate-100 dark:bg-slate-800 p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl">
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Sarah K.</p>
+<p class="text-sm text-slate-800 dark:text-slate-200">Is everyone ready to lose today? 😈</p>
+</div>
+</div>
+<div class="flex gap-3 justify-end">
+<div class="max-w-[80%] bg-primary/10 border border-primary/20 p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl">
+<p class="text-sm text-slate-800 dark:text-slate-200">Just waiting for two more people!</p>
+</div>
+<img alt="Me" class="size-8 rounded-full border-2 border-primary" data-alt="Mini avatar for host message" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA7b0xbyKj4oEQ6yU33x453aDRRiR4me-Sqaxfotsc8wvhqFJLIJ2s3ywlHIshRXVqBYKVAq6U4ZaNhyd12OTkyx0Kc0huSzfuUrrOua85rQcW5WogsFQx_8UMgora8WRTP9OyDtcM37fsPFi3BOf_HLv85UFCaiYsJ97A0K42CTmk_ueV6B9MrgIvzMLiU-V3Up3ikBbiO2FgbrJ1kiGY3J37Tct5g9cjbV1y22OmK603DlTcwtWNWwVhn7R3rH9KzwPNqcoFgbU"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Section -->
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 space-y-4">
+<!-- Chat Input -->
+<div class="flex gap-2">
+<div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-2 flex items-center">
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full p-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-500" placeholder="Type a message..." type="text"/>
+<button class="text-slate-400">
+<span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+</button>
+</div>
+<button class="size-10 bg-primary text-white rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+<!-- Start Game Button (Host Only View) -->
+<button class="w-full bg-primary text-white py-4 rounded-full font-bold text-lg tracking-wide active:scale-95 transition-transform no-shadow">
+                START GAME
+            </button>
+</div>
+</div>
+</body></html>
