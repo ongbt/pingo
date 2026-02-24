@@ -66,8 +66,31 @@ export default function CreateGamePage() {
         finalSheetId = newSheet.id;
       }
 
-      // Create Game
-      const roomCode = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
+      // Create Game with collision check
+      let roomCode = '';
+      let isUnique = false;
+      let attempts = 0;
+
+      while (!isUnique && attempts < 5) {
+        roomCode = Array.from({ length: 6 }, () => {
+          const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude ambiguous chars like 0, O, 1, I, S, 5
+          return chars.charAt(Math.floor(Math.random() * chars.length));
+        }).join('');
+
+        const { data: existingGame } = await supabase
+          .from('game')
+          .select('id')
+          .eq('room_code', roomCode)
+          .maybeSingle();
+
+        if (!existingGame) {
+          isUnique = true;
+        }
+        attempts++;
+      }
+
+      if (!isUnique) throw new Error('Could not generate a unique room code. Please try again.');
+
       const { data: game, error: gameError } = await supabase
         .from('game')
         .insert({

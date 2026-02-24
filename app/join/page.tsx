@@ -9,27 +9,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function JoinGamePage() {
   const router = useRouter();
-  const [code, setCode] = useState<string[]>([]);
+  const [code, setCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
   const [nickname, setNickname] = useState('');
   const [step, setStep] = useState<'code' | 'nickname'>('code');
 
-  const handleNumberClick = (num: string) => {
-    if (code.length < 5) {
-      setCode([...code, num]);
-    }
-  };
-
-  const handleDelete = () => {
-    setCode(code.slice(0, -1));
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    setCode(val);
   };
 
   const handleJoin = async () => {
-    if (code.length < 5 || isJoining) return;
+    if (code.length < 6 || isJoining) return;
     setIsJoining(true);
 
     try {
-      const roomCode = code.join('');
+      const roomCode = code;
       const { data: game, error: gameError } = await supabase
         .from('game')
         .select('id, status')
@@ -62,7 +57,7 @@ export default function JoinGamePage() {
     setIsJoining(true);
 
     try {
-      const roomCode = code.join('');
+      const roomCode = code;
       const { data: game } = await supabase
         .from('game')
         .select('id, status')
@@ -131,59 +126,34 @@ export default function JoinGamePage() {
               <div className="text-center mb-10">
                 <h2 className="text-4xl font-black tracking-tighter mb-4 uppercase">Enter Room Code</h2>
                 <p className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">
-                  Ask the host for the 5-digit code to join the bingo lobby.
+                  Ask the host for the 6-character code to join the bingo lobby.
                 </p>
               </div>
 
-              {/* Code Input Display */}
-              <div className="flex justify-between w-full gap-3 mb-12">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div 
-                    key={i}
-                    className={cn(
-                      "size-14 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 shadow-sm",
-                      code[i] 
-                        ? "bg-primary/5 border-primary ring-4 ring-primary/10" 
-                        : "bg-white/50 dark:bg-white/5 border-transparent"
-                    )}
-                  >
-                    {code[i] ? (
-                      <span className="text-2xl font-black text-primary uppercase">{code[i]}</span>
-                    ) : (
-                      <div className="size-2 rounded-full bg-slate-200 dark:bg-slate-700" />
-                    )}
-                  </div>
-                ))}
+              {/* Alphanumeric Input Display */}
+              <div className="w-full mb-12 relative group">
+                <input 
+                  autoFocus
+                  value={code}
+                  onChange={handleCodeChange}
+                  maxLength={6}
+                  placeholder="CODE"
+                  className="w-full bg-white/50 dark:bg-white/5 border-2 border-transparent focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all rounded-[2rem] py-8 text-center text-5xl font-black tracking-[0.4em] uppercase placeholder:text-slate-200 dark:placeholder:text-slate-800 text-primary"
+                />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-50 group-focus-within:opacity-100 transition-opacity">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className={cn("h-1 w-4 rounded-full", i < code.length ? "bg-primary" : "bg-slate-300 dark:bg-slate-700")} />
+                  ))}
+                </div>
               </div>
 
               <button 
                 onClick={handleJoin}
-                disabled={code.length < 5 || isJoining}
+                disabled={code.length < 6 || isJoining}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-black py-5 rounded-2xl text-lg tracking-[0.2em] shadow-xl shadow-primary/30 active:scale-[0.98] transition-all mb-auto uppercase disabled:opacity-50"
               >
                 {isJoining ? 'Checking...' : 'Enter Lobby'}
               </button>
-
-              {/* Numeric/Alpha Keypad (Mocking for now, could be real buttons) */}
-              <div className="w-full grid grid-cols-3 gap-4 mt-8">
-                {['1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '0'].map((n) => (
-                  n === ' ' ? <div key="blank" /> : (
-                    <button 
-                      key={n}
-                      onClick={() => handleNumberClick(n)}
-                      className="h-16 flex items-center justify-center rounded-2xl bg-white/40 dark:bg-white/5 text-2xl font-black hover:bg-white dark:hover:bg-white/10 active:scale-95 transition-all shadow-sm border border-white/50"
-                    >
-                      {n}
-                    </button>
-                  )
-                ))}
-                <button 
-                  onClick={handleDelete}
-                  className="h-16 flex items-center justify-center rounded-2xl bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 transition-all border border-primary/20"
-                >
-                  <Delete size={28} />
-                </button>
-              </div>
             </motion.div>
           ) : (
             <motion.div 
