@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, Rocket, CheckCircle, PlusCircle, Settings, Shield, Lock, EyeOff, Star } from 'lucide-react';
+import { ArrowLeft, Rocket, CheckCircle, PlusCircle, Settings, Shield, Lock, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function CreateGamePage() {

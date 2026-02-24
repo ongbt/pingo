@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck } from 'lucide-react';
+import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function GamePage() {
@@ -17,6 +17,12 @@ export default function GamePage() {
   const [marked, setMarked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
+
+  // Refs to avoid stale closures in subscription callbacks
+  const gameRef = useRef(game);
+  const playersRef = useRef(players);
+  useEffect(() => { gameRef.current = game; }, [game]);
+  useEffect(() => { playersRef.current = players; }, [players]);
 
   // 1. Fetch Game and Players
   useEffect(() => {
@@ -33,7 +39,7 @@ export default function GamePage() {
         console.error('Error fetching game:', gameError);
         return;
       }
-      setGame(gameData as any);
+      setGame(gameData as unknown as (Game & { sheet: Sheet }));
 
       const { data: playersData } = await supabase
         .from('player')
@@ -65,14 +71,14 @@ export default function GamePage() {
           const updated = payload.new as Player;
           setPlayers(prev => prev.map(p => p.id === updated.id ? updated : p));
           
-          // Show "activity" toast
+          // Show "activity" toast — use refs for current values
           if (updated.board_state) {
-            const oldState = players.find(p => p.id === updated.id)?.board_state as number[] || [];
+            const oldState = playersRef.current.find(p => p.id === updated.id)?.board_state as number[] || [];
             const newState = updated.board_state as number[];
             if (newState.length > oldState.length) {
               const newIndex = newState.find(idx => !oldState.includes(idx));
-              if (newIndex !== undefined && game) {
-                setLastMarked({ nickname: updated.nickname, item: game.sheet.items[newIndex] });
+              if (newIndex !== undefined && gameRef.current) {
+                setLastMarked({ nickname: updated.nickname, item: gameRef.current.sheet.items[newIndex] });
                 setTimeout(() => setLastMarked(null), 3000);
               }
             }
