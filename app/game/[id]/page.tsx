@@ -7,6 +7,7 @@ import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 export default function GamePage() {
   const { id } = useParams();
@@ -90,8 +91,16 @@ export default function GamePage() {
       })
       .subscribe();
 
+    const gameChannel = supabase.channel(`game_status:${id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game', filter: `id=eq.${id}` }, (payload) => {
+        const updated = payload.new as Game;
+        setGame(prev => prev ? { ...prev, ...updated } : null);
+      })
+      .subscribe();
+
     return () => {
       supabase.removeChannel(playerChannel);
+      supabase.removeChannel(gameChannel);
     };
   }, [id]);
 
@@ -119,7 +128,7 @@ export default function GamePage() {
   }, [marked]);
 
   const toggleMark = async (index: number) => {
-    if (index === 12 || !currentPlayer) return; // Can't toggle free space
+    if (index === 12 || !currentPlayer || !game || game.status === 'finished') return;
 
     const newMarked = marked.includes(index)
       ? marked.filter(i => i !== index)
@@ -133,6 +142,55 @@ export default function GamePage() {
       .update({ board_state: newMarked, score: newMarked.length })
       .eq('id', currentPlayer.id);
   };
+
+  const handleBingo = async () => {
+    if (!hasBingo || !currentPlayer || !game) return;
+
+    // 1. Update player status
+    await supabase
+      .from('player')
+      .update({ is_winner: true })
+      .eq('id', currentPlayer.id);
+
+    // 2. Update game status
+    await supabase
+      .from('game')
+      .update({ status: 'finished' })
+      .eq('id', game.id);
+  };
+
+  const winner = useMemo(() => {
+    return players.find(p => p.is_winner) || null;
+  }, [players]);
+
+  useEffect(() => {
+    if (winner) {
+      // Periodic confetti for the winner
+      const end = Date.now() + 3 * 1000;
+      const colors = ['#f47b25', '#fcd34d', '#22c55e', '#3b82f6'];
+
+      (function frame() {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+  }, [winner]);
 
   const sortedPlayers = useMemo(() => {
     return [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
@@ -291,7 +349,9 @@ export default function GamePage() {
             className="fixed bottom-0 left-0 right-0 p-8 flex flex-col items-center z-50 bg-gradient-to-t from-white dark:from-background-dark via-white/80 dark:via-background-dark/80 to-transparent"
           >
             <button 
-              className="group relative w-full max-w-xs h-20 bg-primary rounded-[2rem] shadow-2xl shadow-primary/40 flex items-center justify-center gap-4 text-white border-b-8 border-[#c65e18] active:border-b-0 active:translate-y-2 transition-all transform hover:scale-105"
+              onClick={handleBingo}
+              disabled={game.status === 'finished'}
+              className="group relative w-full max-w-xs h-20 bg-primary rounded-[2rem] shadow-2xl shadow-primary/40 flex items-center justify-center gap-4 text-white border-b-8 border-[#c65e18] active:border-b-0 active:translate-y-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none"
             >
               <PartyPopper size={36} className="animate-bounce" />
               <span className="text-4xl font-black tracking-tighter uppercase italic drop-shadow-md">Bingo!</span>
@@ -315,6 +375,79 @@ export default function GamePage() {
           <Settings size={24} />
         </button>
       </nav>
+
+      {/* WINNER SCREEN OVERLAY */}
+      <AnimatePresence>
+        {winner && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="relative flex flex-col items-center max-w-sm w-full"
+            >
+              <div className="relative mb-8">
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[-40px] opacity-30"
+                >
+                  <Star fill="#f47b25" size={200} className="w-full h-full text-primary" />
+                </motion.div>
+                <motion.img 
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${winner.nickname}`}
+                  alt={winner.nickname}
+                  className="size-40 rounded-full border-8 border-primary shadow-2xl relative z-10"
+                />
+                <div className="absolute -top-6 -right-6 bg-yellow-400 p-3 rounded-2xl shadow-lg rotate-12 z-20">
+                  <Trophy size={32} className="text-white fill-white" />
+                </div>
+              </div>
+
+              <h2 className="text-white text-5xl font-black uppercase italic tracking-tighter mb-2 drop-shadow-lg">
+                Bingo!
+              </h2>
+              <p className="text-primary text-2xl font-black uppercase tracking-widest mb-8">
+                {winner.nickname} Won!
+              </p>
+
+              <div className="bg-white/10 rounded-3xl p-6 w-full backdrop-blur-md border border-white/20 mb-8">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-slate-400 text-xs font-black uppercase tracking-widest">Board Marks</span>
+                  <span className="text-white font-black text-xl">{winner.score}</span>
+                </div>
+                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(winner.score / 25) * 100}%` }}
+                    className="h-full bg-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3 w-full">
+                <button 
+                  onClick={() => router.push('/')}
+                  className="h-16 bg-primary text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary/30 border-b-4 border-primary-dark active:border-b-0 active:translate-y-1 transition-all"
+                >
+                  Play Again
+                </button>
+                <button 
+                  onClick={() => router.push(`/lobby/${id}`)}
+                  className="h-16 bg-white/10 text-white font-black uppercase tracking-widest rounded-2xl hover:bg-white/20 transition-all border border-white/10"
+                >
+                  Back to Lobby
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Game Info Overlay (Host Only) */}
       {currentPlayer?.is_host && (
