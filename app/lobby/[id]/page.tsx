@@ -7,6 +7,7 @@ import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Copy, ArrowLeft, Send, Smile, UserPlus, Star, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ErrorDialog from '@/app/components/ErrorDialog';
 
 export default function LobbyPage() {
   const { id } = useParams();
@@ -16,6 +17,9 @@ export default function LobbyPage() {
   const [loading, setLoading] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [showCopied, setShowCopied] = useState(false);
+  const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
+
+  const showError = (title: string, message: string) => setDialog({ title, message });
 
   useEffect(() => {
     if (!id) return;
@@ -186,7 +190,7 @@ export default function LobbyPage() {
 
       if (layoutError) {
         console.error(`Error assigning layout to player ${player.nickname}:`, layoutError);
-        alert('Failed to assign board layouts. Check console for details.');
+        showError('Board Layout Error', 'Failed to assign board layouts. Please try again.');
         return;
       }
     }
@@ -199,7 +203,7 @@ export default function LobbyPage() {
 
     if (error) {
       console.error('Error starting game:', error);
-      alert('Failed to start game. Check console for details.');
+      showError('Start Game Failed', 'Failed to start the game. Please try again.');
       return;
     }
 
@@ -229,6 +233,12 @@ export default function LobbyPage() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-[#E8F4F8] dark:bg-background-dark font-display antialiased">
+      <ErrorDialog
+        open={dialog !== null}
+        title={dialog?.title ?? ''}
+        message={dialog?.message ?? ''}
+        onClose={() => setDialog(null)}
+      />
       {/* Background Elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#ffffff_0%,_#d0eaf5_100%)] dark:bg-[radial-gradient(circle_at_50%_40%,_#221710_0%,_#110a06_100%)] opacity-80" />

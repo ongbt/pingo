@@ -108,10 +108,10 @@ export default function Home() {
       {/* Bottom Navigation Bar */}
       <footer className="sticky bottom-0 z-50 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 pb-safe">
         <div className="flex justify-around items-center px-2 py-3">
-          <NavLink icon="house" label="Home" active />
-          <NavLink icon="groups" label="Rooms" />
-          <NavLink icon="grid_view" label="Sheets" />
-          <NavLink icon="account_circle" label="Profile" />
+          <NavLink icon="house" label="Home" href="/" active />
+          <NavLink icon="groups" label="Rooms" href="#" />
+          <NavLink icon="grid_view" label="Sheets" href="/sheets" />
+          <NavLink icon="account_circle" label="Profile" href="#" />
         </div>
       </footer>
     </div>
@@ -155,10 +155,10 @@ function SheetCard({ title, uses, icon, image }: { title: string; uses: string; 
   );
 }
 
-function NavLink({ icon, label, active }: { icon: string; label: string; active?: boolean }) {
+function NavLink({ icon, label, href, active }: { icon: string; label: string; href: string; active?: boolean }) {
   return (
     <Link 
-      href="#" 
+      href={href} 
       className={`flex flex-col items-center gap-1 ${active ? 'text-primary' : 'text-slate-400 hover:text-primary transition-colors'}`}
     >
       <span className={`material-symbols-outlined ${active ? 'fill-1' : ''}`}>{icon}</span>

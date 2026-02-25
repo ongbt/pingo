@@ -114,6 +114,20 @@ largely complete:
   machine and `AnimatePresence` step transitions. Inline error messages replace
   `alert()` dialogs.
 
+### Bug Fixes (cont.)
+
+- **Custom Sheet RLS — SELECT policy**
+  (`20260225111000_allow_custom_sheet_select.sql`):
+  - **Root cause**: The original `"Public read defaults"` policy on the `sheet`
+    table only permitted reading rows where `is_default = true` OR
+    `auth.uid() = creator_id`. Guest-created custom sheets have
+    `is_default = false` AND `creator_id IS NULL`. In SQL, `auth.uid() = NULL`
+    evaluates to **NULL** (not TRUE), so the `.select()` after inserting a
+    custom sheet returned no rows — causing game creation to fail silently.
+  - **Fix**: Dropped the old policy and replaced it with `"Public read sheets"`
+    which adds a third branch: `OR creator_id IS NULL`. This allows guest hosts
+    to read back the sheet record they just created.
+
 ### Next Steps
 
 1. Anti-cheat mode (verification logic).
