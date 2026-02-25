@@ -68,6 +68,28 @@ resolutions for issues encountered during the process.
 
 ---
 
+## 🛑 Blank Page Troubleshooting
+
+If your app is blank after deployment, please check these settings in your
+Cloudflare Pages dashboard:
+
+1. **Build Settings**:
+   - Ensure **Build Command** is set to `npm run build`.
+   - Ensure **Build Output Directory** is set to `dist`.
+   - _If these are still pointing to Next.js paths, the page will be blank
+     or 404._
+
+2. **Environment Variables**:
+   - Ensure your secrets are prefixed with `VITE_` (e.g., `VITE_SUPABASE_URL`).
+   - _Vite ignores variables without the prefix, which will cause Supabase to
+     fail on load._
+
+3. **Routing**:
+   - I have added a `public/_redirects` file to handle SPA routing. Make sure
+     this is pushed to your repository.
+
+---
+
 ## ✅ Final Pre-Flight Checklist
 
 - [x] Push all migrations to Supabase Cloud.
