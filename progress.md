@@ -106,6 +106,14 @@ largely complete:
   player states (`board_state`, `board_layout`, `score`, `is_winner`) so the
   group can start a fresh round.
 
+### UX Improvements
+
+- **Join flow consolidated**: Merged the two-step join flow (code → nickname)
+  into a single screen. Players now enter both the room code and their nickname
+  on one page before hitting a single "Let's Play!" button. Removed `step` state
+  machine and `AnimatePresence` step transitions. Inline error messages replace
+  `alert()` dialogs.
+
 ### Next Steps
 
 1. Anti-cheat mode (verification logic).
