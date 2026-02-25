@@ -159,3 +159,23 @@ largely complete:
   (`20260225110000_player_replica_identity_full.sql`) — without this, Supabase
   Realtime drops DELETE events on channels filtered by non-PK columns like
   `game_id`.
+
+### `next/image` Migration
+
+- Added `remotePatterns` to `next.config.ts` for the three external image hosts:
+  `api.dicebear.com`, `lh3.googleusercontent.com`, `images.unsplash.com`.
+- Replaced every `<img>` tag across:
+  - `app/page.tsx` — Unsplash SheetCard hero image (uses `fill` layout).
+  - `app/lobby/[id]/page.tsx` — decorative bingo-balls background image, player
+    grid avatars, and mock lobby chat avatars.
+  - `app/game/[id]/page.tsx` — mini-leaderboard avatars, winner screen avatar
+    (wrapped `motion.div` around `Image` to preserve Framer Motion animation),
+    and game-over standings avatars.
+- All SVG-based dicebear avatars use `unoptimized` since Next.js cannot optimize
+  SVG images natively.
+- `tsc --noEmit` passes clean — zero TypeScript errors.
+
+### Play Count Display + Create Page Redesign
+
+- **Create page** sheet picker redesigned from carousel to clean selectable list with play counts.
+- **Home page** Popular Sheets now fetches real play_count data via PopularSheets client component.

@@ -73,7 +73,7 @@
       confetti.
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.
-- [ ] Replace `<img>` with `next/image` for performance.
+- [x] Replace `<img>` with `next/image` for performance.
 
 ## Phase 6: Session Robustness 🏗️
 

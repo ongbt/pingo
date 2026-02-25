@@ -12,6 +12,7 @@ export interface Sheet {
   items: string[]
   is_default: boolean
   creator_id: string | null
+  play_count: number
   created_at: string
 }
 

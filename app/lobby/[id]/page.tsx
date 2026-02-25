@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Copy, ArrowLeft, Send, Smile, UserPlus, Star, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/app/components/ErrorDialog';
+import Image from 'next/image';
 
 export default function LobbyPage() {
   const { id } = useParams();
@@ -245,13 +246,16 @@ export default function LobbyPage() {
         <div className="absolute inset-0 flex items-center justify-center opacity-10">
           <h2 className="text-8xl font-black text-primary rotate-[-10deg] select-none">BINGO</h2>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end justify-center">
-          <img 
-            alt="Bingo balls background" 
-            className="w-full object-contain object-bottom opacity-40" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHv9x_gR86qD2q_z3_PAnY7hV7v8K_q7Bv9S8w" 
-          />
-        </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end justify-center relative">
+            <Image 
+              alt="Bingo balls background" 
+              className="object-contain object-bottom opacity-40" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHv9x_gR86qD2q_z3_PAnY7hV7v8K_q7Bv9S8w" 
+              fill
+              sizes="100vw"
+              unoptimized
+            />
+          </div>
         {/* Stars */}
         <Star className="absolute top-[15%] left-[10%] text-yellow-400 opacity-40 w-5 h-5" />
         <Star className="absolute top-[5%] right-[20%] text-yellow-400 opacity-40 w-6 h-6" />
@@ -349,10 +353,13 @@ export default function LobbyPage() {
                       "size-14 rounded-full p-0.5",
                       player.is_host ? "border-2 border-primary" : "border border-slate-200 dark:border-slate-800 bg-white"
                     )}>
-                      <img 
+                      <Image 
                         alt={player.nickname} 
                         className="w-full h-full rounded-full object-cover" 
                         src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${player.nickname}`}
+                        width={56}
+                        height={56}
+                        unoptimized
                       />
                     </div>
                     {player.is_host && (
@@ -386,10 +393,13 @@ export default function LobbyPage() {
           <h3 className="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-widest mb-4">Lobby Chat</h3>
           <div className="space-y-3">
             <div className="flex gap-3">
-              <img 
+              <Image 
                 alt="Sarah" 
                 className="size-8 rounded-full" 
-                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sarah" 
+                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sarah"
+                width={32}
+                height={32}
+                unoptimized
               />
               <div className="flex-1 bg-white/60 dark:bg-slate-800/80 p-3 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl backdrop-blur-sm border border-white/50 shadow-sm">
                 <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1">Sarah K.</p>
@@ -400,10 +410,13 @@ export default function LobbyPage() {
               <div className="max-w-[80%] bg-primary/10 border border-primary/20 p-3 rounded-tl-2xl rounded-bl-2xl rounded-br-2xl shadow-sm">
                 <p className="text-xs text-slate-800 dark:text-slate-200">Just waiting for two more people!</p>
               </div>
-              <img 
+              <Image 
                 alt="Me" 
                 className="size-8 rounded-full border-2 border-primary" 
-                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Me" 
+                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Me"
+                width={32}
+                height={32}
+                unoptimized
               />
             </div>
           </div>

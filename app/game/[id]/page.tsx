@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye, OctagonX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import Image from 'next/image';
 
 export default function GamePage() {
   const { id } = useParams();
@@ -165,6 +166,10 @@ export default function GamePage() {
       .from('game')
       .update({ status: 'finished' })
       .eq('id', game.id);
+
+    // 3. Increment sheet play count — only on a real bingo, not on game creation
+    const { error: rpcError } = await supabase.rpc('increment_sheet_play_count', { p_sheet_id: game.sheet.id });
+    if (rpcError) console.error('[handleBingo] increment_sheet_play_count failed:', rpcError);
   };
 
   const handleEndGame = async () => {
@@ -287,13 +292,16 @@ export default function GamePage() {
             >
               <div className="relative">
                 {i === 0 && <Trophy className="absolute -top-6 left-1/2 -translate-x-1/2 text-primary fill-primary" size={24} />}
-                <img 
+                <Image 
                   alt={p.nickname} 
                   className={cn(
                     "rounded-full object-cover shadow-lg",
                     i === 0 ? "size-16 border-4 border-primary" : "size-12 border-2 border-white dark:border-slate-800"
                   )} 
                   src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${p.nickname}`}
+                  width={i === 0 ? 64 : 48}
+                  height={i === 0 ? 64 : 48}
+                  unoptimized
                 />
                 <div className={cn(
                   "absolute -bottom-1 -right-1 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md",
@@ -461,9 +469,12 @@ export default function GamePage() {
                   {sortedPlayers.slice(0, 3).map((p, i) => (
                     <div key={p.id} className="flex items-center gap-3">
                       <span className="text-slate-500 text-xs font-black w-4">#{i + 1}</span>
-                      <img
+                      <Image
                         src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${p.nickname}`}
                         alt={p.nickname}
+                        width={28}
+                        height={28}
+                        unoptimized
                         className="size-7 rounded-full border border-white/20"
                       />
                       <span className="text-white text-xs font-bold flex-1 text-left truncate">{p.nickname}</span>
@@ -505,13 +516,20 @@ export default function GamePage() {
                 >
                   <Star fill="#f47b25" size={200} className="w-full h-full text-primary" />
                 </motion.div>
-                <motion.img 
+                <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${winner.nickname}`}
-                  alt={winner.nickname}
-                  className="size-40 rounded-full border-8 border-primary shadow-2xl relative z-10"
-                />
+                  className="size-40 rounded-full border-8 border-primary shadow-2xl relative z-10 overflow-hidden"
+                >
+                  <Image
+                    src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${winner.nickname}`}
+                    alt={winner.nickname}
+                    width={160}
+                    height={160}
+                    unoptimized
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
                 <div className="absolute -top-6 -right-6 bg-yellow-400 p-3 rounded-2xl shadow-lg rotate-12 z-20">
                   <Trophy size={32} className="text-white fill-white" />
                 </div>

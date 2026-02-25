@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import PopularSheets, { SeeAllLink } from "@/app/components/PopularSheets";
 
 export default function Home() {
   return (
@@ -79,29 +81,14 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Popular Sheets Section */}
+        {/* Popular Sheets Section — live data */}
         <section className="px-6 py-12 bg-white dark:bg-slate-900/50">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Popular Sheets</h2>
-            <Link href="/sheets" className="text-primary font-bold text-sm flex items-center gap-1">
-              See All
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </Link>
+            <SeeAllLink />
           </div>
-          <div className="grid grid-cols-1 gap-6">
-            <SheetCard
-              title="Corporate Bingo"
-              uses="8.4k"
-              icon="groups"
-              image="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80"
-            />
-            <SheetCard
-              title="Family Night"
-              uses="12k"
-              icon="favorite"
-              image="https://images.unsplash.com/photo-1513159419869-1a032c39a6c6?auto=format&fit=crop&w=800&q=80"
-            />
-          </div>
+          {/* Real data from Supabase */}
+          <PopularSheets />
         </section>
       </main>
 
@@ -127,29 +114,6 @@ function StepCard({ icon, title, description }: { icon: string; title: string; d
       <div>
         <h3 className="font-bold text-slate-900 dark:text-white">{title}</h3>
         <p className="text-slate-500 dark:text-slate-400 text-sm">{description}</p>
-      </div>
-    </div>
-  );
-}
-
-function SheetCard({ title, uses, icon, image }: { title: string; uses: string; icon: string; image: string }) {
-  return (
-    <div className="group overflow-hidden rounded-xl bg-background-light dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-      <div className="h-32 bg-slate-200 dark:bg-slate-700 relative">
-        <img 
-          className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" 
-          src={image} 
-          alt={title}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-3 left-4 text-white font-bold text-lg">{title}</div>
-      </div>
-      <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-primary text-base">{icon}</span>
-          <span className="text-slate-500 dark:text-slate-400 text-xs font-medium">{uses} uses</span>
-        </div>
-        <button className="bg-primary/10 text-primary font-bold text-xs px-3 py-1.5 rounded-full">Preview</button>
       </div>
     </div>
   );
