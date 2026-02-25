@@ -13,3 +13,7 @@ BEGIN
 EXCEPTION WHEN duplicate_object THEN
   NULL;
 END $$;
+
+-- NOTE: REPLICA IDENTITY FULL for the player table is set in
+-- 20260225110000_player_replica_identity_full.sql — required so that
+-- DELETE events are delivered through game_id-filtered Realtime channels.

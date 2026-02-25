@@ -442,9 +442,25 @@ export default function LobbyPage() {
             Start Game
           </button>
         ) : (
-          <div className="w-full bg-slate-100 dark:bg-slate-800 text-slate-400 py-4 rounded-2xl font-black text-center text-sm tracking-widest uppercase border border-slate-200 dark:border-slate-700">
-            Waiting for host to start...
-          </div>
+          <motion.div
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-full bg-slate-100 dark:bg-slate-800 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-3"
+          >
+            <div className="flex items-center gap-1.5">
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  className="block w-2 h-2 rounded-full bg-primary"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.18 }}
+                />
+              ))}
+            </div>
+            <span className="text-slate-500 dark:text-slate-400 font-black text-sm tracking-widest uppercase">
+              Waiting for host to start
+            </span>
+          </motion.div>
         )}
       </div>
     </div>

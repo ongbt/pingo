@@ -20,6 +20,7 @@ export default function GamePage() {
   const [isSpectating, setIsSpectating] = useState(false);
   const [isEndGameOpen, setIsEndGameOpen] = useState(false);
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
+  const [lastLeft, setLastLeft] = useState<string | null>(null);
 
   // Refs to avoid stale closures in subscription callbacks
   const gameRef = useRef(game);
@@ -89,6 +90,11 @@ export default function GamePage() {
               }
             }
           }
+        } else if (payload.eventType === 'DELETE') {
+          const departed = payload.old as Player;
+          setPlayers(prev => prev.filter(p => p.id !== departed.id));
+          setLastLeft(departed.nickname);
+          setTimeout(() => setLastLeft(null), 3000);
         }
       })
       .subscribe();
@@ -170,6 +176,23 @@ export default function GamePage() {
     setIsEndGameOpen(false);
   };
 
+  const handleQuit = async () => {
+    if (!currentPlayer) {
+      router.push('/');
+      return;
+    }
+    // Hosts must use End Game — quitting would leave the game without a host
+    if (currentPlayer.is_host) return;
+
+    await supabase
+      .from('player')
+      .delete()
+      .eq('id', currentPlayer.id);
+
+    localStorage.removeItem(`pingo_player_${String(id)}`);
+    router.push('/');
+  };
+
   const winner = useMemo(() => {
     return players.find(p => p.is_winner) || null;
   }, [players]);
@@ -241,8 +264,10 @@ export default function GamePage() {
           </h1>
         </div>
         <button 
-          onClick={() => router.push('/')}
-          className="flex items-center gap-1 px-4 py-2 bg-primary/10 text-primary rounded-full font-black text-xs hover:bg-primary/20 transition-colors uppercase tracking-widest"
+          onClick={handleQuit}
+          disabled={currentPlayer?.is_host}
+          title={currentPlayer?.is_host ? 'Use End Game to stop the session' : 'Quit game'}
+          className="flex items-center gap-1 px-4 py-2 bg-primary/10 text-primary rounded-full font-black text-xs hover:bg-primary/20 transition-colors uppercase tracking-widest disabled:opacity-30 disabled:pointer-events-none"
         >
           <LogOut size={14} />
           Quit
@@ -300,6 +325,25 @@ export default function GamePage() {
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
               <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-tight">
                 <span className="text-primary">{lastMarked.nickname}</span> marked <span className="text-slate-900 dark:text-white underline decoration-primary/30 decoration-2 italic">"{lastMarked.item}"</span>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Player Left Toast */}
+      <AnimatePresence>
+        {lastLeft && (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            className="fixed top-36 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <div className="bg-white/95 dark:bg-slate-800/95 border border-red-200 dark:border-red-900/40 rounded-full px-6 py-2 flex items-center gap-3 shadow-xl backdrop-blur-sm">
+              <LogOut size={12} className="text-red-400 shrink-0" />
+              <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-tight">
+                <span className="text-red-400">{lastLeft}</span> has left the game
               </p>
             </div>
           </motion.div>

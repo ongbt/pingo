@@ -132,3 +132,16 @@ largely complete:
   - The host button is disabled once the game is already `finished`.
   - A separate `!winner && game.status === 'finished'` overlay is shown
     (distinct from the winner screen) to clearly communicate the forced end.
+
+- **Player Quit**: Added `handleQuit` to the game page. Non-host players who
+  click Quit are deleted from the `player` table and their `localStorage` entry
+  is cleared. The host Quit button is disabled with a tooltip directing them to
+  End Game instead.
+
+- **Realtime DELETE propagation**: Added `DELETE` event handling to the
+  `playerChannel` subscription so remaining players see quitted players
+  disappear from the leaderboard instantly. Fixed the root cause by setting
+  `REPLICA IDENTITY FULL` on the `player` table
+  (`20260225110000_player_replica_identity_full.sql`) — without this, Supabase
+  Realtime drops DELETE events on channels filtered by non-PK columns like
+  `game_id`.
