@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import PopularSheets, { SeeAllLink } from "@/app/components/PopularSheets";
 
 export const runtime = 'edge';

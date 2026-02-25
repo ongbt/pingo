@@ -23,6 +23,7 @@ export interface Game {
   sheet_id: string | null
   status: 'lobby' | 'active' | 'finished'
   config: Json
+  sheet?: Sheet
   created_at: string
 }
 

@@ -334,7 +334,7 @@ export default function GamePage() {
             <div className="bg-white/95 dark:bg-slate-800/95 border border-primary/20 rounded-full px-6 py-2 flex items-center gap-3 shadow-xl backdrop-blur-sm">
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
               <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-tight">
-                <span className="text-primary">{lastMarked.nickname}</span> marked <span className="text-slate-900 dark:text-white underline decoration-primary/30 decoration-2 italic">"{lastMarked.item}"</span>
+                <span className="text-primary">{lastMarked.nickname}</span> marked <span className="text-slate-900 dark:text-white underline decoration-primary/30 decoration-2 italic">&quot;{lastMarked.item}&quot;</span>
               </p>
             </div>
           </motion.div>

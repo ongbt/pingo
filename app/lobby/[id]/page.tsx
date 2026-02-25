@@ -32,7 +32,7 @@ export default function LobbyPage() {
       // Fetch Game
       const { data: gameData, error: gameError } = await supabase
         .from('game')
-        .select('*')
+        .select('*, sheet(*)')
         .eq('id', gameId)
         .single();
 
@@ -182,7 +182,7 @@ export default function LobbyPage() {
     };
 
     // Assign a shuffled layout to each player
-    const totalItems = (game as any)?.sheet?.items?.length || 25;
+    const totalItems = game?.sheet?.items?.length || 25;
     
     for (const player of players) {
       const layout = generateShuffledLayout(totalItems);
