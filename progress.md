@@ -120,3 +120,15 @@ largely complete:
 2. Replace `<img>` with `next/image` for dicebear avatars.
 3. Responsive layout audit for desktop.
 4. Final dark mode contrast review.
+
+### Host Controls
+
+- **End Game for All**: Added a dedicated "End Game" button (red) in the host
+  control panel on the game board. Clicking it opens a confirmation modal
+  (anti-accidental-trigger protection). On confirm, the game's `status` is set
+  to `'finished'` via Supabase, which the real-time subscription broadcasts to
+  all connected players — instantly showing every player a "Game Over" overlay
+  with final standings and a "Play Again" link.
+  - The host button is disabled once the game is already `finished`.
+  - A separate `!winner && game.status === 'finished'` overlay is shown
+    (distinct from the winner screen) to clearly communicate the forced end.

@@ -16,6 +16,9 @@ room codes, randomized board generation, and instant victory celebrations.
   - Visual victory celebrations with confetti and grand winner modals.
   - Quick-join flow with persistent nickname memory.
   - "Copy to Clipboard" sharing directly from the lobby.
+- **Host Controls**: The host can force-end the game at any time using the
+  in-game **End Game** button. A real-time broadcast ensures all players
+  instantly see the "Game Over" screen with final standings.
 - **Premium UI/UX**: Ultra-modern design with smooth Framer Motion transitions,
   dark mode support, and interactive player leaderboards.
 

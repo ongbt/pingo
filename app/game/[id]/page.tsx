@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
-import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye } from 'lucide-react';
+import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye, OctagonX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -18,6 +18,7 @@ export default function GamePage() {
   const [marked, setMarked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSpectating, setIsSpectating] = useState(false);
+  const [isEndGameOpen, setIsEndGameOpen] = useState(false);
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
 
   // Refs to avoid stale closures in subscription callbacks
@@ -158,6 +159,15 @@ export default function GamePage() {
       .from('game')
       .update({ status: 'finished' })
       .eq('id', game.id);
+  };
+
+  const handleEndGame = async () => {
+    if (!game || !currentPlayer?.is_host) return;
+    await supabase
+      .from('game')
+      .update({ status: 'finished' })
+      .eq('id', game.id);
+    setIsEndGameOpen(false);
   };
 
   const winner = useMemo(() => {
@@ -377,6 +387,59 @@ export default function GamePage() {
         </button>
       </nav>
 
+      {/* GAME OVER OVERLAY (Host Force-Ended — No Winner) */}
+      <AnimatePresence>
+        {!winner && game.status === 'finished' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="flex flex-col items-center max-w-sm w-full"
+            >
+              <div className="size-24 rounded-3xl bg-slate-700/60 flex items-center justify-center mb-8 shadow-xl">
+                <OctagonX size={48} className="text-red-400" />
+              </div>
+
+              <h2 className="text-white text-4xl font-black uppercase italic tracking-tighter mb-2 drop-shadow-lg">
+                Game Over
+              </h2>
+              <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-10">
+                The host ended the game
+              </p>
+
+              <div className="bg-white/10 rounded-3xl p-5 w-full backdrop-blur-md border border-white/10 mb-8">
+                <p className="text-slate-300 text-xs font-black uppercase tracking-widest mb-3">Final Standings</p>
+                <div className="flex flex-col gap-2">
+                  {sortedPlayers.slice(0, 3).map((p, i) => (
+                    <div key={p.id} className="flex items-center gap-3">
+                      <span className="text-slate-500 text-xs font-black w-4">#{i + 1}</span>
+                      <img
+                        src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${p.nickname}`}
+                        alt={p.nickname}
+                        className="size-7 rounded-full border border-white/20"
+                      />
+                      <span className="text-white text-xs font-bold flex-1 text-left truncate">{p.nickname}</span>
+                      <span className="text-slate-400 text-xs font-black">{p.score || 0} pts</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => router.push('/')}
+                className="w-full h-16 bg-primary text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary/30 border-b-4 border-primary-dark active:border-b-0 active:translate-y-1 transition-all"
+              >
+                Play Again
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* WINNER SCREEN OVERLAY */}
       <AnimatePresence>
         {winner && !isSpectating && (
@@ -453,15 +516,69 @@ export default function GamePage() {
         )}
       </AnimatePresence>
 
-      {/* Game Info Overlay (Host Only) */}
+      {/* Host Controls */}
       {currentPlayer?.is_host && (
-        <div className="fixed bottom-6 left-6 z-40">
+        <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-2 items-start">
+          <button
+            id="end-game-btn"
+            onClick={() => setIsEndGameOpen(true)}
+            disabled={game.status === 'finished'}
+            className="flex items-center gap-2 bg-red-600/90 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-2xl transition-colors disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <OctagonX size={14} />
+            End Game
+          </button>
           <div className="flex items-center gap-2 bg-slate-900/90 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-2xl">
             <ShieldCheck size={14} className="text-green-500" />
             Host Mode
           </div>
         </div>
       )}
+
+      {/* End Game Confirmation Modal */}
+      <AnimatePresence>
+        {isEndGameOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.85, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.85, y: 20 }}
+              className="bg-white dark:bg-slate-900 rounded-3xl p-8 w-full max-w-sm shadow-2xl border border-red-200 dark:border-red-900/50 flex flex-col items-center gap-6"
+            >
+              <div className="size-16 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <OctagonX size={32} className="text-red-500" />
+              </div>
+              <div className="text-center">
+                <h2 className="text-xl font-black uppercase tracking-tight mb-1">End the Game?</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  This will immediately end the game for <span className="font-bold text-slate-700 dark:text-slate-200">all players</span>. This cannot be undone.
+                </p>
+              </div>
+              <div className="flex gap-3 w-full">
+                <button
+                  id="end-game-cancel-btn"
+                  onClick={() => setIsEndGameOpen(false)}
+                  className="flex-1 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-black text-sm uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="end-game-confirm-btn"
+                  onClick={handleEndGame}
+                  className="flex-1 h-12 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-black text-sm uppercase tracking-widest transition-colors shadow-lg shadow-red-500/30"
+                >
+                  End Game
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Spectating Badge */}
       {isSpectating && winner && (

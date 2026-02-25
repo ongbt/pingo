@@ -58,6 +58,8 @@
 - [x] Bingo claim broadcast — visual/audio victory celebration (Confetti +
       Modal).
 - [x] End game logic — handle "First Bingo Wins" status updates.
+- [x] Host "End Game" button — allows host to force-end the game for all
+      players.
 - [ ] Anti-cheat mode — multi-player verification for marked squares.
 
 ## Phase 4: Stylize (UI/UX) 🏗️
