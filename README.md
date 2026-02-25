@@ -1,9 +1,9 @@
 # Pingo — Premium Real-Time Bingo 🚀
 
 Pingo is a modern, real-time multiplayer Bingo application designed for
-high-energy interactions. Built with React (Vite) and Supabase, it features
-curated room codes, randomized board generation, and instant victory
-celebrations.
+high-energy interactions. Built with **React (Vite)** and **Supabase**, it
+features curated room codes, randomized board generation, instant victory
+celebrations, and a custom sheet builder.
 
 ## ✨ Key Features
 
@@ -11,38 +11,57 @@ celebrations.
   marks using Supabase Realtime.
 - **Dynamic Board Randomization**: Every player receives a unique shuffle of the
   bingo sheet to ensure a competitive experience.
-- **Alphanumeric Room System**: Secure 6-character room codes (curated to avoid
+- **6-Character Room Codes**: Secure alphanumeric room codes (curated to avoid
   ambiguity) with collision protection.
+- **Custom Sheet Builder**: Players can create, name, and manage their own bingo
+  sheets via the My Sheets page, persisted in localStorage.
 - **User Engagement**:
   - Visual victory celebrations with confetti and grand winner modals.
-  - Quick-join flow with persistent nickname memory.
+  - Quick-join flow with persistent nickname memory via localStorage.
   - "Copy to Clipboard" sharing directly from the lobby.
-- **Host Controls**: The host can force-end the game at any time using the
-  in-game **End Game** button. A real-time broadcast ensures all players
-  instantly see the "Game Over" screen with final standings.
+- **Host Controls**:
+  - Start the game and auto-assign randomized boards to all players.
+  - Force-end the game at any time with a confirmation modal ("End Game").
+  - A real-time broadcast ensures all players instantly see the "Game Over"
+    screen with final standings.
+- **Player Controls**:
+  - Non-host players can quit mid-game; their record is deleted from Supabase
+    and removed from other players' leaderboards in real-time.
 - **Premium UI/UX**: Ultra-modern design with smooth Framer Motion transitions,
-  dark mode support, and interactive player leaderboards.
+  dark mode aesthetics, and interactive player leaderboards.
 
 ## 🛠️ Technology Stack
 
 - **Framework**: React 18+ (Vite)
-- **Routing**: React Router 7 (formerly Remix)
+- **Routing**: React Router DOM v6
 - **Styling**: Tailwind CSS
-- **Database/Realtime**: Supabase (Postgres)
+- **Database/Realtime**: Supabase (Postgres + Realtime)
 - **Animations**: Framer Motion
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
 
 ## 🚀 Getting Started
 
-### 1. Prerequisite (Supabase Local)
+### 1. Prerequisites
 
-Start the local Supabase stack if you are developing locally:
+- Node.js 20+
+- Docker Desktop (for local Supabase)
+
+### 2. Start Local Supabase
 
 ```bash
 npx supabase start
 ```
 
-### 2. Run the App
+### 3. Configure Environment
+
+Copy `.env.local` and fill in your local Supabase credentials:
+
+```
+VITE_SUPABASE_URL=http://127.0.0.1:54321
+VITE_SUPABASE_ANON_KEY=<your-local-anon-key>
+```
+
+### 4. Run the App
 
 ```bash
 npm run dev
@@ -53,13 +72,43 @@ experience.
 
 ## 📁 Project Structure
 
-- `src/`: Main application source code.
-  - `pages/`: Application views and routing.
-  - `components/`: Reusable UI components.
-  - `lib/`: Shared utilities and Supabase client.
-  - `types/`: TypeScript interfaces.
-- `supabase/`: Migrations and schema definitions.
-- `public/`: Static assets.
+```
+pingo/
+├── src/
+│   ├── pages/          # Application views (6 routes)
+│   ├── components/     # Reusable UI components
+│   ├── lib/            # Supabase client & shared utilities
+│   └── types/          # TypeScript interfaces
+├── supabase/
+│   ├── migrations/     # All DB migrations (11 total)
+│   └── seed.sql        # Default bingo sheets seed
+├── public/
+│   └── _redirects      # Cloudflare SPA routing
+└── dist/               # Production build output
+```
+
+## 🌐 Routes
+
+| Route        | Page       | Description                              |
+| ------------ | ---------- | ---------------------------------------- |
+| `/`          | HomePage   | Landing — host or join a game            |
+| `/create`    | CreatePage | Select/create a sheet and launch a lobby |
+| `/join`      | JoinPage   | Enter room code + nickname               |
+| `/lobby/:id` | LobbyPage  | Waiting room before game start           |
+| `/game/:id`  | GamePage   | Live bingo game board                    |
+| `/sheets`    | SheetsPage | Manage custom bingo sheets               |
+
+## 🚢 Deployment
+
+- **Frontend**: Cloudflare Pages (Vite SPA)
+  - Build Command: `npm run build`
+  - Output Directory: `dist`
+  - Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+- **Backend**: Supabase Cloud (`ap-southeast-1` — Singapore)
+  - Project ID: `uzcumjicbmnlehrdjirl`
+  - Realtime enabled for `game` and `player` tables.
+
+See `DEPLOYMENT.md` for full setup checklist and troubleshooting.
 
 ---
 

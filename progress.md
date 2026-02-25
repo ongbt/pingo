@@ -27,14 +27,11 @@
 
 ### Lint & Code Quality
 
-- Fixed ESLint warning in `app/game/[id]/page.tsx`:
-  - `useEffect` had stale closure references to `game` and `players` state.
+- Fixed ESLint warning in game page: `useEffect` had stale closure references.
   - Introduced `useRef` to track latest values in realtime subscription
     callbacks.
   - Removed unused `useCallback` import.
-- Remaining lint: `<img>` vs `<Image />` warning for dicebear avatars
-  (non-blocking).
-- TypeScript: compiles clean with `tsc --noEmit` (zero errors).
+- TypeScript: compiles clean with zero errors.
 
 ### Local Supabase Stack
 
@@ -72,10 +69,8 @@ largely complete:
   - Implemented board randomization via `board_layout` (unique shuffle per
     player).
 - **Alphanumeric Room System**:
-  - Successfully transitioned from 5-digit numeric to **6-character
-    alphanumeric** codes.
-  - Implemented curated character set (excluding ambiguous characters like 0/O,
-    1/I).
+  - Transitioned from 5-digit numeric to **6-character alphanumeric** codes.
+  - Implemented curated character set (excluding ambiguous chars like 0/O, 1/I).
   - Built a uniqueness check loop to prevent code collisions in high-traffic
     scenarios.
 - **Persistence & Profiles**:
@@ -86,14 +81,10 @@ largely complete:
 - **Improved Join Flow**:
   - Replaced numeric keypad with high-fidelity alphanumeric input.
   - Added "Copy to Clipboard" utility card in the lobby for easy sharing.
-
-### Current State
-
-- **Phase 1 (Blueprint)**: ✅ Complete
-- **Phase 2 (Link)**: ✅ Complete
-- **Phase 3 (Architect)**: ✅ Complete — Core MVP logic and data sync finished.
-- **Phase 4 (Stylize)**: 🏗️ ~95% — All pages styled and interactive. Refinement
-  phase active.
+- **Join Game — 5-Digit Numeric Codes**:
+  - Room code generation switched to 5-digit numeric codes to match keypad UI.
+  - Join logic validates that a game exists and is in `lobby` status before
+    proceeding.
 
 ## 2026-02-25
 
@@ -128,13 +119,6 @@ largely complete:
     which adds a third branch: `OR creator_id IS NULL`. This allows guest hosts
     to read back the sheet record they just created.
 
-### Next Steps
-
-1. Anti-cheat mode (verification logic).
-2. Replace `<img>` with `next/image` for dicebear avatars.
-3. Responsive layout audit for desktop.
-4. Final dark mode contrast review.
-
 ### Host Controls
 
 - **End Game for All**: Added a dedicated "End Game" button (red) in the host
@@ -144,8 +128,6 @@ largely complete:
   all connected players — instantly showing every player a "Game Over" overlay
   with final standings and a "Play Again" link.
   - The host button is disabled once the game is already `finished`.
-  - A separate `!winner && game.status === 'finished'` overlay is shown
-    (distinct from the winner screen) to clearly communicate the forced end.
 
 - **Player Quit**: Added `handleQuit` to the game page. Non-host players who
   click Quit are deleted from the `player` table and their `localStorage` entry
@@ -160,50 +142,31 @@ largely complete:
   Realtime drops DELETE events on channels filtered by non-PK columns like
   `game_id`.
 
-### `next/image` Migration
+### Custom Sheet Management
 
-- Added `remotePatterns` to `next.config.ts` for the three external image hosts:
-  `api.dicebear.com`, `lh3.googleusercontent.com`, `images.unsplash.com`.
-- Replaced every `<img>` tag across:
-  - `app/page.tsx` — Unsplash SheetCard hero image (uses `fill` layout).
-  - `app/lobby/[id]/page.tsx` — decorative bingo-balls background image, player
-    grid avatars, and mock lobby chat avatars.
-  - `app/game/[id]/page.tsx` — mini-leaderboard avatars, winner screen avatar
-    (wrapped `motion.div` around `Image` to preserve Framer Motion animation),
-    and game-over standings avatars.
-- All SVG-based dicebear avatars use `unoptimized` since Next.js cannot optimize
-  SVG images natively.
-- `tsc --noEmit` passes clean — zero TypeScript errors.
+- **My Sheets page** (`/sheets`): New dedicated page for managing custom bingo
+  sheets. Allows users to create and reuse sheets across multiple games.
+- **Sheet creation flow**: Sheet names are required; duplicate items within a
+  sheet are not allowed.
+- **localStorage persistence**: Custom sheets are stored locally for guest users
+  via localStorage.
+- **Create Game integration**: The Create page now shows a combo of default
+  (from Supabase) and custom sheets (from localStorage) in a unified selection
+  UI.
 
-### Play Count Display + Create Page Redesign
+### Seeded More Default Sheets
 
-- **Create page** sheet picker redesigned from carousel to clean selectable list
-  with play counts.
-- **Home page** Popular Sheets now fetches real play_count data via
-  PopularSheets client component.
+- Added "Zoo Animals" and "Disneyland Characters" default bingo sheets to the
+  production Supabase database via SQL seed scripts.
 
-### Deployment 🚀
-
-- **Supabase Cloud**: Created new production project (`uzcumjicbmnlehrdjirl`) in
-  Singapore region.
-- **Database Architecture**: Pushed all 11 local migrations and synced default
-  sheet data to the cloud database.
-- **Realtime Networking**: Enabled Realtime for all tables on the production
-  project.
-- **Cloudflare Migration**: Optimized Next.js configuration for
-  `@cloudflare/next-on-pages` using the Edge runtime for all main application
-  routes.
-- **Environment Management**: Configured `.env.production` with production-ready
-  Supabase URL and Anon Key.
-
-### Migration 🚀
+### Framework Migration (Next.js → React/Vite)
 
 - **Framework Swap**: Migrated from Next.js 15 to **React (Vite)** to streamline
   the client-only architecture.
   - Replaced `next/navigation` with `react-router-dom` for robust client-side
     routing.
-  - Replaced `next/image` with standard `<img>` tags (since Cloudflare
-    Pages/Next.js optimization was unnecessary for this project).
+  - Replaced `next/image` with standard `<img>` tags (Cloudflare Pages / no SSR
+    needed).
 - **Project Restructure**: Moved all code from `app/` to `src/` following
   standard Vite patterns.
 - **Environment Update**: Transitioned all environment variables from
@@ -212,3 +175,19 @@ largely complete:
   established a standard ESLint config for React.
 - **Verification**: Confirmed all 6 main routes are functional and visually
   consistent via local verification.
+  - Routes: `/`, `/create`, `/join`, `/lobby/:id`, `/game/:id`, `/sheets`
+
+### Deployment
+
+- **Supabase Cloud**: Created new production project (`uzcumjicbmnlehrdjirl`) in
+  Singapore region.
+- **Database Architecture**: Pushed all 11 local migrations and synced default
+  sheet data to the cloud database.
+- **Realtime Networking**: Enabled Realtime for all tables on the production
+  project.
+- **Cloudflare Configuration**: Set up build settings (Vite preset, `dist`
+  output directory, `NODE_VERSION=20`).
+- **SPA Routing**: Added `public/_redirects` for Cloudflare Pages wildcard
+  routing.
+- **Environment Management**: Configured `.env.production` with production-ready
+  `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.

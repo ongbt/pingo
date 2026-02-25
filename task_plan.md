@@ -1,4 +1,4 @@
-# Task Plan: Pingo React Conversion
+# Task Plan: Pingo
 
 ## Phase 1: Blueprint (Vision & Logic) ✅
 
@@ -14,7 +14,7 @@
 - [x] Configure `.env.local` with local Supabase credentials.
 - [x] Verify local database connectivity — seed sheet confirmed via REST API.
 
-## Phase 3: Architect (Build - MVP Focus) 🏗️
+## Phase 3: Architect (Build - MVP Focus) ✅
 
 ### Layer 1: Architecture ✅
 
@@ -27,14 +27,13 @@
 - [x] Landing page (`src/pages/HomePage.tsx`) — Host/Join entry point.
 - [x] Create Game page (`src/pages/CreatePage.tsx`) — Sheet selection, custom
       sheet, lobby settings.
-- [x] Join Game page (`src/pages/JoinPage.tsx`) — Room code entry + nickname
-      screen.
+- [x] Join Game page (`src/pages/JoinPage.tsx`) — Single-screen room code +
+      nickname entry.
 - [x] Lobby page (`src/pages/LobbyPage.tsx`) — Pre-game waiting room with player
       grid.
 - [x] Game Board page (`src/pages/GamePage.tsx`) — 5x5 grid, marking, bingo
       detection.
-- [x] Sheets page (`src/pages/SheetsPage.tsx`) — Sheet management and top
-      sheets.
+- [x] Sheets page (`src/pages/SheetsPage.tsx`) — Custom sheet management.
 
 ### Layer 3: Data Integration (Supabase Wiring) ✅
 
@@ -44,13 +43,13 @@
 - [x] Lobby page: fetches game + players, realtime subscription for new
       players + game status.
 - [x] Game Board page: fetches game with sheet, realtime subscription for player
-      updates.
+      updates + DELETE events.
 - [x] Room code generation (random 6-char alphanumeric, curated set).
 - [x] Uniqueness check loop for room codes.
 - [x] Player session via `localStorage`.
 - [x] Nickname persistence (localStorage + Supabase profiles).
 
-### Layer 4: Core Logic — Remaining 🏗️
+### Layer 4: Core Logic ✅
 
 - [x] Bingo win detection (horizontal, vertical, diagonal line check).
 - [x] Cell marking + score sync to Supabase.
@@ -61,19 +60,21 @@
 - [x] Bingo claim broadcast — visual/audio victory celebration (Confetti +
       Modal).
 - [x] End game logic — handle "First Bingo Wins" status updates.
-- [x] Host "End Game" button — allows host to force-end the game for all
-      players.
+- [x] Host "End Game" button — force-end the game for all players.
+- [x] Player Quit — non-host players can leave; DELETE propagated via Realtime.
+- [x] `REPLICA IDENTITY FULL` on `player` table for correct DELETE events.
 - [ ] Anti-cheat mode — multi-player verification for marked squares.
 
 ## Phase 4: Stylize (UI/UX) 🏗️
 
 - [x] Landing page styled with Pingo brand identity.
-- [x] Create page — sheet gallery, custom sheet form, settings toggles.
-- [x] Join page —room code entry, nickname screen with animations.
-- [x] Lobby page — player grid, mock chat, host controls, copy-to-clipboard
-      card.
+- [x] Create page — sheet gallery (selectable list + play counts), custom sheet
+      form.
+- [x] Join page — single-screen room code + nickname entry with animations.
+- [x] Lobby page — player grid, copy-to-clipboard share card, host controls.
 - [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications,
       confetti.
+- [x] Sheets page — custom sheet creation and management (localStorage).
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.
 
@@ -90,14 +91,17 @@
 
 - [ ] Lobby Timeout: Auto-cancel lobbies if not started within configurable
       time.
-- [ ] Game Timeout: Auto-terminate games if they remain inactive/not started.
+- [ ] Game Timeout: Auto-terminate games that remain inactive.
 - [ ] Configurable thresholds in Game Settings.
 
 ## Phase 7: Deployment ✅
 
-- [x] Create production Supabase project (`uzcumjicbmnlehrdjirl`).
-- [x] Push all migrations to production Database.
-- [x] Sync default sheet data/seeds.
-- [x] Configure for Cloudflare Pages (Vite/React SPA).
-- [x] Setup `.env.production` for Cloudflare dashboard.
-- [ ] Connect GitHub repo to Cloudflare Pages (User action).
+- [x] Create production Supabase project (`uzcumjicbmnlehrdjirl`) in Singapore.
+- [x] Push all migrations to production database (11 migrations total).
+- [x] Sync default sheet data/seeds (Corporate Townhall, Zoo, Disneyland).
+- [x] Enable Realtime for `game` and `player` tables in production.
+- [x] Configure `public/_redirects` for Cloudflare SPA routing.
+- [x] Setup `.env.production` with `VITE_` prefixed secrets.
+- [x] Verify production build (`npm run build`) passes.
+- [ ] Connect GitHub repo to Cloudflare Pages (User action required).
+- [ ] Setup custom domain on Cloudflare Pages.
