@@ -185,12 +185,12 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
   );
 }
 
-// ─── Settings Toggle ──────────────────────────────────────────────────────────
-function SettingToggle({ icon, title, description, enabled, onToggle }: {
-  icon: React.ReactNode; title: string; description: string; enabled: boolean; onToggle: () => void;
+// ─── Settings Row (read-only, locked at default) ──────────────────────────────
+function SettingRow({ icon, title, description, enabled }: {
+  icon: React.ReactNode; title: string; description: string; enabled: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3.5">
+    <div className="flex items-center justify-between px-4 py-3.5 opacity-60">
       <div className="flex gap-3 items-center">
         <div className={cn(
           'size-8 rounded-lg flex items-center justify-center shrink-0',
@@ -203,10 +203,10 @@ function SettingToggle({ icon, title, description, enabled, onToggle }: {
           <p className="text-[10px] text-slate-400 font-medium leading-tight mt-0.5">{description}</p>
         </div>
       </div>
-      <button
-        onClick={onToggle}
+      {/* Static toggle — non-interactive */}
+      <div
         className={cn(
-          'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200',
+          'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent cursor-not-allowed',
           enabled ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700',
         )}
       >
@@ -214,7 +214,7 @@ function SettingToggle({ icon, title, description, enabled, onToggle }: {
           'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200',
           enabled ? 'translate-x-5' : 'translate-x-0',
         )} />
-      </button>
+      </div>
     </div>
   );
 }
@@ -231,7 +231,7 @@ export default function CreatePage() {
   const [nickname,        setNickname]        = useState('');
   const [isCreating,      setIsCreating]      = useState(false);
   const [loading,         setLoading]         = useState(true);
-  const [settings, setSettings] = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true });
+  const [settings] = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true });
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
@@ -419,30 +419,32 @@ export default function CreatePage() {
           </button>
         </section>
 
-        {/* ── Lobby Settings ── */}
+        {/* ── Lobby Settings (locked — coming soon) ── */}
         <section>
-          <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5">Lobby Settings</h2>
+          <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5 flex items-center gap-2">
+            Lobby Settings
+            <span className="text-[9px] font-black uppercase tracking-widest bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
+              Coming Soon
+            </span>
+          </h2>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 shadow-sm">
-            <SettingToggle
+            <SettingRow
               icon={<Star size={16} />}
               title="First Bingo Wins"
               description="Game ends when the first player scores."
               enabled={settings.firstBingoWins}
-              onToggle={() => setSettings(s => ({ ...s, firstBingoWins: !s.firstBingoWins }))}
             />
-            <SettingToggle
+            <SettingRow
               icon={<Shield size={16} />}
               title="Anti-Cheat Mode"
               description="Multi-player verification for marked squares."
               enabled={settings.antiCheat}
-              onToggle={() => setSettings(s => ({ ...s, antiCheat: !s.antiCheat }))}
             />
-            <SettingToggle
+            <SettingRow
               icon={<Lock size={16} />}
               title="Private Lobby"
               description="Join requires the unique room code."
               enabled={settings.privateLobby}
-              onToggle={() => setSettings(s => ({ ...s, privateLobby: !s.privateLobby }))}
             />
           </div>
         </section>

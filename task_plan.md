@@ -63,7 +63,8 @@
 - [x] Host "End Game" button — force-end the game for all players.
 - [x] Player Quit — non-host players can leave; DELETE propagated via Realtime.
 - [x] `REPLICA IDENTITY FULL` on `player` table for correct DELETE events.
-- [ ] Anti-cheat mode — multi-player verification for marked squares.
+- [ ] Sheet preview — tap to open a read-only modal showing all items in a sheet
+      before selecting or duplicating it.
 
 ## Phase 4: Stylize (UI/UX) 🏗️
 
@@ -75,6 +76,11 @@
 - [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications,
       confetti.
 - [x] Sheets page — custom sheet creation and management (localStorage).
+- [ ] Anti-cheat mode — multi-player verification for marked squares.
+- [ ] Sheet duplication — clone any existing sheet (default or custom) as a
+      starting point for a new custom sheet.
+- [ ] "Live Now: xx Players" indicator — real-time active player count badge on
+      the Home page, subscribed via Supabase Realtime.
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.
 
