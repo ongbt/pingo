@@ -1,36 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function JoinPage() {
   const navigate = useNavigate();
+  const { profile } = useAuth();
   const [code, setCode] = useState('');
   const [nickname, setNickname] = useState('');
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const saved = localStorage.getItem('pingo_nickname');
-    if (saved) setNickname(saved);
-
-    const checkProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profile')
-          .select('nickname')
-          .eq('id', user.id)
-          .single();
-        if (profile?.nickname) {
-          setNickname(profile.nickname);
-          localStorage.setItem('pingo_nickname', profile.nickname);
-        }
-      }
-    };
-    checkProfile();
-  }, []);
+    if (profile?.nickname) {
+      setNickname(profile.nickname);
+      localStorage.setItem('pingo_nickname', profile.nickname);
+    } else {
+      const saved = localStorage.getItem('pingo_nickname');
+      if (saved) setNickname(saved);
+    }
+  }, [profile]);
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);

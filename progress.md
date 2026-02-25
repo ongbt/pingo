@@ -88,6 +88,29 @@ largely complete:
 
 ## 2026-02-25
 
+### Authentication & Profiles (Phase 8 Complete)
+
+- **Supabase Auth**: Implemented authentication using Supabase email/password
+  and Google OAuth providers.
+- **Sign In / Sign Up Pages**: Built dedicated authentication pages (`/signin`,
+  `/signup`) with integrated error handling, loading states, and direct Google
+  authentication buttons.
+- **Context API (`AuthContext`)**: Created a global context provider to
+  seamlessly manage and distribute session, user, and profile data throughout
+  the application.
+- **User Profiles**:
+  - Added `avatar_url` to the `profile` table via database migration
+    (`20260225110802_add_avatar_url_and_public_profile.sql`).
+  - Added `ProfilePage.tsx` to allow authenticated users to view/edit their
+    nicknames and log out.
+- **Seamless Game Integration**: Configured `CreatePage` and `JoinPage` to
+  automatically populate the nickname from the user's `profile` data so
+  authenticated users can hop straight into games without naming themselves
+  every time.
+- **Dynamic Navigation**: Updated the `HomePage` navigation header and bottom
+  tab bar to show a user avatar (or initials) linking to their profile when
+  logged in, or a standard user icon linking to sign-in when they are guests.
+
 ### Bug Fixes
 
 - **Back to Lobby (finished game)**: Fixed broken "Back to Lobby" button on the

@@ -111,3 +111,34 @@
 - [x] Verify production build (`npm run build`) passes.
 - [ ] Connect GitHub repo to Cloudflare Pages (User action required).
 - [ ] Setup custom domain on Cloudflare Pages.
+
+## Phase 8: Authentication & Profiles ✅
+
+### 8A: Sign Up / Sign In ✅
+
+- [x] Enable Supabase Auth (email/password) on local and production projects.
+- [x] Create migration: add `user_id` (UUID, FK → `auth.users`) to `profile`
+      table.
+- [x] Add RLS policies: users can read/update their own profile row.
+- [x] Build `SignUpPage.tsx` — email + password form with validation and error
+      feedback.
+- [x] Build `SignInPage.tsx` — email + password form, "Forgot password?" link.
+- [x] Wire Supabase `signUp` / `signInWithPassword` / `signOut` calls (and
+      Google Auth).
+- [x] Create `AuthContext` (`src/context/AuthContext.tsx`) — exposes `session`,
+      `user`, `signIn`, `signUp`, `signOut` helpers to the whole app.
+- [x] Protect routes: redirect unauthenticated users away from profile page.
+- [x] Surface auth entry points on the Home page (Sign In / Sign Up buttons).
+- [x] Handle Supabase email confirmation flow (show "check your email" state).
+
+### 8B: User Profile ✅
+
+- [x] Build `ProfilePage.tsx` — display and edit display name / avatar URL.
+- [x] Persist profile changes to the `profile` table via Supabase.
+- [x] Link profile nickname to the game session so signed-in users don't need to
+      re-enter it on Create/Join pages.
+- [x] Show avatar / display name in the Lobby player grid for signed-in users.
+- [x] Add "My Sheets" shortcut on the profile page (links to `SheetsPage`).
+- [x] Add route `/profile` guarded by auth check.
+- [x] Update navigation header / Home page to show user avatar or initials when
+      signed in, with a Sign Out option.

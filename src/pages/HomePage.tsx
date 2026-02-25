@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
 function useLivePlayerCount() {
@@ -57,7 +58,9 @@ function formatLiveCount(n: number | null): string {
 }
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const liveCount = useLivePlayerCount();
+  const { user, profile } = useAuth();
 
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
@@ -69,8 +72,19 @@ export default function HomePage() {
           </div>
           <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">Pingo</span>
         </div>
-        <button className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-          <span className="material-symbols-outlined">person</span>
+        <button 
+          onClick={() => navigate(user ? '/profile' : '/signin')}
+          className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border-2 border-primary border-opacity-20"
+        >
+          {user ? (
+            profile?.avatar_url ? (
+               <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+               <span>{(profile?.nickname || user.email || '?').charAt(0).toUpperCase()}</span>
+            )
+          ) : (
+            <span className="material-symbols-outlined">person</span>
+          )}
         </button>
       </nav>
 
@@ -140,9 +154,10 @@ export default function HomePage() {
           <NavLink icon="house" label="Home" to="/" active />
           <NavLink icon="groups" label="Rooms" to="#" />
           <NavLink icon="grid_view" label="Sheets" to="/sheets" />
-          <NavLink icon="account_circle" label="Profile" to="#" />
+          <NavLink icon="account_circle" label="Profile" to={user ? '/profile' : '/signin'} />
         </div>
       </footer>
+
     </div>
   );
 }

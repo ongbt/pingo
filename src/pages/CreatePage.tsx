@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import {
@@ -223,6 +224,7 @@ function SettingRow({ icon, title, description, enabled }: {
 export default function CreatePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { profile } = useAuth();
 
   const [sheets,          setSheets]          = useState<Sheet[]>([]);
   const [mySheetIds,      setMySheetIds]      = useState<string[]>([]);
@@ -260,25 +262,27 @@ export default function CreatePage() {
       setLoading(false);
     };
     load();
+  }, [searchParams]);
 
-    const saved = localStorage.getItem('pingo_nickname');
-    if (saved) setNickname(saved);
-    const checkProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase.from('profile').select('nickname').eq('id', user.id).single();
-        if (profile?.nickname) {
-          setNickname(profile.nickname);
-          localStorage.setItem('pingo_nickname', profile.nickname);
-        }
-      }
-    };
-    checkProfile();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => {
+    if (profile?.nickname) {
+      setNickname(profile.nickname);
+      localStorage.setItem('pingo_nickname', profile.nickname);
+    } else {
+      const saved = localStorage.getItem('pingo_nickname');
+      if (saved) setNickname(saved);
+    }
+  }, [profile]);
 
   const handleCreate = async () => {
     if (isCreating) return;
+    
+    // Check authentication
+    if (!profile) {
+      showError('Authentication Required', 'You must be signed in to host a game. Please go to the Home page to sign in or sign up.');
+      return;
+    }
+
     if (!nickname.trim()) { showError('Nickname Required', 'Please enter a nickname before creating the lobby.'); return; }
     if (!selectedSheetId) { showError('No Sheet Selected', 'Please select a bingo sheet before creating the lobby.'); return; }
 
@@ -467,9 +471,16 @@ export default function CreatePage() {
       {/* ── Bottom CTA ── */}
       <div className="fixed bottom-0 left-0 right-0 px-4 py-4 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 z-30">
         <div className="max-w-lg mx-auto">
+          {!profile && (
+            <div className="mb-3 text-center">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                You must be <button onClick={() => navigate('/signin')} className="text-primary hover:underline">signed in</button> to host a game.
+              </p>
+            </div>
+          )}
           <button
             onClick={handleCreate}
-            disabled={isCreating || !selectedSheetId}
+            disabled={isCreating || !selectedSheetId || !profile}
             className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-black py-4 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-lg shadow-primary/25 uppercase tracking-widest text-sm"
           >
             {isCreating ? (
