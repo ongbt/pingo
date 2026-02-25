@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
-import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck } from 'lucide-react';
+import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
@@ -17,6 +17,7 @@ export default function GamePage() {
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [marked, setMarked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSpectating, setIsSpectating] = useState(false);
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
 
   // Refs to avoid stale closures in subscription callbacks
@@ -378,7 +379,7 @@ export default function GamePage() {
 
       {/* WINNER SCREEN OVERLAY */}
       <AnimatePresence>
-        {winner && (
+        {winner && !isSpectating && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -437,12 +438,15 @@ export default function GamePage() {
                 >
                   Play Again
                 </button>
-                <button 
-                  onClick={() => router.push(`/lobby/${id}`)}
-                  className="h-16 bg-white/10 text-white font-black uppercase tracking-widest rounded-2xl hover:bg-white/20 transition-all border border-white/10"
-                >
-                  Back to Lobby
-                </button>
+                {!(game.config as { firstBingoWins?: boolean })?.firstBingoWins && (
+                  <button 
+                    onClick={() => setIsSpectating(true)}
+                    className="h-16 bg-white/10 text-white font-black uppercase tracking-widest rounded-2xl hover:bg-white/20 transition-all border border-white/10 flex items-center justify-center gap-2"
+                  >
+                    <Eye size={18} />
+                    Spectate
+                  </button>
+                )}
               </div>
             </motion.div>
           </motion.div>
@@ -455,6 +459,16 @@ export default function GamePage() {
           <div className="flex items-center gap-2 bg-slate-900/90 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-2xl">
             <ShieldCheck size={14} className="text-green-500" />
             Host Mode
+          </div>
+        </div>
+      )}
+
+      {/* Spectating Badge */}
+      {isSpectating && winner && (
+        <div className="fixed bottom-6 left-6 z-40">
+          <div className="flex items-center gap-2 bg-primary/90 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-2xl">
+            <Eye size={14} />
+            Spectating
           </div>
         </div>
       )}
