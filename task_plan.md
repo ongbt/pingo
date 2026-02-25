@@ -79,7 +79,7 @@
 - [ ] Anti-cheat mode — multi-player verification for marked squares.
 - [ ] Sheet duplication — clone any existing sheet (default or custom) as a
       starting point for a new custom sheet.
-- [ ] "Live Now: xx Players" indicator — real-time active player count badge on
+- [x] "Live Now: xx Players" indicator — real-time active player count badge on
       the Home page, subscribed via Supabase Realtime.
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.

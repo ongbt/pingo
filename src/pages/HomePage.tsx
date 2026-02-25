@@ -1,7 +1,63 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
+function useLivePlayerCount() {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchCount = async () => {
+      // Supabase JS client doesn't support subquery builders in .in();
+      // fetch active game IDs first, then count players in those games.
+      const { data: games } = await supabase
+        .from('game')
+        .select('id')
+        .in('status', ['lobby', 'active']);
+
+      const gameIds = (games ?? []).map((g: { id: string }) => g.id);
+
+      if (gameIds.length === 0) {
+        if (!cancelled) setCount(0);
+        return;
+      }
+
+      const { count: n } = await supabase
+        .from('player')
+        .select('id', { count: 'exact', head: true })
+        .in('game_id', gameIds);
+
+      if (!cancelled) setCount(n ?? 0);
+    };
+
+    fetchCount();
+
+    const channel = supabase
+      .channel('live-player-count')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'player' }, () => fetchCount())
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'player' }, () => fetchCount())
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game' }, () => fetchCount())
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  return count;
+}
+
+function formatLiveCount(n: number | null): string {
+  if (n === null) return '…';
+  if (n >= 1000) return `${(n / 1000).toFixed(n < 10000 ? 1 : 0)}k`;
+  return String(n);
+}
+
 export default function HomePage() {
+  const liveCount = useLivePlayerCount();
 
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
@@ -31,7 +87,7 @@ export default function HomePage() {
           <div className="relative z-10 flex flex-col items-center text-center max-w-md mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6">
               <span className="material-symbols-outlined text-sm">local_fire_department</span>
-              Live Now: 1.2k Players
+              Live Now: {formatLiveCount(liveCount)} Players
             </div>
             <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white mb-6">
               The Ultimate <span className="text-primary">Multiplayer</span> Bingo Experience

@@ -191,3 +191,16 @@ largely complete:
   routing.
 - **Environment Management**: Configured `.env.production` with production-ready
   `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+
+### Live Player Count
+
+- **"Live Now: xx Players" badge**: Replaced the hardcoded `"1.2k Players"` on
+  the Home page with a real-time counter powered by Supabase.
+  - `useLivePlayerCount` hook fetches the count of players currently in games
+    with `status IN ('lobby', 'active')` via a two-step query (game IDs first,
+    then player count).
+  - Subscribes to `postgres_changes` on `INSERT`/`DELETE` on the `player` table
+    and `UPDATE` on the `game` table to trigger a refetch on any relevant
+    change.
+  - Shows `"…"` while loading, then the live count formatted as a number (or
+    `"1.2k"` style for ≥1000).
