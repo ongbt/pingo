@@ -5,11 +5,10 @@ resolutions for issues encountered during the process.
 
 ## 🚀 Deployment Overview
 
-- **Frontend**: Cloudflare Pages (Next.js with `@cloudflare/next-on-pages`)
+- **Frontend**: Cloudflare Pages (React SPA with Vite)
 - **Backend/DB**: Supabase Cloud
 - **Region**: ap-southeast-1 (Singapore)
-- **Domain**: [Pingo on Cloudflare](https://pingo.pages.dev) (Pending final
-  build)
+- **Domain**: [Pingo on Cloudflare](https://pingo.pages.dev)
 
 ---
 
@@ -18,68 +17,54 @@ resolutions for issues encountered during the process.
 ### 1. Supabase Cloud Configuration
 
 - **Project Created**: `uzcumjicbmnlehrdjirl`
-- **Database**: Pushed all 11 local migrations using Supabase CLI.
+- **Database**: Pushed all migrations using Supabase CLI.
 - **Seeding**: Initial default bingo sheets (Corporate Townhall, Zoo,
   Disneyland) are synced to the production database.
 - **Realtime**: Enabled replication for `game` and `player` tables in the
   production project dashboard to support multiplayer sync.
 
-### 2. Next.js Optimizations
+### 2. React (Vite) Migration
 
-- **Edge Runtime**: Added `export const runtime = 'edge';` to all main routes
-  (`/`, `/create`, `/lobby/[id]`, `/game/[id]`, `/sheets`) to ensure high
-  performance on Cloudflare's global network.
-- **Image Optimization**: Configured `next.config.ts` with `remotePatterns` for
-  Dicebear, Unsplash, and Google avatars.
+- **Architecture**: Simplified the app from a Next.js Full-Stack framework to a
+  pure React SPA.
+- **Routing**: Implemented `react-router-dom` for client-side navigation.
+- **Environment**: Transitioned to `VITE_SUPABASE_URL` and
+  `VITE_SUPABASE_ANON_KEY` prefixes.
 
 ### 3. Cloudflare Pages Build Settings
 
-- **Framework Preset**: `Next.js`
-- **Build Command**: `npx @cloudflare/next-on-pages`
-- **Build Output Directory**: `.vercel/output/static`
+- **Framework Preset**: `Vite`
+- **Build Command**: `npm run build` (runs `tsc && vite build`)
+- **Build Output Directory**: `dist`
 - **Environment Variables**:
   - `NODE_VERSION`: `20`
-  - `NEXT_PUBLIC_SUPABASE_URL`: (Production URL)
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: (Production Anon Key)
+  - `VITE_SUPABASE_URL`: (Production URL)
+  - `VITE_SUPABASE_ANON_KEY`: (Production Anon Key)
 
 ---
 
-## ⚠️ Issues & Resolutions
+## ⚠️ Migration Notes & Issues
 
-### 1. Dependency Conflict (npm ERESOLVE)
+### 1. Framework Transition (Next.js ➔ Vite)
 
-- **Problem**: The build failed during `npm clean-install` because the `vercel`
-  package (`^50.23.2`) was too new for the `@cloudflare/next-on-pages` adapter.
-- **Resolution**: Downgraded `vercel` to `47.0.4` in `package.json` to satisfy
-  peer dependency requirements.
+- **Problem**: Next.js 15 routing and image optimization were tailored for
+  SSR/Edge environments, adding complexity for a client-only real-time app.
+- **Resolution**: Converted the codebase to a standard React entry point
+  (`main.tsx`) with a client-side router (`App.tsx`).
 
-### 2. React 19 RC Peer Dependency Conflict
+### 2. Environment Variables
 
-- **Problem**: Strict `npm install` in the CI environment blocked packages like
-  `framer-motion` due to React version mismatches (Next.js 15 uses React 19 RC).
-- **Resolution**: Created a `.npmrc` file with `legacy-peer-deps=true` to allow
-  the build to proceed with compatible (though not strictly matched) peer
-  dependencies.
+- **Problem**: Vite requires variables to be prefixed with `VITE_` for
+  client-side exposure.
+- **Resolution**: Updated all `.env` files and `src/lib/supabase.ts` to use
+  `import.meta.env.VITE_*`.
 
-### 3. Lint Errors Blocking Build
+### 3. TypeScript & Linting
 
-- **Problem**: Next.js production builds are strict. The build failed due to:
-  - Unescaped double quotes in JSX (`react/no-unescaped-entities`).
-  - Unused `Image` import in `app/page.tsx`.
-  - `any` type casting and missing types for joined Supabase queries.
-- **Resolution**:
-  - Escaped quotes with `&quot;`.
-  - Cleaned up unused imports.
-  - Enhanced `types/index.ts` with optional relations and updated queries to use
-    the joined `sheet` data properly.
-
-### 4. Node.js Compatibility Flag
-
-- **Problem**: The app showed a "Node.JS Compatibility Error" after the first
-  successful build.
-- **Resolution**: Required enabling the `nodejs_compat` flag in **Settings ➔
-  Functions ➔ Compatibility Flags** in the Cloudflare Dashboard for both
-  Production and Preview environments.
+- **Problem**: Next.js-specific ESLint rules (like `next/core-web-vitals`)
+  failed after removing Next.js.
+- **Resolution**: Established a standard React/TypeScript ESLint config and
+  added `vite-env.d.ts` for proper `ImportMeta` typing.
 
 ---
 
@@ -87,6 +72,6 @@ resolutions for issues encountered during the process.
 
 - [x] Push all migrations to Supabase Cloud.
 - [x] Enable Realtime for `game` and `player` tables.
-- [x] Set Environment Variables in Cloudflare.
-- [x] Add `nodejs_compat` flag in Cloudflare.
-- [x] Fix all TypeScript/ESLint errors.
+- [x] Set environment variables in Cloudflare with `VITE_` prefix.
+- [x] Set Build Command to `npm run build` and Directory to `dist`.
+- [x] Verify local build (`npm run build`) passes without errors.

@@ -1,8 +1,9 @@
 # Pingo — Premium Real-Time Bingo 🚀
 
 Pingo is a modern, real-time multiplayer Bingo application designed for
-high-energy interactions. Built with Next.js and Supabase, it features curated
-room codes, randomized board generation, and instant victory celebrations.
+high-energy interactions. Built with React (Vite) and Supabase, it features
+curated room codes, randomized board generation, and instant victory
+celebrations.
 
 ## ✨ Key Features
 
@@ -24,7 +25,8 @@ room codes, randomized board generation, and instant victory celebrations.
 
 ## 🛠️ Technology Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: React 18+ (Vite)
+- **Routing**: React Router 7 (formerly Remix)
 - **Styling**: Tailwind CSS
 - **Database/Realtime**: Supabase (Postgres)
 - **Animations**: Framer Motion
@@ -46,15 +48,18 @@ npx supabase start
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) for the high-octane Bingo
+Open [http://localhost:5173](http://localhost:5173) for the high-octane Bingo
 experience.
 
 ## 📁 Project Structure
 
-- `app/`: Next.js pages and routing.
-- `lib/`: Shared utilities and Supabase client.
+- `src/`: Main application source code.
+  - `pages/`: Application views and routing.
+  - `components/`: Reusable UI components.
+  - `lib/`: Shared utilities and Supabase client.
+  - `types/`: TypeScript interfaces.
 - `supabase/`: Migrations and schema definitions.
-- `types/`: TypeScript interfaces.
+- `public/`: Static assets.
 
 ---
 

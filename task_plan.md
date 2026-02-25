@@ -24,14 +24,17 @@
 
 ### Layer 2: Pages (React Components) ✅
 
-- [x] Landing page (`app/page.tsx`) — Host/Join entry point.
-- [x] Create Game page (`app/create/page.tsx`) — Sheet selection, custom sheet,
-      lobby settings.
-- [x] Join Game page (`app/join/page.tsx`) — Room code entry + nickname step.
-- [x] Lobby page (`app/lobby/[id]/page.tsx`) — Pre-game waiting room with player
+- [x] Landing page (`src/pages/HomePage.tsx`) — Host/Join entry point.
+- [x] Create Game page (`src/pages/CreatePage.tsx`) — Sheet selection, custom
+      sheet, lobby settings.
+- [x] Join Game page (`src/pages/JoinPage.tsx`) — Room code entry + nickname
+      screen.
+- [x] Lobby page (`src/pages/LobbyPage.tsx`) — Pre-game waiting room with player
       grid.
-- [x] Game Board page (`app/game/[id]/page.tsx`) — 5x5 grid, marking, bingo
+- [x] Game Board page (`src/pages/GamePage.tsx`) — 5x5 grid, marking, bingo
       detection.
+- [x] Sheets page (`src/pages/SheetsPage.tsx`) — Sheet management and top
+      sheets.
 
 ### Layer 3: Data Integration (Supabase Wiring) ✅
 
@@ -65,15 +68,23 @@
 ## Phase 4: Stylize (UI/UX) 🏗️
 
 - [x] Landing page styled with Pingo brand identity.
-- [x] Create page — sheet carousel, custom sheet form, settings toggles.
-- [x] Join page — keypad room code entry, nickname step with animations.
+- [x] Create page — sheet gallery, custom sheet form, settings toggles.
+- [x] Join page —room code entry, nickname screen with animations.
 - [x] Lobby page — player grid, mock chat, host controls, copy-to-clipboard
       card.
 - [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications,
       confetti.
 - [ ] Refine responsive layout for larger screens.
 - [ ] Dark mode consistency audit.
-- [x] Replace `<img>` with `next/image` for performance.
+
+## Phase 5: React Migration (Vite Consolidation) ✅
+
+- [x] Scaffold Vite + React + TypeScript project.
+- [x] Migrate all components and pages to `src/`.
+- [x] Transition routing to `react-router-dom`.
+- [x] Update environment variables to `VITE_` prefix.
+- [x] Standardize ESLint for React SPA.
+- [x] Verify production build and local dev server.
 
 ## Phase 6: Session Robustness 🏗️
 
@@ -87,6 +98,6 @@
 - [x] Create production Supabase project (`uzcumjicbmnlehrdjirl`).
 - [x] Push all migrations to production Database.
 - [x] Sync default sheet data/seeds.
-- [x] Configure Next.js for Cloudflare Pages (Edge runtime).
+- [x] Configure for Cloudflare Pages (Vite/React SPA).
 - [x] Setup `.env.production` for Cloudflare dashboard.
 - [ ] Connect GitHub repo to Cloudflare Pages (User action).

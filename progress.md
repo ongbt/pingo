@@ -195,3 +195,20 @@ largely complete:
   routes.
 - **Environment Management**: Configured `.env.production` with production-ready
   Supabase URL and Anon Key.
+
+### Migration 🚀
+
+- **Framework Swap**: Migrated from Next.js 15 to **React (Vite)** to streamline
+  the client-only architecture.
+  - Replaced `next/navigation` with `react-router-dom` for robust client-side
+    routing.
+  - Replaced `next/image` with standard `<img>` tags (since Cloudflare
+    Pages/Next.js optimization was unnecessary for this project).
+- **Project Restructure**: Moved all code from `app/` to `src/` following
+  standard Vite patterns.
+- **Environment Update**: Transitioned all environment variables from
+  `NEXT_PUBLIC_` to `VITE_` prefix.
+- **Build & Lint**: Verified a clean production build (`npm run build`) and
+  established a standard ESLint config for React.
+- **Verification**: Confirmed all 6 main routes are functional and visually
+  consistent via local verification.
