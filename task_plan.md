@@ -82,4 +82,11 @@
 - [ ] Game Timeout: Auto-terminate games if they remain inactive/not started.
 - [ ] Configurable thresholds in Game Settings.
 
-## Phase 7: Deployment
+## Phase 7: Deployment ✅
+
+- [x] Create production Supabase project (`uzcumjicbmnlehrdjirl`).
+- [x] Push all migrations to production Database.
+- [x] Sync default sheet data/seeds.
+- [x] Configure Next.js for Cloudflare Pages (Edge runtime).
+- [x] Setup `.env.production` for Cloudflare dashboard.
+- [ ] Connect GitHub repo to Cloudflare Pages (User action).

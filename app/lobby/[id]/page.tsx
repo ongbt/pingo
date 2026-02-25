@@ -10,6 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/app/components/ErrorDialog';
 import Image from 'next/image';
 
+export const runtime = 'edge';
+
 export default function LobbyPage() {
   const { id } = useParams();
   const router = useRouter();

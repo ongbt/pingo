@@ -12,6 +12,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/app/components/ErrorDialog';
 
+export const runtime = 'edge';
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
 function getLocalSheetIds(): string[] {

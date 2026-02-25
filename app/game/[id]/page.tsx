@@ -10,6 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import Image from 'next/image';
 
+export const runtime = 'edge';
+
 export default function GamePage() {
   const { id } = useParams();
   const router = useRouter();

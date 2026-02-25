@@ -177,5 +177,21 @@ largely complete:
 
 ### Play Count Display + Create Page Redesign
 
-- **Create page** sheet picker redesigned from carousel to clean selectable list with play counts.
-- **Home page** Popular Sheets now fetches real play_count data via PopularSheets client component.
+- **Create page** sheet picker redesigned from carousel to clean selectable list
+  with play counts.
+- **Home page** Popular Sheets now fetches real play_count data via
+  PopularSheets client component.
+
+### Deployment 🚀
+
+- **Supabase Cloud**: Created new production project (`uzcumjicbmnlehrdjirl`) in
+  Singapore region.
+- **Database Architecture**: Pushed all 11 local migrations and synced default
+  sheet data to the cloud database.
+- **Realtime Networking**: Enabled Realtime for all tables on the production
+  project.
+- **Cloudflare Migration**: Optimized Next.js configuration for
+  `@cloudflare/next-on-pages` using the Edge runtime for all main application
+  routes.
+- **Environment Management**: Configured `.env.production` with production-ready
+  Supabase URL and Anon Key.

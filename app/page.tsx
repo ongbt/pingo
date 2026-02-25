@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import PopularSheets, { SeeAllLink } from "@/app/components/PopularSheets";
 
+export const runtime = 'edge';
+
 export default function Home() {
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
