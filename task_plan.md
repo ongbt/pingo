@@ -52,7 +52,8 @@
 - [x] Bingo win detection (horizontal, vertical, diagonal line check).
 - [x] Cell marking + score sync to Supabase.
 - [x] Host "Start Game" — transitions lobby to active.
-- [x] Board randomization — shuffle sheet items per player.
+- [x] Board randomization — shuffle and select 24 items from sheet pool
+      (supports >25 items).
 - [x] Host nickname prompt on Create/Join pages.
 - [x] Bingo claim broadcast — visual/audio victory celebration (Confetti +
       Modal).

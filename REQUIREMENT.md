@@ -35,7 +35,8 @@ townhalls, and casual group play.
 ### 🎮 Game Mechanics
 
 - **Randomized Boards**: Every player receives a unique, randomized 5x5 layout
-  based on the selected sheet.
+  based on the selected sheet. If a sheet contains more than 25 items, a random
+  subset of 24 items (+ 1 free space) is selected for each player.
 - **Interaction**: Tap cells to mark them as selected.
 - **Scoring**: Persistent score tracking during the session.
 - **Win Condition**: Valid Bingo (Vertical, Horizontal, or Diagonal line).

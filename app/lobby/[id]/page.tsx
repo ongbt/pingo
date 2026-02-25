@@ -129,24 +129,35 @@ export default function LobbyPage() {
     const gameId = String(id);
 
     // Generate a unique shuffled board layout for each player
-    // Fisher-Yates shuffle of indices [0..24], keeping index 12 (center/free space) fixed
-    const generateShuffledLayout = (): number[] => {
-      const indices = Array.from({ length: 25 }, (_, i) => i);
-      // Shuffle all positions except the center (index 12)
-      for (let i = indices.length - 1; i > 0; i--) {
-        if (i === 12) continue;
-        let j: number;
-        do {
-          j = Math.floor(Math.random() * (i + 1));
-        } while (j === 12);
-        [indices[i], indices[j]] = [indices[j], indices[i]];
+    // Picks 24 items from the available pool and shuffles them into positions 0-11 and 13-24
+    const generateShuffledLayout = (totalPoolCount: number): number[] => {
+      // 1. Create a pool of all possible indices
+      const pool = Array.from({ length: totalPoolCount }, (_, i) => i);
+      
+      // 2. Fisher-Yates shuffle the pool
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
       }
-      return indices;
+      
+      // 3. Take 24 items for the visible squares
+      const selected = pool.slice(0, 24);
+      
+      // 4. Map them to a 25-slot board array (skipping index 12)
+      const layout = new Array(25).fill(-1);
+      for (let i = 0; i < 25; i++) {
+        if (i < 12) layout[i] = selected[i];
+        else if (i > 12) layout[i] = selected[i - 1];
+      }
+      
+      return layout;
     };
 
     // Assign a shuffled layout to each player
+    const totalItems = (game as any)?.sheet?.items?.length || 25;
+    
     for (const player of players) {
-      const layout = generateShuffledLayout();
+      const layout = generateShuffledLayout(totalItems);
       const { error: layoutError } = await supabase
         .from('player')
         .update({ board_layout: layout })

@@ -271,7 +271,7 @@ export default function CreateGamePage() {
                   placeholder="Can you hear me?&#10;Let's circle back&#10;Bio break" 
                   rows={6}
                 />
-                <p className="text-[10px] text-slate-400 px-2 italic font-medium">Enter at least 25 phrases for a standard 5x5 grid.</p>
+                <p className="text-[10px] text-slate-400 px-2 italic font-medium">Enter at least 25 phrases. If you enter more, each player gets a random subset of 24.</p>
               </div>
             </div>
           </motion.section>
