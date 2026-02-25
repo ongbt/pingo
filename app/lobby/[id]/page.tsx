@@ -34,6 +34,27 @@ export default function LobbyPage() {
         return;
       }
 
+      // Reset finished games back to lobby state for replay
+      if (gameData?.status === 'finished') {
+        await supabase
+          .from('game')
+          .update({ status: 'lobby' })
+          .eq('id', gameId);
+
+        // Reset all player states for a fresh round
+        await supabase
+          .from('player')
+          .update({
+            board_state: [],
+            board_layout: null,
+            score: 0,
+            is_winner: false,
+          })
+          .eq('game_id', gameId);
+
+        gameData.status = 'lobby';
+      }
+
       if (gameError) {
         console.error('Error fetching game:', gameError);
         return;

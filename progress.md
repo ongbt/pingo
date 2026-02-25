@@ -95,6 +95,17 @@ largely complete:
 - **Phase 4 (Stylize)**: 🏗️ ~95% — All pages styled and interactive. Refinement
   phase active.
 
+## 2026-02-25
+
+### Bug Fixes
+
+- **Back to Lobby (finished game)**: Fixed broken "Back to Lobby" button on the
+  winner screen. The lobby page had no handling for `finished` game status —
+  navigating back left the game stuck in `finished` state with stale player
+  data. Now the lobby auto-resets the game to `lobby` status and clears all
+  player states (`board_state`, `board_layout`, `score`, `is_winner`) so the
+  group can start a fresh round.
+
 ### Next Steps
 
 1. Anti-cheat mode (verification logic).
