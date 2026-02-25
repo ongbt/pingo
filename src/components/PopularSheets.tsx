@@ -1,12 +1,9 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Sheet } from '@/types';
 import { Flame, ArrowRight, ChevronRight } from 'lucide-react';
 
-// Consistent colour from title
 const GRADIENTS = [
   'from-orange-400 to-pink-500',
   'from-violet-500 to-indigo-600',
@@ -19,7 +16,7 @@ function formatPlayCount(n: number) {
 }
 
 export default function PopularSheets() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [sheets, setSheets] = useState<Sheet[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,15 +49,13 @@ export default function PopularSheets() {
       {sheets.map((sheet, i) => (
         <button
           key={sheet.id}
-          onClick={() => router.push(`/create?sheetId=${sheet.id}`)}
+          onClick={() => navigate(`/create?sheetId=${sheet.id}`)}
           className="group flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition-all text-left active:scale-[0.99]"
         >
-          {/* Colour swatch */}
           <div className={`size-12 rounded-xl bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} flex items-center justify-center shrink-0 shadow-md`}>
             <span className="text-xl">{['📋', '✨', '🎯'][i]}</span>
           </div>
 
-          {/* Info */}
           <div className="flex-1 min-w-0">
             <p className="font-black text-[14px] text-slate-900 dark:text-white truncate">{sheet.title}</p>
             <div className="flex items-center gap-3 mt-0.5">
@@ -74,7 +69,6 @@ export default function PopularSheets() {
             </div>
           </div>
 
-          {/* Rank badge */}
           <div className="flex flex-col items-end gap-1.5 shrink-0">
             <span className="text-[14px]">
               {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
@@ -90,12 +84,11 @@ export default function PopularSheets() {
   );
 }
 
-// ─── See-All link helper ──────────────────────────────────────────────────────
 export function SeeAllLink() {
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <button
-      onClick={() => router.push('/sheets')}
+      onClick={() => navigate('/sheets')}
       className="text-primary font-bold text-sm flex items-center gap-1 hover:opacity-70 transition-opacity"
     >
       See All

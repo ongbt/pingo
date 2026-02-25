@@ -1,14 +1,10 @@
-'use client';
-
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, X } from 'lucide-react';
 
 interface ErrorDialogProps {
   open: boolean;
   title: string;
-  /** Main message. Can contain an array of bullet strings for lists. */
   message: string;
-  /** Optional list of detail items (e.g. duplicate entries). */
   details?: string[];
   onClose: () => void;
 }
@@ -18,7 +14,6 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop */}
           <motion.div
             key="backdrop"
             initial={{ opacity: 0 }}
@@ -28,7 +23,6 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
             onClick={onClose}
           />
 
-          {/* Dialog */}
           <motion.div
             key="dialog"
             initial={{ y: 40, opacity: 0, scale: 0.95 }}
@@ -38,7 +32,6 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
             className="fixed z-[101] bottom-0 inset-x-0 max-w-md mx-auto p-4 pb-8"
           >
             <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-              {/* Header */}
               <div className="flex items-start justify-between p-5 pb-0">
                 <div className="flex items-center gap-3">
                   <div className="size-10 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
@@ -54,7 +47,6 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
                 </button>
               </div>
 
-              {/* Body */}
               <div className="p-5 space-y-3">
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{message}</p>
 
@@ -72,7 +64,6 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
                 )}
               </div>
 
-              {/* Footer */}
               <div className="px-5 pb-5">
                 <button
                   onClick={onClose}

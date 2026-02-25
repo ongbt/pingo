@@ -1,9 +1,8 @@
-import Link from "next/link";
-import PopularSheets, { SeeAllLink } from "@/app/components/PopularSheets";
+import { Link } from 'react-router-dom';
+import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
-export const runtime = 'edge';
+export default function HomePage() {
 
-export default function Home() {
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
       {/* Top Navigation Bar */}
@@ -22,14 +21,13 @@ export default function Home() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative overflow-hidden px-6 pt-12 pb-16 bg-gradient-to-b from-primary/5 to-transparent">
-          {/* Decorative Elements */}
           <div className="absolute top-10 right-10 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary/40 rotate-12">
             <span className="material-symbols-outlined text-4xl">star</span>
           </div>
           <div className="absolute bottom-20 left-[-20px] w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary/30">
             <span className="material-symbols-outlined text-5xl">blur_on</span>
           </div>
-          
+
           <div className="relative z-10 flex flex-col items-center text-center max-w-md mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6">
               <span className="material-symbols-outlined text-sm">local_fire_department</span>
@@ -43,14 +41,14 @@ export default function Home() {
             </p>
             <div className="flex flex-col w-full gap-4">
               <Link
-                href="/create"
+                to="/create"
                 className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-full transition-all flex items-center justify-center gap-2 text-lg"
               >
                 <span className="material-symbols-outlined">add_circle</span>
                 Host a Game
               </Link>
               <Link
-                href="/join"
+                to="/join"
                 className="w-full bg-white dark:bg-slate-800 border-2 border-primary/20 text-slate-900 dark:text-white font-bold py-4 rounded-full transition-all flex items-center justify-center gap-2 text-lg"
               >
                 <span className="material-symbols-outlined">group_add</span>
@@ -64,31 +62,18 @@ export default function Home() {
         <section className="px-6 py-12">
           <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-8 text-center">How it Works</h2>
           <div className="space-y-6">
-            <StepCard
-              icon="edit_square"
-              title="Create"
-              description="Choose your theme and grid size effortlessly."
-            />
-            <StepCard
-              icon="share"
-              title="Invite"
-              description="Share a unique room code with your friends."
-            />
-            <StepCard
-              icon="trophy"
-              title="Play"
-              description="Mark your numbers and claim your Bingo!"
-            />
+            <StepCard icon="edit_square" title="Create" description="Choose your theme and grid size effortlessly." />
+            <StepCard icon="share" title="Invite" description="Share a unique room code with your friends." />
+            <StepCard icon="trophy" title="Play" description="Mark your numbers and claim your Bingo!" />
           </div>
         </section>
 
-        {/* Popular Sheets Section — live data */}
+        {/* Popular Sheets Section */}
         <section className="px-6 py-12 bg-white dark:bg-slate-900/50">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Popular Sheets</h2>
             <SeeAllLink />
           </div>
-          {/* Real data from Supabase */}
           <PopularSheets />
         </section>
       </main>
@@ -96,10 +81,10 @@ export default function Home() {
       {/* Bottom Navigation Bar */}
       <footer className="sticky bottom-0 z-50 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 pb-safe">
         <div className="flex justify-around items-center px-2 py-3">
-          <NavLink icon="house" label="Home" href="/" active />
-          <NavLink icon="groups" label="Rooms" href="#" />
-          <NavLink icon="grid_view" label="Sheets" href="/sheets" />
-          <NavLink icon="account_circle" label="Profile" href="#" />
+          <NavLink icon="house" label="Home" to="/" active />
+          <NavLink icon="groups" label="Rooms" to="#" />
+          <NavLink icon="grid_view" label="Sheets" to="/sheets" />
+          <NavLink icon="account_circle" label="Profile" to="#" />
         </div>
       </footer>
     </div>
@@ -120,10 +105,10 @@ function StepCard({ icon, title, description }: { icon: string; title: string; d
   );
 }
 
-function NavLink({ icon, label, href, active }: { icon: string; label: string; href: string; active?: boolean }) {
+function NavLink({ icon, label, to, active }: { icon: string; label: string; to: string; active?: boolean }) {
   return (
-    <Link 
-      href={href} 
+    <Link
+      to={to}
       className={`flex flex-col items-center gap-1 ${active ? 'text-primary' : 'text-slate-400 hover:text-primary transition-colors'}`}
     >
       <span className={`material-symbols-outlined ${active ? 'fill-1' : ''}`}>{icon}</span>

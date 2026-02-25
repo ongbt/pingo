@@ -1,7 +1,5 @@
-'use client';
-
 import { useEffect, useState, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
@@ -10,9 +8,7 @@ import {
   ChevronRight, X, CheckCircle2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ErrorDialog from '@/app/components/ErrorDialog';
-
-export const runtime = 'edge';
+import ErrorDialog from '@/components/ErrorDialog';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
@@ -88,7 +84,6 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
     <AnimatePresence>
       {open && (
         <>
-          {/* Scrim */}
           <motion.div
             className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
@@ -97,7 +92,6 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
             onClick={onClose}
           />
 
-          {/* Bottom sheet */}
           <motion.div
             className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-3xl bg-white dark:bg-slate-900 shadow-2xl max-h-[80vh]"
             initial={{ y: '100%' }}
@@ -105,12 +99,10 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
-            {/* Handle */}
             <div className="flex justify-center pt-3 pb-1 shrink-0">
               <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
             </div>
 
-            {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 shrink-0 border-b border-slate-100 dark:border-slate-800">
               <h3 className="font-black text-base text-slate-900 dark:text-white">Choose a Sheet</h3>
               <button
@@ -121,7 +113,6 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
               </button>
             </div>
 
-            {/* Search */}
             <div className="px-4 py-3 shrink-0">
               <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2.5">
                 <Search size={15} className="text-slate-400 shrink-0" />
@@ -140,7 +131,6 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
               </div>
             </div>
 
-            {/* List */}
             <div className="overflow-y-auto flex-1 pb-6">
               {mySheets.length > 0 && (
                 <>
@@ -173,7 +163,6 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
                 </div>
               )}
 
-              {/* Create custom sheet CTA */}
               <div className="px-4 mt-4">
                 <button
                   onClick={onGoToSheets}
@@ -231,9 +220,9 @@ function SettingToggle({ icon, title, description, enabled, onToggle }: {
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-export default function CreateGamePage() {
-  const router       = useRouter();
-  const searchParams = useSearchParams();
+export default function CreatePage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [sheets,          setSheets]          = useState<Sheet[]>([]);
   const [mySheetIds,      setMySheetIds]      = useState<string[]>([]);
@@ -249,7 +238,6 @@ export default function CreateGamePage() {
 
   useEffect(() => {
     const load = async () => {
-      // Load ALL sheets so the picker has everything
       const { data } = await supabase
         .from('sheet')
         .select('*')
@@ -330,7 +318,7 @@ export default function CreateGamePage() {
         await supabase.from('profile').upsert({ id: user.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
       }
 
-      router.push(`/lobby/${game.id}`);
+      navigate(`/lobby/${game.id}`);
     } catch (error) {
       console.error('Error creating game:', error);
       showError('Game Creation Failed', 'Something went wrong while creating the lobby. Please try again.');
@@ -357,14 +345,14 @@ export default function CreateGamePage() {
         selectedId={selectedSheetId}
         onSelect={setSelectedSheetId}
         onClose={() => setPickerOpen(false)}
-        onGoToSheets={() => { setPickerOpen(false); router.push('/sheets'); }}
+        onGoToSheets={() => { setPickerOpen(false); navigate('/sheets'); }}
       />
 
       {/* ── Header ── */}
       <header className="sticky top-0 z-30 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 py-3.5">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button
-            onClick={() => router.back()}
+            onClick={() => navigate(-1)}
             className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
           >
             <ArrowLeft size={18} />
@@ -398,7 +386,6 @@ export default function CreateGamePage() {
               </div>
             ) : selectedSheet ? (
               <div className="flex items-center gap-4 p-4">
-                {/* Emoji icon */}
                 <div className="size-14 rounded-xl bg-gradient-to-br from-primary/20 to-orange-400/10 flex items-center justify-center shrink-0 text-2xl">
                   {emojiFor(selectedSheet.title)}
                 </div>

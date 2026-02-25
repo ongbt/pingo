@@ -1,13 +1,11 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { ArrowLeft, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function JoinGamePage() {
-  const router = useRouter();
+export default function JoinPage() {
+  const navigate = useNavigate();
   const [code, setCode] = useState('');
   const [nickname, setNickname] = useState('');
   const [isJoining, setIsJoining] = useState(false);
@@ -71,7 +69,6 @@ export default function JoinGamePage() {
 
       if (playerError) throw playerError;
 
-      // Persist nickname
       localStorage.setItem('pingo_nickname', nickname.trim());
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -81,7 +78,7 @@ export default function JoinGamePage() {
       }
 
       localStorage.setItem(`pingo_player_${game.id}`, newPlayer.id);
-      router.push(`/lobby/${game.id}`);
+      navigate(`/lobby/${game.id}`);
     } catch (err) {
       console.error('Error joining game:', err);
       setError(err instanceof Error ? err.message : 'Failed to join game.');
@@ -104,7 +101,7 @@ export default function JoinGamePage() {
 
       <header className="flex items-center justify-between px-4 py-4 bg-background-light/50 dark:bg-background-dark/50 backdrop-blur-sm relative z-10">
         <button
-          onClick={() => router.back()}
+          onClick={() => navigate(-1)}
           className="flex items-center justify-center size-10 rounded-full hover:bg-white/50 dark:hover:bg-primary/10 transition-colors bg-white/20"
         >
           <ArrowLeft size={20} />
@@ -115,7 +112,7 @@ export default function JoinGamePage() {
 
       <main className="flex-1 flex flex-col items-center px-6 pt-10 pb-4 max-w-md mx-auto w-full relative z-10">
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-black tracking-tighter mb-3 uppercase">Enter & Play</h2>
+          <h2 className="text-4xl font-black tracking-tighter mb-3 uppercase">Enter &amp; Play</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">
             Enter the room code and your nickname to join the bingo lobby.
           </p>
@@ -161,7 +158,6 @@ export default function JoinGamePage() {
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <p className="text-red-500 text-sm font-semibold text-center mb-4 -mt-2 px-4">
             {error}

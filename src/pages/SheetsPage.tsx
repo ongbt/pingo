@@ -1,7 +1,5 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
@@ -10,9 +8,7 @@ import {
   Flame, TrendingUp,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ErrorDialog from '@/app/components/ErrorDialog';
-
-export const runtime = 'edge';
+import ErrorDialog from '@/components/ErrorDialog';
 
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
 
@@ -256,7 +252,7 @@ function TopSheetRow({ sheet, rank, onPlay }: { sheet: Sheet; rank: number; onPl
 
 // ─── Page ──────────────────────────────────────────────────────────────────
 export default function SheetsPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [topSheets, setTopSheets]   = useState<Sheet[]>([]);
   const [mySheets, setMySheets]     = useState<Sheet[]>([]);
   const [showForm, setShowForm]     = useState(false);
@@ -316,16 +312,15 @@ export default function SheetsPage() {
     setMySheets(prev => prev.filter(s => s.id !== sheet.id));
   };
 
-  const handlePlay = (sheetId: string) => router.push(`/create?sheetId=${sheetId}`);
+  const handlePlay = (sheetId: string) => navigate(`/create?sheetId=${sheetId}`);
 
   return (
     <div className="bg-[#F5F7FA] dark:bg-background-dark min-h-screen pb-28 font-display antialiased">
-
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 py-3.5">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button
-            onClick={() => router.back()}
+            onClick={() => navigate(-1)}
             className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
           >
             <ArrowLeft size={18} />
@@ -336,7 +331,6 @@ export default function SheetsPage() {
       </header>
 
       <main className="max-w-lg mx-auto px-4 pt-5 space-y-8">
-
         {/* ── My Sheets ── */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
@@ -355,7 +349,6 @@ export default function SheetsPage() {
             </button>
           </div>
 
-          {/* Create form */}
           <AnimatePresence>
             {showForm && (
               <motion.div
@@ -371,7 +364,6 @@ export default function SheetsPage() {
             )}
           </AnimatePresence>
 
-          {/* List */}
           {loading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-7 w-7 border-t-2 border-b-2 border-primary" />
@@ -433,7 +425,6 @@ export default function SheetsPage() {
             </div>
           )}
         </section>
-
       </main>
     </div>
   );

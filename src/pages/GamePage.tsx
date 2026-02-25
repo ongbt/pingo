@@ -1,20 +1,15 @@
-'use client';
-
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye, OctagonX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import Image from 'next/image';
-
-export const runtime = 'edge';
 
 export default function GamePage() {
-  const { id } = useParams();
-  const router = useRouter();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [game, setGame] = useState<(Game & { sheet: Sheet }) | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
@@ -56,8 +51,6 @@ export default function GamePage() {
       const pList = playersData || [];
       setPlayers(pList);
 
-      // Simple current player detection (last joined/created in this session)
-      // In a real app, this would be from cookies/session
       const savedPlayerId = localStorage.getItem(`pingo_player_${id}`);
       if (savedPlayerId) {
         const p = pList.find(p => p.id === savedPlayerId);
@@ -78,14 +71,12 @@ export default function GamePage() {
           const updated = payload.new as Player;
           setPlayers(prev => prev.map(p => p.id === updated.id ? updated : p));
           
-          // Show "activity" toast — use refs for current values
           if (updated.board_state) {
             const oldState = playersRef.current.find(p => p.id === updated.id)?.board_state as number[] || [];
             const newState = updated.board_state as number[];
             if (newState.length > oldState.length) {
               const newIndex = newState.find(idx => !oldState.includes(idx));
               if (newIndex !== undefined && gameRef.current) {
-                // Resolve item name through the updated player's own board_layout
                 const layout = updated.board_layout as number[] | null;
                 const itemIndex = layout ? layout[newIndex] : newIndex;
                 setLastMarked({ nickname: updated.nickname, item: gameRef.current.sheet.items[itemIndex] });
@@ -147,7 +138,6 @@ export default function GamePage() {
     
     setMarked(newMarked);
 
-    // Update Supabase
     await supabase
       .from('player')
       .update({ board_state: newMarked, score: newMarked.length })
@@ -157,19 +147,16 @@ export default function GamePage() {
   const handleBingo = async () => {
     if (!hasBingo || !currentPlayer || !game) return;
 
-    // 1. Update player status
     await supabase
       .from('player')
       .update({ is_winner: true })
       .eq('id', currentPlayer.id);
 
-    // 2. Update game status
     await supabase
       .from('game')
       .update({ status: 'finished' })
       .eq('id', game.id);
 
-    // 3. Increment sheet play count — only on a real bingo, not on game creation
     const { error: rpcError } = await supabase.rpc('increment_sheet_play_count', { p_sheet_id: game.sheet.id });
     if (rpcError) console.error('[handleBingo] increment_sheet_play_count failed:', rpcError);
   };
@@ -185,7 +172,7 @@ export default function GamePage() {
 
   const handleQuit = async () => {
     if (!currentPlayer) {
-      router.push('/');
+      navigate('/');
       return;
     }
     // Hosts must use End Game — quitting would leave the game without a host
@@ -197,7 +184,7 @@ export default function GamePage() {
       .eq('id', currentPlayer.id);
 
     localStorage.removeItem(`pingo_player_${String(id)}`);
-    router.push('/');
+    navigate('/');
   };
 
   const winner = useMemo(() => {
@@ -206,7 +193,6 @@ export default function GamePage() {
 
   useEffect(() => {
     if (winner) {
-      // Periodic confetti for the winner
       const end = Date.now() + 3 * 1000;
       const colors = ['#f47b25', '#fcd34d', '#22c55e', '#3b82f6'];
 
@@ -294,16 +280,13 @@ export default function GamePage() {
             >
               <div className="relative">
                 {i === 0 && <Trophy className="absolute -top-6 left-1/2 -translate-x-1/2 text-primary fill-primary" size={24} />}
-                <Image 
+                <img 
                   alt={p.nickname} 
                   className={cn(
                     "rounded-full object-cover shadow-lg",
                     i === 0 ? "size-16 border-4 border-primary" : "size-12 border-2 border-white dark:border-slate-800"
                   )} 
                   src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${p.nickname}`}
-                  width={i === 0 ? 64 : 48}
-                  height={i === 0 ? 64 : 48}
-                  unoptimized
                 />
                 <div className={cn(
                   "absolute -bottom-1 -right-1 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md",
@@ -471,12 +454,9 @@ export default function GamePage() {
                   {sortedPlayers.slice(0, 3).map((p, i) => (
                     <div key={p.id} className="flex items-center gap-3">
                       <span className="text-slate-500 text-xs font-black w-4">#{i + 1}</span>
-                      <Image
+                      <img
                         src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${p.nickname}`}
                         alt={p.nickname}
-                        width={28}
-                        height={28}
-                        unoptimized
                         className="size-7 rounded-full border border-white/20"
                       />
                       <span className="text-white text-xs font-bold flex-1 text-left truncate">{p.nickname}</span>
@@ -487,7 +467,7 @@ export default function GamePage() {
               </div>
 
               <button
-                onClick={() => router.push('/')}
+                onClick={() => navigate('/')}
                 className="w-full h-16 bg-primary text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary/30 border-b-4 border-primary-dark active:border-b-0 active:translate-y-1 transition-all"
               >
                 Play Again
@@ -523,12 +503,9 @@ export default function GamePage() {
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   className="size-40 rounded-full border-8 border-primary shadow-2xl relative z-10 overflow-hidden"
                 >
-                  <Image
+                  <img
                     src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${winner.nickname}`}
                     alt={winner.nickname}
-                    width={160}
-                    height={160}
-                    unoptimized
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
@@ -560,7 +537,7 @@ export default function GamePage() {
 
               <div className="flex flex-col gap-3 w-full">
                 <button 
-                  onClick={() => router.push('/')}
+                  onClick={() => navigate('/')}
                   className="h-16 bg-primary text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary/30 border-b-4 border-primary-dark active:border-b-0 active:translate-y-1 transition-all"
                 >
                   Play Again
