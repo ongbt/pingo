@@ -25,6 +25,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (profile?.nickname) {
+      // eslint-disable-next-line
       setNickname(profile.nickname);
     }
   }, [profile]);

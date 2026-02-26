@@ -38,5 +38,6 @@ export interface Player {
   board_layout: number[] | null
   score: number
   is_winner: boolean
+  bingo_rank: number | null
   created_at: string
 }

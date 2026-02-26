@@ -20,6 +20,7 @@ export default function GamePage() {
   const [isEndGameOpen, setIsEndGameOpen] = useState(false);
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
   const [lastLeft, setLastLeft] = useState<string | null>(null);
+  const [lastBingo, setLastBingo] = useState<{ nickname: string, rank: number } | null>(null);
 
   // Refs to avoid stale closures in subscription callbacks
   const gameRef = useRef(game);
@@ -70,10 +71,16 @@ export default function GamePage() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'player', filter: `game_id=eq.${id}` }, (payload) => {
         if (payload.eventType === 'UPDATE') {
           const updated = payload.new as Player;
+          const oldPlayer = playersRef.current.find(p => p.id === updated.id);
           setPlayers(prev => prev.map(p => p.id === updated.id ? updated : p));
           
+          if (!oldPlayer?.is_winner && updated.is_winner) {
+            setLastBingo({ nickname: updated.nickname, rank: updated.bingo_rank || 1 });
+            setTimeout(() => setLastBingo(null), 5000);
+          }
+
           if (updated.board_state) {
-            const oldState = playersRef.current.find(p => p.id === updated.id)?.board_state as number[] || [];
+            const oldState = oldPlayer?.board_state as number[] || [];
             const newState = updated.board_state as number[];
             if (newState.length > oldState.length) {
               const newIndex = newState.find(idx => !oldState.includes(idx));
@@ -142,26 +149,48 @@ export default function GamePage() {
     setMarked(newMarked);
     isWritingRef.current = true;
 
+    // Preserve the bingo bonus when calculating the new score
+    let bonus = 0;
+    if (currentPlayer.is_winner && currentPlayer.bingo_rank) {
+      if (currentPlayer.bingo_rank === 1) bonus = 10;
+      else if (currentPlayer.bingo_rank === 2) bonus = 5;
+      else if (currentPlayer.bingo_rank === 3) bonus = 3;
+      else bonus = 1;
+    }
+
     await supabase
       .from('player')
-      .update({ board_state: newMarked, score: newMarked.length })
+      .update({ board_state: newMarked, score: newMarked.length + bonus })
       .eq('id', currentPlayer.id);
 
     isWritingRef.current = false;
   };
 
   const handleBingo = async () => {
-    if (!hasBingo || !currentPlayer || !game) return;
+    if (!hasBingo || !currentPlayer || !game || currentPlayer.is_winner) return;
 
-    await supabase
-      .from('player')
-      .update({ is_winner: true })
-      .eq('id', currentPlayer.id);
+    // claim_bingo safely assigns rank, updates score, and sets is_winner=true
+    const { error: claimError } = await supabase.rpc('claim_bingo', {
+      p_game_id: game.id,
+      p_player_id: currentPlayer.id
+    });
+    
+    if (claimError) {
+      console.error('Error claiming bingo:', claimError);
+      return;
+    }
 
-    await supabase
-      .from('game')
-      .update({ status: 'finished' })
-      .eq('id', game.id);
+    const firstBingoWins =
+      typeof game.config === 'object' && game.config !== null && !Array.isArray(game.config)
+        ? (game.config as Record<string, unknown>).firstBingoWins as boolean | undefined ?? false
+        : false;
+
+    if (firstBingoWins) {
+      await supabase
+        .from('game')
+        .update({ status: 'finished' })
+        .eq('id', game.id);
+    }
 
     const { error: rpcError } = await supabase.rpc('increment_sheet_play_count', { p_sheet_id: game.sheet.id });
     if (rpcError) console.error('[handleBingo] increment_sheet_play_count failed:', rpcError);
@@ -375,6 +404,28 @@ export default function GamePage() {
         )}
       </AnimatePresence>
 
+      {/* Bingo Claim Toast */}
+      <AnimatePresence>
+        {lastBingo && (
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed top-48 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-6 py-3 flex items-center gap-3 shadow-2xl backdrop-blur-sm">
+              <PartyPopper size={20} className="text-white shrink-0 animate-bounce" />
+              <p className="text-sm font-black text-white uppercase tracking-tight">
+                {lastBingo.nickname} got Bingo!
+                <span className="ml-2 text-yellow-100 italic">
+                  (#{lastBingo.rank})
+                </span>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Bingo Grid */}
       <main className="px-4 pb-32 max-w-md mx-auto w-full flex-grow">
         <div className="grid grid-cols-5 gap-2.5 sm:gap-4 p-4 rounded-[2.5rem] bg-white/30 dark:bg-white/5 backdrop-blur-sm shadow-inner border border-white/20">
@@ -422,16 +473,17 @@ export default function GamePage() {
 
       {/* BINGO Button */}
       <AnimatePresence>
-        {hasBingo && (
+        {hasBingo && !currentPlayer?.is_winner && (
           <motion.div 
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="fixed bottom-0 left-0 right-0 p-8 flex flex-col items-center z-50 bg-gradient-to-t from-white dark:from-background-dark via-white/80 dark:via-background-dark/80 to-transparent"
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 p-8 flex flex-col items-center z-50 bg-gradient-to-t from-white dark:from-background-dark via-white/80 dark:via-background-dark/80 to-transparent pointer-events-none"
           >
             <button 
               onClick={handleBingo}
               disabled={game.status === 'finished'}
-              className="group relative w-full max-w-xs h-20 bg-primary rounded-[2rem] shadow-2xl shadow-primary/40 flex items-center justify-center gap-4 text-white border-b-8 border-[#c65e18] active:border-b-0 active:translate-y-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none"
+              className="group relative w-full max-w-xs h-20 bg-primary rounded-[2rem] shadow-2xl shadow-primary/40 flex items-center justify-center gap-4 text-white border-b-8 border-[#c65e18] active:border-b-0 active:translate-y-2 transition-all transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none pointer-events-auto"
             >
               <PartyPopper size={36} className="animate-bounce" />
               <span className="text-4xl font-black tracking-tighter uppercase italic drop-shadow-md">Bingo!</span>
@@ -511,7 +563,7 @@ export default function GamePage() {
 
       {/* WINNER SCREEN OVERLAY */}
       <AnimatePresence>
-        {winner && !isSpectating && (
+        {game.status === 'finished' && winner && !isSpectating && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

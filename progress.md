@@ -355,3 +355,34 @@ All audit issues fixed in a single session. Summary of changes made:
 - **Toast messages** are context-aware:
   - "Click to Copy Code" (code display area) → **"Room Code Copied!"**
   - Share icon button (clipboard fallback) → **"Invite Link Copied!"**
+
+### Session Robustness (Timeout Mechanisms)
+
+- Added `last_activity_at` column to `game` table.
+- Created Postgres triggers to bump `last_activity_at` when a player joins or
+  marks a cell.
+- Created `expire_stale_sessions` RPC to auto-cancel stale lobbies (15 min) and
+  inactive games (30 min).
+- Created `useSessionTimeout` hook for frontend logic, driving a smart
+  countdown. Auto-calls RPC so `pg_cron` is not required on Free tier.
+- Rendered concise countdown pill UI on `LobbyPage` and `GamePage` (GamePage
+  timer is hidden unless <= 10 mins remain).
+
+### Advanced Bingo Scoring
+
+- Implemented tiered scoring rule where players earn 1 point per marked cell
+  PLUS a bonus depending on their rank when achieving a Bingo:
+  - 1st bingo = 10 pts
+  - 2nd bingo = 5 pts
+  - 3rd bingo = 3 pts
+  - 4th+ bingo = 1 pt
+- Added `bingo_rank` integer to `player` schema and TypeScript types.
+- Replaced frontend `update({ is_winner: true })` with atomic RPC
+  `claim_bingo(p_game_id, p_player_id)` that computes relative rank dynamically
+  to prevent race conditions.
+- Adjusted local `toggleMark` calculation logic so subsequent marks sum the safe
+  base count and the assigned bonus correctly.
+- Set `firstBingoWins` to `false` in `CreatePage.tsx` so multiple participants
+  can hit bingo and race for high-scoring ranks.
+- Added a floating global Toast Notification ("Player got Bingo! (#1)") when
+  anyone claims bingo.
