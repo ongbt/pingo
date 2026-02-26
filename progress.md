@@ -410,3 +410,25 @@ All audit issues fixed in a single session. Summary of changes made:
 - Every player receives a board populated with the exact same 24 items,
   randomized in placement. This minimizes the randomness variance when using
   large sheets (e.g. 50+ items).
+
+### Bug Fix: Immediate Game Over on Start
+
+- **Root Cause**: When the host clicked "Start Game", the realtime subscription
+  changed the `game.status` to `active` _before_ the initial fetch had finished
+  populating the `players` array. This caused the `minTwoPlayers` check
+  (`players.length < 2`) in `GamePage.tsx` to mistakenly evaluate to true on an
+  empty array, immediately ending the game.
+- **Fix**: Added a `playersLoadedRef` that is set to `true` only after the
+  initial `fetchData` completes. The `minTwoPlayers` effect is now gated by this
+  ref, ensuring the game only auto-terminates if the player count drops below 2
+  _after_ the initial data has securely loaded.
+
+### UX Fix: Accurate Game Over Reason
+
+- **Issue**: The "Game Over" modal hardcoded the message "The host ended the
+  game", which is misleading if the game ended automatically because a non-host
+  player quit (triggering the `< 2` players `minTwoPlayers` rule).
+- **Fix**: The message text now evaluates `minTwoPlayers` and `players.length`.
+  If the player count is critically low, it correctly communicates **"Not enough
+  players to continue"**. Otherwise, it accurately attributes the termination to
+  the host.

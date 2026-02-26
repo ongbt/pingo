@@ -43,14 +43,13 @@ export default function GamePage() {
         console.error('Error fetching game:', gameError);
         return;
       }
-      setGame(gameData as unknown as (Game & { sheet: Sheet }));
-
       const { data: playersData } = await supabase
         .from('player')
         .select('*')
         .eq('game_id', id);
 
       const pList = playersData || [];
+      setGame(gameData as unknown as (Game & { sheet: Sheet }));
       setPlayers(pList);
 
       const savedPlayerId = localStorage.getItem(`pingo_player_${id}`);
@@ -62,6 +61,7 @@ export default function GamePage() {
         }
       }
       setLoading(false);
+      playersLoadedRef.current = true;
     };
 
     fetchData();
@@ -137,6 +137,7 @@ export default function GamePage() {
     return wins.some(line => line.every(idx => markedSet.has(idx)));
   }, [marked]);
 
+  const playersLoadedRef = useRef(false);
   const isWritingRef = useRef(false);
   const toggleMark = async (index: number) => {
     if (index === 12 || !currentPlayer || !game || game.status === 'finished') return;
@@ -248,7 +249,7 @@ export default function GamePage() {
 
   // Enforce minTwoPlayers during gameplay
   useEffect(() => {
-    if (!game || game.status !== 'active') return;
+    if (!playersLoadedRef.current || !game || game.status !== 'active') return;
 
     const minTwoPlayers =
       typeof game.config === 'object' && game.config !== null && !Array.isArray(game.config)
@@ -550,7 +551,9 @@ export default function GamePage() {
                 Game Over
               </h2>
               <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-10">
-                The host ended the game
+                {((game.config as Record<string, unknown>)?.minTwoPlayers && players.length < 2) 
+                  ? "Not enough players to continue" 
+                  : "The host ended the game"}
               </p>
 
               <div className="bg-white/10 rounded-3xl p-5 w-full backdrop-blur-md border border-white/10 mb-8">
