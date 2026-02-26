@@ -55,6 +55,9 @@ townhalls, and casual group play.
 - **Anti-Cheating Mode**: An optional setting where a cell is only officially
   "marked" if at least 2 different players select the same item (useful for
   townhall-style verification).
+  - _Requirement:_ When enabled, the game must ensure that all players receive a
+    card generated from the exact same subset of 24 words (+ 1 free space), even
+    if the selected sheet has a larger pool of items.
 
 ### Game Master (GM) Controls
 

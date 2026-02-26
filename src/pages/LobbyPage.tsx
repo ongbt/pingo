@@ -178,13 +178,43 @@ export default function LobbyPage() {
 
     const gameId = String(id);
 
-    const generateShuffledLayout = (totalPoolCount: number): number[] => {
-      const pool = Array.from({ length: totalPoolCount }, (_, i) => i);
-      for (let i = pool.length - 1; i > 0; i--) {
+    const antiCheat =
+      typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)
+        ? (game.config as Record<string, unknown>).antiCheat as boolean | undefined ?? false
+        : false;
+
+    const totalItems = (game as unknown as { sheet?: { items?: string[] } })?.sheet?.items?.length || 25;
+
+    let sharedItemIndices: number[] | null = null;
+    if (antiCheat && totalItems > 24) {
+      // Pick exactly 24 items to be shared universally among all players
+      const fullPool = Array.from({ length: totalItems }, (_, i) => i);
+      for (let i = fullPool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
+        [fullPool[i], fullPool[j]] = [fullPool[j], fullPool[i]];
       }
-      const selected = pool.slice(0, 24);
+      sharedItemIndices = fullPool.slice(0, 24);
+    }
+
+    const generateShuffledLayout = (totalPoolCount: number, sharedPool: number[] | null): number[] => {
+      let selected: number[];
+      if (sharedPool) {
+        // If anti-cheat is on, randomly shuffle the *exact same 24 items* for this player
+        selected = [...sharedPool];
+        for (let i = selected.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [selected[i], selected[j]] = [selected[j], selected[i]];
+        }
+      } else {
+        // Otherwise, fully randomize their card from the entire possible pool of items
+        const pool = Array.from({ length: totalPoolCount }, (_, i) => i);
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        selected = pool.slice(0, 24);
+      }
+
       const layout = new Array(25).fill(-1);
       for (let i = 0; i < 25; i++) {
         if (i < 12) layout[i] = selected[i];
@@ -193,12 +223,10 @@ export default function LobbyPage() {
       return layout;
     };
 
-    const totalItems = (game as unknown as { sheet?: { items?: string[] } })?.sheet?.items?.length || 25;
-
     // Assign board layouts in parallel — avoids N+1 sequential DB round-trips
     const layoutResults = await Promise.all(
       players.map((player) => {
-        const layout = generateShuffledLayout(totalItems);
+        const layout = generateShuffledLayout(totalItems, sharedItemIndices);
         return supabase.from('player').update({ board_layout: layout }).eq('id', player.id);
       })
     );
