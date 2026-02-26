@@ -1,11 +1,12 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player, Sheet } from '@/types';
 import { cn } from '@/lib/utils';
-import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye, OctagonX } from 'lucide-react';
+import { LogOut, Grid3X3, Star, PartyPopper, Volume2, Settings, Trophy, ShieldCheck, Eye, OctagonX, Timer } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 
 export default function GamePage() {
   const { id } = useParams<{ id: string }>();
@@ -216,6 +217,23 @@ export default function GamePage() {
     return [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
   }, [players]);
 
+  // Game session timeout
+  const gameTimeoutMin =
+    typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)
+      ? (game.config as Record<string, unknown>).game_timeout_min as number | undefined ?? 30
+      : 30;
+
+  const handleGameExpire = useCallback(() => {
+    navigate('/', { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const gameTimeout = useSessionTimeout({
+    lastActivityAt: game?.last_activity_at,
+    timeoutMinutes: gameTimeoutMin,
+    onExpire: handleGameExpire,
+  });
+
   if (loading || !game) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
@@ -249,6 +267,27 @@ export default function GamePage() {
             {game.sheet.title}
           </h1>
         </div>
+        {/* Game timeout pill - only shown when <= 10 mins remaining */}
+        <AnimatePresence>
+          {game.status !== 'finished' && gameTimeout.secondsLeft !== null && gameTimeout.secondsLeft <= 600 && (
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={gameTimeout.isUrgent ? { scale: [1, 1.05, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.5, repeat: gameTimeout.isUrgent ? Infinity : 0 }}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors shadow-sm",
+                gameTimeout.isUrgent
+                  ? "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50"
+                  : "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50"
+              )}
+              title="Game auto-ends due to inactivity"
+            >
+              <Timer size={12} className={cn(gameTimeout.isUrgent && "animate-pulse")} />
+              <span>Idle: <span className="tabular-nums">{gameTimeout.label}</span></span>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <button 
           onClick={handleQuit}
           disabled={currentPlayer?.is_host}

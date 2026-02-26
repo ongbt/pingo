@@ -25,6 +25,7 @@ export interface Game {
   config: Json
   sheet?: Sheet
   created_at: string
+  last_activity_at: string
 }
 
 export interface Player {

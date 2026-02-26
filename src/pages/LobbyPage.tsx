@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Copy, Share2, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff } from 'lucide-react';
+import { Copy, Share2, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff, Timer } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 
 export default function LobbyPage() {
   const { id } = useParams<{ id: string }>();
@@ -103,6 +104,12 @@ export default function LobbyPage() {
         (payload) => {
           if (payload.new.status === 'active') {
             navigate(`/game/${gameId}`);
+          } else if (payload.new.status === 'finished') {
+            // Server-side expiry (e.g., via expire_stale_sessions RPC) — go home
+            navigate('/', { replace: true });
+          } else {
+            // Sync last_activity_at so the countdown stays accurate
+            setGame((prev) => prev ? { ...prev, last_activity_at: payload.new.last_activity_at as string } : prev);
           }
         }
       )
@@ -138,6 +145,23 @@ export default function LobbyPage() {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]); // navigate from React Router v6 is referentially stable — omitting intentionally
+
+  // Read configurable thresholds from game.config (defaults: 15 min lobby, 30 min game)
+  const lobbyTimeoutMin =
+    typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)
+      ? (game.config as Record<string, unknown>).lobby_timeout_min as number | undefined ?? 15
+      : 15;
+
+  const handleLobbyExpire = useCallback(() => {
+    navigate('/', { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const timeout = useSessionTimeout({
+    lastActivityAt: game?.last_activity_at,
+    timeoutMinutes: lobbyTimeoutMin,
+    onExpire: handleLobbyExpire,
+  });
 
   const handleStartGame = async () => {
     // Client-side guard: only render the button for hosts, but we also
@@ -379,6 +403,45 @@ export default function LobbyPage() {
             <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider">Game Mode</p>
             <p className="text-slate-900 dark:text-slate-100 text-2xl font-black">Classic</p>
           </div>
+        </div>
+
+        {/* Lobby Timeout Countdown */}
+        <div className="px-4 pb-2">
+          <motion.div
+            animate={timeout.isUrgent ? { scale: [1, 1.02, 1] } : {}}
+            transition={{ duration: 0.6, repeat: Infinity }}
+            className={cn(
+              "flex items-center gap-3 rounded-2xl px-4 py-3 border transition-colors",
+              timeout.isUrgent
+                ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                : "bg-white/40 dark:bg-slate-900/50 border-white/50 dark:border-slate-800"
+            )}
+          >
+            <Timer
+              size={16}
+              className={cn(
+                "shrink-0",
+                timeout.isUrgent ? "text-red-500" : "text-slate-400 dark:text-slate-500"
+              )}
+            />
+            <div className="flex-1">
+              <p className={cn(
+                "text-[10px] font-black uppercase tracking-wider",
+                timeout.isUrgent ? "text-red-400" : "text-slate-400"
+              )}>
+                {timeout.isUrgent ? "Lobby closing soon!" : "Lobby auto-closes in"}
+              </p>
+              <p className={cn(
+                "text-lg font-black tabular-nums leading-none mt-0.5",
+                timeout.isUrgent ? "text-red-500" : "text-slate-700 dark:text-slate-200"
+              )}>
+                {timeout.label}
+              </p>
+            </div>
+            <p className="text-[9px] font-medium text-slate-400 text-right">
+              Closes if host<br />doesn&#39;t start
+            </p>
+          </motion.div>
         </div>
 
         {/* Player Grid */}
