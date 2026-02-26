@@ -227,3 +227,42 @@ largely complete:
     change.
   - Shows `"…"` while loading, then the live count formatted as a number (or
     `"1.2k"` style for ≥1000).
+
+## 2026-02-26
+
+### Performance & Code Quality Audit (Phase 9)
+
+Full static code review conducted across all pages and shared modules. **15
+issues** identified — 3 critical, 7 moderate, 5 minor. All tracked in
+`task_plan.md § Phase 9`. No fixes applied yet; audit captured for prioritized
+resolution.
+
+#### 🔴 Critical
+
+| # | File            | Summary                                                                                                                 |
+| - | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 1 | `LobbyPage.tsx` | `gameError` checked _after_ status branches — failed queries silently fall through; `gameData.status` mutated directly. |
+| 2 | `LobbyPage.tsx` | `handleStartGame` fires one sequential `UPDATE` per player (N+1). With 12 players = 12 DB round-trips.                  |
+| 3 | `GamePage.tsx`  | Bingo win check uses `Array.includes()` (O(n)) inside nested loops. Simple `Set` conversion eliminates this.            |
+
+#### 🟡 Moderate
+
+| #  | File              | Summary                                                                                                             |
+| -- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 4  | `HomePage.tsx`    | `useLivePlayerCount` fires 2 chained queries on every realtime event (player change, game update).                  |
+| 5  | `LobbyPage.tsx`   | `navigate` in `useEffect` deps causes Supabase channels to be torn down and re-created on re-renders.               |
+| 6  | `GamePage.tsx`    | No debounce on cell tap — rapid taps fire multiple overlapping `supabase.update()` calls.                           |
+| 7  | `AuthContext.tsx` | `isLoading` stays `true` indefinitely if `fetchProfile` fails and `setProfile(null)` is called while `user` exists. |
+| 8  | `SheetsPage.tsx`  | Mount fires 3 sequential queries (top sheets → localStorage IDs → auth user + auth sheets).                         |
+| 9  | `LobbyPage.tsx`   | Background image sourced from a hardcoded, unversioned Google URL with no `width`/`height` (CLS risk).              |
+| 10 | `LobbyPage.tsx`   | Mock "Sarah K." chat UI with non-functional input/send shipped to production.                                       |
+
+#### 🟢 Minor / Code Quality
+
+| #  | File                              | Summary                                                                                                        |
+| -- | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 11 | `CreatePage.tsx` / `JoinPage.tsx` | Redundant `supabase.auth.getUser()` called after insert; `user` already available from `AuthContext`.          |
+| 12 | `GamePage.tsx`                    | Confetti `requestAnimationFrame` loop has no cleanup — leaks if component unmounts before 3-second timer ends. |
+| 13 | `ProfilePage.tsx`                 | `LogOut` and `LinkIcon` imported but only used with `className="hidden"` — dead code.                          |
+| 14 | `PopularSheets.tsx`               | `select('*')` pulls full `items` array (25–100 strings) for a component that only needs title + play count.    |
+| 15 | `App.tsx`                         | All 9 pages eagerly imported — no route-based code splitting or `React.lazy()`.                                |

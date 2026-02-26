@@ -142,3 +142,108 @@
 - [x] Add route `/profile` guarded by auth check.
 - [x] Update navigation header / Home page to show user avatar or initials when
       signed in, with a Sign Out option.
+
+## Phase 9: Performance & Code Quality Audit 🏗️
+
+> Audit conducted 2026-02-26. 15 issues identified across 6 files. Priority: 🔴
+> Critical → 🟡 Moderate → 🟢 Minor.
+
+### 9A: Critical Fixes
+
+- [ ] **`LobbyPage.tsx` — Logic bug: error check after status checks**
+      (`lines 33–60`)
+  - `gameError` is checked _after_ `gameData?.status` branches, meaning a failed
+    query silently falls through. Also mutates `gameData.status` directly (line
+    54).
+  - **Fix**: Move error check to the top, then handle statuses below it.
+
+- [ ] **`LobbyPage.tsx` — N+1 sequential DB writes in `handleStartGame`**
+      (`lines 149–161`)
+  - Iterates players in a `for...of` and fires one `UPDATE` per player
+    sequentially. With 12 players → 12 sequential round-trips before the game
+    can start.
+  - **Fix**: Replace with `Promise.all()` to run all layout updates in parallel.
+
+- [ ] **`GamePage.tsx` — O(n) `includes()` in bingo win check** (`line 128–129`)
+  - `markedWithCenter.includes(idx)` iterates an array inside nested loops (12
+    win lines × 5 cells = up to 60 O(n) checks per render).
+  - **Fix**: Convert `markedWithCenter` to a `Set` for O(1) `.has()` lookups.
+
+### 9B: Moderate Fixes
+
+- [ ] **`HomePage.tsx` — 2 chained queries on every realtime event**
+      (`lines 16–33`)
+  - `useLivePlayerCount` fires `fetchCount()` (2 sequential queries) on every
+    player INSERT/DELETE and game UPDATE — excessive DB load during active
+    games.
+  - **Fix**: Create a Supabase RPC/view that returns live count in a single
+    query.
+
+- [ ] **`LobbyPage.tsx` — `navigate` in `useEffect` deps causes extra
+      re-subscriptions** (`line 125`)
+  - Including `navigate` in the dependency array tears down/re-creates both
+    Realtime channels when `navigate` reference changes between renders.
+  - **Fix**: Wrap navigate calls in a `useRef` or remove from deps (it's
+    stable).
+
+- [ ] **`GamePage.tsx` — No debounce on cell tap → overlapping DB writes**
+      (`lines 141–144`)
+  - Every tap fires an immediate `await supabase.update()`. Rapid taps create
+    overlapping requests with no rollback on failure.
+  - **Fix**: Add debounce (e.g., `useRef` timer) or confirm-then-write pattern.
+
+- [ ] **`AuthContext.tsx` — `isLoading` stuck `true` when profile fetch fails**
+      (`lines 42–78`)
+  - If `fetchProfile` errors, `setProfile(null)` is called but `isLoading` is
+    never cleared because the `user && profile` condition is not met.
+  - **Fix**: Always call `setIsLoading(false)` in the `fetchProfile` finally
+    block.
+
+- [ ] **`SheetsPage.tsx` — 3 sequential queries on mount** (`lines 264–301`)
+  - Top sheets query, localStorage sheets query, and auth user + auth sheets
+    query all run sequentially. Items 1 and 2 have no dependency on each other.
+  - **Fix**: Parallelize queries 1 and 3 with `Promise.all()`.
+
+- [ ] **`LobbyPage.tsx` — Hardcoded external Google image URL** (`line 215`)
+  - `src="https://lh3.googleusercontent.com/..."` will break if unavailable.
+    Also missing `width`/`height` attributes → layout shift (CLS regression).
+  - **Fix**: Host asset locally in `/public`, add explicit dimensions.
+
+- [ ] **`LobbyPage.tsx` — Mock chat UI shipped in production** (`lines 346–372`)
+  - Hardcoded "Sarah K." messages with a non-functional Send button/input
+    confuse real users into thinking chat works.
+  - **Fix**: Remove mock chat section entirely, or implement real lobby chat.
+
+### 9C: Minor / Code Quality
+
+- [ ] **`CreatePage.tsx` / `JoinPage.tsx` — Redundant `supabase.auth.getUser()`
+      call** (`CreatePage line 320`, `JoinPage line 64`)
+  - `getUser()` is called after insert when `profile` / `user` is already
+    available from `AuthContext`.
+  - **Fix**: Use `profile.id` from `useAuth()` context directly.
+
+- [ ] **`GamePage.tsx` — Confetti `requestAnimationFrame` loop leaks on
+      unmount** (`lines 194–220`)
+  - The 3-second confetti loop has no cleanup. If the component unmounts
+    mid-loop (e.g., `navigate('/')`) the RAF keeps firing → CPU/memory leak.
+  - **Fix**: Add `let active = true` flag and return `() => { active = false; }`
+    from `useEffect`.
+
+- [ ] **`ProfilePage.tsx` — Unused imports and dead `hidden` elements**
+      (`lines 7, 152–153`)
+  - `LogOut` and `LinkIcon` imported but rendered only with
+    `className="hidden"`.
+  - **Fix**: Remove the unused imports and dead JSX nodes.
+
+- [ ] **`PopularSheets.tsx` — `select('*')` fetches oversized sheet data**
+      (`line 26`)
+  - Fetches all columns including the full `items` array (25–100 strings) just
+    to display title and play count.
+  - **Fix**: `select('id, title, play_count, items')` — or add a denormalized
+    `item_count` column to avoid shipping the full items array.
+
+- [ ] **`App.tsx` — No route-based code splitting** (`lines 1–10`)
+  - All 9 pages are eagerly imported, bundled into a single chunk, and loaded on
+    every page visit.
+  - **Fix**: Wrap heavy pages (`GamePage`, `SheetsPage`, `LobbyPage`, etc.) in
+    `React.lazy()` + `<Suspense>` for route-level code splitting.
