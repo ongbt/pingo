@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Copy, ArrowLeft, UserPlus, Star, CheckCircle } from 'lucide-react';
+import { Copy, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
 
@@ -15,6 +15,7 @@ export default function LobbyPage() {
   const [loading, setLoading] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [showCopied, setShowCopied] = useState(false);
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
@@ -76,14 +77,19 @@ export default function LobbyPage() {
       const pList = playersData || [];
       setPlayers(pList);
 
+      // Identify the current player only from the persisted session ID.
+      // If there's no localStorage entry (or the ID is stale/unknown) the
+      // visitor has no business being in this lobby — block them.
       const savedPlayerId = localStorage.getItem(`pingo_player_${gameId}`);
-      if (savedPlayerId) {
-        const found = pList.find(p => p.id === savedPlayerId) || null;
-        setCurrentPlayer(found);
-      } else {
-        if (pList.length > 0) setCurrentPlayer(pList[pList.length - 1]);
+      const found = savedPlayerId ? pList.find(p => p.id === savedPlayerId) ?? null : null;
+
+      if (!found) {
+        setIsUnauthorized(true);
+        setLoading(false);
+        return;
       }
 
+      setCurrentPlayer(found);
       setLoading(false);
     };
 
@@ -109,7 +115,12 @@ export default function LobbyPage() {
         { event: '*', schema: 'public', table: 'player', filter: `game_id=eq.${gameId}` },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setPlayers((prev) => [...prev, payload.new as Player]);
+            setPlayers((prev) => {
+              // Guard against the channel replaying an INSERT that the initial
+              // fetch already captured (common on first subscribe).
+              if (prev.some(p => p.id === (payload.new as Player).id)) return prev;
+              return [...prev, payload.new as Player];
+            });
           } else if (payload.eventType === 'DELETE') {
             setPlayers((prev) => prev.filter((p) => p.id !== payload.old.id));
           } else if (payload.eventType === 'UPDATE') {
@@ -129,6 +140,8 @@ export default function LobbyPage() {
   }, [id]); // navigate from React Router v6 is referentially stable — omitting intentionally
 
   const handleStartGame = async () => {
+    // Client-side guard: only render the button for hosts, but we also
+    // enforce this server-side via the start_game RPC.
     if (!currentPlayer?.is_host) return;
 
     const gameId = String(id);
@@ -164,10 +177,13 @@ export default function LobbyPage() {
       return;
     }
 
-    const { error } = await supabase
-      .from('game')
-      .update({ status: 'active' })
-      .eq('id', gameId);
+    // Use the start_game RPC so that host verification is enforced
+    // server-side — a non-host visitor who directly calls the Supabase
+    // API cannot start the game even if they know the game ID.
+    const { error } = await supabase.rpc('start_game', {
+      p_game_id: gameId,
+      p_player_id: currentPlayer.id,
+    });
 
     if (error) {
       console.error('Error starting game:', error);
@@ -189,10 +205,62 @@ export default function LobbyPage() {
     }
   };
 
+  // Auto-redirect unauthorized visitors back to home after a short delay
+  useEffect(() => {
+    if (!isUnauthorized) return;
+    const t = setTimeout(() => navigate('/', { replace: true }), 3000);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUnauthorized]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (isUnauthorized) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#E8F4F8] dark:bg-background-dark font-display p-6 text-center">
+        {/* Background flair */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#ffffff_0%,_#d0eaf5_100%)] dark:bg-[radial-gradient(circle_at_50%_40%,_#221710_0%,_#110a06_100%)] opacity-80" />
+        </div>
+
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+          className="flex flex-col items-center gap-6 max-w-xs w-full"
+        >
+          {/* Icon */}
+          <div className="size-24 rounded-3xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center shadow-lg">
+            <ShieldOff size={44} className="text-red-500" />
+          </div>
+
+          <div>
+            <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-2">
+              Access Denied
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-relaxed">
+              You haven&apos;t joined this lobby. Ask the host for the room code and join from the home screen.
+            </p>
+          </div>
+
+          {/* Countdown hint */}
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            Redirecting you home&hellip;
+          </p>
+
+          <button
+            onClick={() => navigate('/', { replace: true })}
+            className="w-full bg-primary text-white font-black py-4 rounded-2xl text-sm tracking-widest uppercase shadow-xl shadow-primary/30 active:scale-95 transition-all"
+          >
+            Go Home Now
+          </button>
+        </motion.div>
       </div>
     );
   }
