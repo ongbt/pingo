@@ -250,3 +250,48 @@
     every page visit.
   - **Fix**: All 9 pages converted to `React.lazy()` + single `<Suspense>`
     boundary with a shared `PageSpinner` fallback.
+
+## Phase 10: Security & UX Hardening ✅
+
+### 10A: Host-Only Game Start (Server-Side Enforcement)
+
+- [x] Create `start_game(p_game_id, p_player_id)` Postgres RPC function with
+      `SECURITY DEFINER`.
+  - Validates `is_host = true` for the given player + game is in `'lobby'`
+    state.
+  - Raises `Forbidden` exception for non-hosts.
+  - Grants `EXECUTE` to `anon` and `authenticated` roles.
+- [x] Migration `20260226050000_start_game_rpc.sql` pushed to local and
+      production Supabase.
+- [x] Replace direct `game` table `UPDATE` in `handleStartGame` with
+      `supabase.rpc('start_game', ...)`.
+- [x] Remove `else` fallback in player identification that could grant any URL
+      visitor another player's identity.
+
+### 10B: Lobby Access Control
+
+- [x] Block unauthorized URL visitors from viewing the lobby.
+  - Only users with a valid `pingo_player_<gameId>` localStorage entry (matching
+    an existing DB player) may enter.
+  - Stale or missing sessions → `isUnauthorized = true`.
+- [x] Show **Access Denied** screen with `ShieldOff` icon and explanation
+      message.
+- [x] Auto-redirect to `/` after 3 seconds (`replace: true` — disables back
+      button).
+- [x] "Go Home Now" button for instant redirect.
+
+### 10C: Bug Fix — Duplicate Host in Lobby Participants
+
+- [x] Deduplicate `INSERT` events in the `lobby_players` realtime channel.
+  - Supabase replays recent inserts on subscribe; added `id` check before
+    appending.
+
+### 10D: Share / Invite Link Feature
+
+- [x] Lobby card's Copy button → **Share icon button** (`Share2`).
+  - Uses `navigator.share` (native OS share sheet) where available.
+  - Falls back to copying the deep-link URL to clipboard.
+- [x] Join URL: `<origin>/join?code=XXXXXX`
+- [x] `JoinPage.tsx`: Read `?code=` query param and pre-fill the room code input
+      on mount.
+- [x] Context-aware toast: "Room Code Copied!" vs "Invite Link Copied!".

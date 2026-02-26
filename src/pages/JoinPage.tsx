@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { ArrowLeft, Star } from 'lucide-react';
@@ -7,8 +7,13 @@ import { cn } from '@/lib/utils';
 
 export default function JoinPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { profile, user } = useAuth();
-  const [code, setCode] = useState('');
+  // Pre-fill code from ?code= query param (set by the host's Share link)
+  const [code, setCode] = useState(() => {
+    const param = searchParams.get('code') ?? '';
+    return param.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+  });
   const [nickname, setNickname] = useState('');
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState('');

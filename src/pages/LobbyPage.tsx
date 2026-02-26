@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Copy, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff } from 'lucide-react';
+import { Copy, Share2, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
 
@@ -14,7 +14,7 @@ export default function LobbyPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [showCopied, setShowCopied] = useState(false);
+  const [copiedMsg, setCopiedMsg] = useState<string | null>(null);
   const [isUnauthorized, setIsUnauthorized] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
@@ -198,10 +198,36 @@ export default function LobbyPage() {
     if (!game) return;
     try {
       await navigator.clipboard.writeText(game.room_code);
-      setShowCopied(true);
-      setTimeout(() => setShowCopied(false), 2000);
+      setCopiedMsg('Room Code Copied!');
+      setTimeout(() => setCopiedMsg(null), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!game) return;
+    const joinUrl = `${window.location.origin}/join?code=${game.room_code}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Join my Pingo game!',
+          text: `Use code ${game.room_code} to join my Bingo lobby.`,
+          url: joinUrl,
+        });
+        return;
+      } catch (err) {
+        // User cancelled share sheet — do nothing
+        if ((err as Error).name === 'AbortError') return;
+      }
+    }
+    // Fallback: copy the join URL to clipboard
+    try {
+      await navigator.clipboard.writeText(joinUrl);
+      setCopiedMsg('Invite Link Copied!');
+      setTimeout(() => setCopiedMsg(null), 2000);
+    } catch (err) {
+      console.error('Failed to share:', err);
     }
   };
 
@@ -307,12 +333,6 @@ export default function LobbyPage() {
             Game ID: #{id?.toString().slice(0, 5)}
           </p>
         </div>
-        <button
-          onClick={handleCopy}
-          className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary active:scale-95 transition-transform"
-        >
-          <Copy size={20} />
-        </button>
       </div>
 
       {/* Scrollable Content Area */}
@@ -340,10 +360,10 @@ export default function LobbyPage() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase mt-1">Click to Copy Code</span>
               </div>
               <button
-                onClick={handleCopy}
+                onClick={handleShare}
                 className="aspect-square bg-primary text-white rounded-2xl flex items-center justify-center px-4 shadow-lg shadow-primary/20 active:scale-95 transition-transform"
               >
-                <Copy size={24} />
+                <Share2 size={24} />
               </button>
             </div>
           </motion.div>
@@ -416,17 +436,17 @@ export default function LobbyPage() {
 
       </div>
 
-      {/* Copy Notification */}
+      {/* Copy / Share Notification */}
       <AnimatePresence>
-        {showCopied && (
+        {copiedMsg && (
           <motion.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
-            className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3 rounded-full font-black uppercase text-xs tracking-widest shadow-2xl flex items-center gap-2"
+            className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3 rounded-full font-black uppercase text-xs tracking-widest shadow-2xl flex items-center gap-2 whitespace-nowrap"
           >
             <CheckCircle className="text-green-500" size={16} />
-            Room Code Copied!
+            {copiedMsg}
           </motion.div>
         )}
       </AnimatePresence>

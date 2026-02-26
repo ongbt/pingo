@@ -291,3 +291,67 @@ All audit issues fixed in a single session. Summary of changes made:
 | `ProfilePage.tsx`   | Removed unused `LinkIcon` import and dead `className="hidden"` nodes                 |
 | `PopularSheets.tsx` | `select('*')` → `select('id, title, play_count, items')`                             |
 | `App.tsx`           | All 9 pages converted to `React.lazy()` + shared `<Suspense>` with `PageSpinner`     |
+
+## 2026-02-26 (cont.)
+
+### Phase 10: Security & UX Hardening
+
+#### 🔐 Host-Only Game Start Enforcement
+
+- **Problem**: `handleStartGame` relied solely on a client-side
+  `currentPlayer?.is_host` guard. Since the RLS policy on the `game` table
+  allowed any anonymous caller to run `UPDATE`, a URL-visiting non-host could
+  start the game via a direct Supabase API call.
+- **Fix 1 — Backend**: Created `start_game(p_game_id, p_player_id)` Postgres
+  function (migration `20260226050000_start_game_rpc.sql`):
+  - `SECURITY DEFINER` so the `anon` role can call it.
+  - Server-side checks: `is_host = true` for the given player + game must be in
+    `'lobby'` state. Raises `Forbidden` exception otherwise.
+  - `GRANT EXECUTE` to `anon` and `authenticated` roles.
+- **Fix 2 — Frontend** (`LobbyPage.tsx`): Replaced direct
+  `supabase.from('game').update({ status: 'active' })` call with
+  `supabase.rpc('start_game', { p_game_id, p_player_id })`.
+- **Fix 3 — Frontend** (`LobbyPage.tsx`): Removed the `else` fallback that was
+  setting `currentPlayer` to the last player in the list when no `localStorage`
+  entry existed — any URL visitor inheriting another player's role was silently
+  granted lobby access.
+- Migration pushed to both **local** and **production** Supabase.
+
+#### 🚫 Lobby Access Control (Unauthorized URL Visitor)
+
+- **Problem**: Any user who obtained the lobby URL (`/lobby/:id`) could view the
+  full waiting room — player list, room code, and game details — even if they
+  had not joined.
+- **Fix** (`LobbyPage.tsx`):
+  - After players are fetched, the page checks `localStorage` for a valid
+    `pingo_player_<gameId>` entry. If absent or stale (ID not found in the
+    player list), `isUnauthorized` is set to `true`.
+  - An **Access Denied** screen is shown (animated, with `ShieldOff` icon,
+    explanation text, and a "Go Home Now" CTA).
+  - Auto-redirects to `/` after 3 seconds using
+    `navigate('/', { replace: true })` — back button is disabled.
+
+#### 🐛 Duplicate Host in Lobby Participants
+
+- **Root cause**: Supabase Realtime replays recent `INSERT` events when a
+  channel first subscribes. The host's `INSERT` (fired in `CreatePage`) was
+  replayed when `LobbyPage` mounted, causing the host to appear twice.
+- **Fix** (`LobbyPage.tsx`): Added an ID deduplication guard in the `INSERT`
+  handler: `if (prev.some(p => p.id === payload.new.id)) return prev;` — skips
+  the push if the player is already in state.
+
+#### 🔗 Share / Invite Link
+
+- **Feature**: Lobby card's Copy icon button replaced with a **Share icon
+  button** (`Share2` from Lucide).
+  - On mobile / supported browsers → triggers the native OS **share sheet** with
+    title, message, and a deep-link URL.
+  - On desktop (no `navigator.share`) → falls back to copying the join URL to
+    clipboard.
+- **Join URL format**: `https://<origin>/join?code=XXXXXX`
+- **`JoinPage.tsx`**: Reads `?code=` query param on mount and pre-fills the room
+  code input. Players who tap a share link land on the Join page with the code
+  ready to go — they just need to enter their nickname.
+- **Toast messages** are context-aware:
+  - "Click to Copy Code" (code display area) → **"Room Code Copied!"**
+  - Share icon button (clipboard fallback) → **"Invite Link Copied!"**

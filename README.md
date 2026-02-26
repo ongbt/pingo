@@ -15,18 +15,29 @@ celebrations, and a custom sheet builder.
   ambiguity) with collision protection.
 - **Custom Sheet Builder**: Players can create, name, and manage their own bingo
   sheets via the My Sheets page, persisted in localStorage.
+- **Share / Invite Links**: Lobby share button generates a deep-link
+  (`/join?code=XXXXXX`) that pre-fills the code on the Join page — works via
+  native OS share sheet on mobile or clipboard fallback on desktop.
 - **User Engagement**:
   - Visual victory celebrations with confetti and grand winner modals.
   - Quick-join flow with persistent nickname memory via localStorage.
-  - "Copy to Clipboard" sharing directly from the lobby.
+  - "Copy to Clipboard" and Share shortcut directly from the lobby.
 - **Host Controls**:
-  - Start the game and auto-assign randomized boards to all players.
+  - Start the game — enforced server-side via a `SECURITY DEFINER` Postgres RPC
+    (`start_game`). Non-hosts cannot start the game even by calling the API
+    directly.
+  - Auto-assign randomized boards to all players in parallel.
   - Force-end the game at any time with a confirmation modal ("End Game").
   - A real-time broadcast ensures all players instantly see the "Game Over"
     screen with final standings.
 - **Player Controls**:
   - Non-host players can quit mid-game; their record is deleted from Supabase
     and removed from other players' leaderboards in real-time.
+- **Security**:
+  - Lobby access is gated — URL visitors without a valid player session see an
+    Access Denied screen and are redirected home after 3 seconds.
+  - Game start is enforced at the database layer via a `SECURITY DEFINER` RPC,
+    not just a client-side guard.
 - **Premium UI/UX**: Ultra-modern design with smooth Framer Motion transitions,
   dark mode aesthetics, and interactive player leaderboards.
 
@@ -80,7 +91,7 @@ pingo/
 │   ├── lib/            # Supabase client & shared utilities
 │   └── types/          # TypeScript interfaces
 ├── supabase/
-│   ├── migrations/     # All DB migrations (11 total)
+│   ├── migrations/     # All DB migrations (12 total)
 │   └── seed.sql        # Default bingo sheets seed
 ├── public/
 │   └── _redirects      # Cloudflare SPA routing
@@ -89,14 +100,17 @@ pingo/
 
 ## 🌐 Routes
 
-| Route        | Page       | Description                              |
-| ------------ | ---------- | ---------------------------------------- |
-| `/`          | HomePage   | Landing — host or join a game            |
-| `/create`    | CreatePage | Select/create a sheet and launch a lobby |
-| `/join`      | JoinPage   | Enter room code + nickname               |
-| `/lobby/:id` | LobbyPage  | Waiting room before game start           |
-| `/game/:id`  | GamePage   | Live bingo game board                    |
-| `/sheets`    | SheetsPage | Manage custom bingo sheets               |
+| Route        | Page        | Description                                            |
+| ------------ | ----------- | ------------------------------------------------------ |
+| `/`          | HomePage    | Landing — host or join a game                          |
+| `/create`    | CreatePage  | Select/create a sheet and launch a lobby               |
+| `/join`      | JoinPage    | Enter room code + nickname (supports `?code=` prefill) |
+| `/lobby/:id` | LobbyPage   | Waiting room before game start                         |
+| `/game/:id`  | GamePage    | Live bingo game board                                  |
+| `/sheets`    | SheetsPage  | Manage custom bingo sheets                             |
+| `/profile`   | ProfilePage | View/edit profile (auth required)                      |
+| `/signin`    | SignInPage  | Email/password + Google sign in                        |
+| `/signup`    | SignUpPage  | Create a new account                                   |
 
 ## 🚢 Deployment
 
