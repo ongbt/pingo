@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
+import SheetPreviewModal from '@/components/SheetPreviewModal';
 
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
 
@@ -35,9 +36,9 @@ function detectDuplicates(items: string[]): string[] {
 }
 
 // ─── Create Sheet Form ────────────────────────────────────────────────────
-function CreateSheetForm({ onSaved }: { onSaved: (sheet: Sheet) => void }) {
-  const [title, setTitle] = useState('');
-  const [items, setItems] = useState('');
+function CreateSheetForm({ onSaved, initialTitle = '', initialItems = '' }: { onSaved: (sheet: Sheet) => void, initialTitle?: string, initialItems?: string }) {
+  const [title, setTitle] = useState(initialTitle);
+  const [items, setItems] = useState(initialItems);
   const [saving, setSaving] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string; details?: string[] } | null>(null);
 
@@ -133,7 +134,7 @@ function CreateSheetForm({ onSaved }: { onSaved: (sheet: Sheet) => void }) {
             <textarea
               value={items}
               onChange={e => setItems(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background-dark border-2 border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 resize-none font-medium text-sm leading-relaxed"
+              className="w-full px-4 py-3 rounded-l bg-slate-50 dark:bg-background-dark border-2 border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 resize-none font-medium text-sm leading-relaxed"
               placeholder={"Can you hear me?\nLet's circle back\nBio break"}
               rows={6}
             />
@@ -156,14 +157,15 @@ function CreateSheetForm({ onSaved }: { onSaved: (sheet: Sheet) => void }) {
 }
 
 // ─── My Sheet Card ──────────────────────────────────────────────────────────
-function MySheetCard({ sheet, onDelete, onPlay }: { sheet: Sheet; onDelete?: () => void; onPlay: () => void }) {
+function MySheetCard({ sheet, onDelete, onPlay, onPreview }: { sheet: Sheet; onDelete?: () => void; onPlay: () => void; onPreview: () => void }) {
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden"
+      onClick={onPreview}
+      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden cursor-pointer hover:border-primary/30 transition-colors"
     >
       <div className="flex items-center gap-3 p-3.5">
         {/* Icon */}
@@ -181,15 +183,15 @@ function MySheetCard({ sheet, onDelete, onPlay }: { sheet: Sheet; onDelete?: () 
         <div className="flex items-center gap-1.5 shrink-0">
           {onDelete && (
             <button
-              onClick={onDelete}
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
               className="size-8 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
             >
               <Trash2 size={14} />
             </button>
           )}
           <button
-            onClick={onPlay}
-            className="h-8 px-3.5 rounded-lg bg-primary text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-1 shadow-sm shadow-primary/20 active:scale-95 transition-transform"
+            onClick={(e) => { e.stopPropagation(); onPlay(); }}
+            className="h-8 px-3.5 rounded-lg bg-primary text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-1 shadow-sm shadow-primary/20 hover:scale-105 active:scale-95 transition-transform"
           >
             Use <ChevronRight size={12} />
           </button>
@@ -200,7 +202,7 @@ function MySheetCard({ sheet, onDelete, onPlay }: { sheet: Sheet; onDelete?: () 
 }
 
 // ─── Top Sheet Row ──────────────────────────────────────────────────────────
-function TopSheetRow({ sheet, rank, onPlay }: { sheet: Sheet; rank: number; onPlay: () => void }) {
+function TopSheetRow({ sheet, rank, onPlay, onPreview }: { sheet: Sheet; rank: number; onPlay: () => void; onPreview: () => void }) {
   const rankColors = ['text-yellow-500', 'text-slate-400', 'text-orange-500'];
   const rankBg    = ['bg-yellow-50 dark:bg-yellow-900/20', 'bg-slate-50 dark:bg-slate-800', 'bg-orange-50 dark:bg-orange-900/20'];
 
@@ -210,7 +212,8 @@ function TopSheetRow({ sheet, rank, onPlay }: { sheet: Sheet; rank: number; onPl
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: rank * 0.05 }}
-      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden"
+      onClick={onPreview}
+      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden cursor-pointer hover:border-primary/30 transition-colors"
     >
       <div className="flex items-center gap-3 px-3.5 py-3">
         {/* Rank badge */}
@@ -240,8 +243,8 @@ function TopSheetRow({ sheet, rank, onPlay }: { sheet: Sheet; rank: number; onPl
 
         {/* Use button */}
         <button
-          onClick={onPlay}
-          className="h-8 px-3.5 rounded-lg bg-primary text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-1 shadow-sm shadow-primary/20 active:scale-95 transition-transform shrink-0"
+          onClick={(e) => { e.stopPropagation(); onPlay(); }}
+          className="h-8 px-3.5 rounded-lg bg-primary text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-1 shadow-sm shadow-primary/20 hover:scale-105 active:scale-95 transition-transform shrink-0"
         >
           Use <ChevronRight size={12} />
         </button>
@@ -257,6 +260,10 @@ export default function SheetsPage() {
   const [mySheets, setMySheets]     = useState<Sheet[]>([]);
   const [showForm, setShowForm]     = useState(false);
   const [loading, setLoading]       = useState(true);
+  const [previewSheet, setPreviewSheet] = useState<Sheet | null>(null);
+  
+  // State to hold starting values when duplicating a sheet
+  const [initialFormState, setInitialFormState] = useState<{ title: string, items: string } | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -291,6 +298,28 @@ export default function SheetsPage() {
       const merged = [...authSheets, ...localSheets.filter(s => !mergedIds.has(s.id))];
       setMySheets(merged);
 
+      // Check ?duplicate=id param to auto-open form with duplicating data
+      const urlParams = new URLSearchParams(window.location.search);
+      const duplicateId = urlParams.get('duplicate');
+      if (duplicateId) {
+        // Try to find the sheet in our fetched list, or fetch it specifically if not present
+        let sheetToDuplicate = (top as Sheet[]).find(s => s.id === duplicateId) || merged.find(s => s.id === duplicateId);
+        if (!sheetToDuplicate) {
+          const { data } = await supabase.from('sheet').select('*').eq('id', duplicateId).maybeSingle();
+          if (data) sheetToDuplicate = data as Sheet;
+        }
+
+        if (sheetToDuplicate) {
+          setInitialFormState({
+            title: `${sheetToDuplicate.title} (Copy)`,
+            items: sheetToDuplicate.items.join('\n')
+          });
+          setShowForm(true);
+          // clear the query param gracefully
+          window.history.replaceState({}, '', '/sheets');
+        }
+      }
+
       setLoading(false);
     };
     load();
@@ -299,6 +328,7 @@ export default function SheetsPage() {
   const handleSheetSaved = (sheet: Sheet) => {
     setMySheets(prev => [sheet, ...prev]);
     setShowForm(false);
+    setInitialFormState(null);
   };
 
   const handleDelete = (sheet: Sheet) => {
@@ -330,7 +360,10 @@ export default function SheetsPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white">My Sheets</h2>
             <button
-              onClick={() => setShowForm(v => !v)}
+              onClick={() => {
+                if (showForm) setInitialFormState(null);
+                setShowForm(v => !v);
+              }}
               className={cn(
                 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-black text-[11px] uppercase tracking-widest transition-all',
                 showForm
@@ -353,7 +386,12 @@ export default function SheetsPage() {
                 transition={{ duration: 0.22 }}
                 className="overflow-hidden"
               >
-                <CreateSheetForm onSaved={handleSheetSaved} />
+                <CreateSheetForm 
+                  key={initialFormState?.title || 'new'} 
+                  onSaved={handleSheetSaved} 
+                  initialTitle={initialFormState?.title} 
+                  initialItems={initialFormState?.items} 
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -384,6 +422,7 @@ export default function SheetsPage() {
                     sheet={sheet}
                     onDelete={() => handleDelete(sheet)}
                     onPlay={() => handlePlay(sheet.id)}
+                    onPreview={() => setPreviewSheet(sheet)}
                   />
                 ))}
               </div>
@@ -414,12 +453,36 @@ export default function SheetsPage() {
                   sheet={sheet}
                   rank={i}
                   onPlay={() => handlePlay(sheet.id)}
+                  onPreview={() => setPreviewSheet(sheet)}
                 />
               ))}
             </div>
           )}
         </section>
       </main>
+
+      {/* Sheet Preview Modal */}
+      <SheetPreviewModal 
+        sheet={previewSheet} 
+        open={!!previewSheet} 
+        onClose={() => setPreviewSheet(null)} 
+        onSelect={() => {
+          if (previewSheet) handlePlay(previewSheet.id);
+          setPreviewSheet(null);
+        }}
+        onDuplicate={() => {
+          if (previewSheet) {
+            setInitialFormState({
+              title: `${previewSheet.title} (Copy)`,
+              items: previewSheet.items.join('\n')
+            });
+            setShowForm(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+          setPreviewSheet(null);
+        }}
+        selectLabel="Use Sheet" 
+      />
     </div>
   );
 }

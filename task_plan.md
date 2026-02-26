@@ -63,7 +63,7 @@
 - [x] Host "End Game" button — force-end the game for all players.
 - [x] Player Quit — non-host players can leave; DELETE propagated via Realtime.
 - [x] `REPLICA IDENTITY FULL` on `player` table for correct DELETE events.
-- [ ] Sheet preview — tap to open a read-only modal showing all items in a sheet
+- [x] Sheet preview — tap to open a read-only modal showing all items in a sheet
       before selecting or duplicating it.
 
 ## Phase 4: Stylize (UI/UX) 🏗️
@@ -77,7 +77,7 @@
       confetti.
 - [x] Sheets page — custom sheet creation and management (localStorage).
 - [ ] Anti-cheat mode — multi-player verification for marked squares.
-- [ ] Sheet duplication — clone any existing sheet (default or custom) as a
+- [x] Sheet duplication — clone any existing sheet (default or custom) as a
       starting point for a new custom sheet.
 - [x] "Live Now: xx Players" indicator — real-time active player count badge on
       the Home page, subscribed via Supabase Realtime.
@@ -93,12 +93,13 @@
 - [x] Standardize ESLint for React SPA.
 - [x] Verify production build and local dev server.
 
-## Phase 6: Session Robustness 🏗️
+## Phase 6: Session Robustness ✅
 
-- [ ] Lobby Timeout: Auto-cancel lobbies if not started within configurable
+- [x] Lobby Timeout: Auto-cancel lobbies if not started within configurable
       time.
-- [ ] Game Timeout: Auto-terminate games that remain inactive.
-- [ ] Configurable thresholds in Game Settings.
+- [x] Game Timeout: Auto-terminate games that remain inactive.
+- [x] Configurable thresholds in Game Settings.
+- [x] Minimum 2 Players Config: Auto-terminate if player count drops below 2.
 
 ## Phase 7: Deployment ✅
 

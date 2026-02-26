@@ -6,10 +6,11 @@ import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import {
   ArrowLeft, Rocket, Shield, Lock, Star, Flame, Plus, Search,
-  ChevronRight, X, CheckCircle2,
+  ChevronRight, X, CheckCircle2, Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
+import SheetPreviewModal from '@/components/SheetPreviewModal';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
@@ -71,7 +72,9 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
   onClose: () => void;
   onGoToSheets: () => void;
 }) {
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const [previewSheet, setPreviewSheet] = useState<Sheet | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -138,7 +141,7 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
                   <p className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400">My Sheets</p>
                   <div className="divide-y divide-slate-100 dark:divide-slate-800">
                     {mySheets.map(s => (
-                      <ModalSheetRow key={s.id} sheet={s} selected={selectedId === s.id} onSelect={() => { onSelect(s.id); onClose(); }} />
+                      <ModalSheetRow key={s.id} sheet={s} selected={selectedId === s.id} onSelect={() => setPreviewSheet(s)} />
                     ))}
                   </div>
                 </>
@@ -151,7 +154,7 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
                   </p>
                   <div className="divide-y divide-slate-100 dark:divide-slate-800">
                     {allSheets.map(s => (
-                      <ModalSheetRow key={s.id} sheet={s} selected={selectedId === s.id} onSelect={() => { onSelect(s.id); onClose(); }} />
+                      <ModalSheetRow key={s.id} sheet={s} selected={selectedId === s.id} onSelect={() => setPreviewSheet(s)} />
                     ))}
                   </div>
                 </>
@@ -182,6 +185,21 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
           </motion.div>
         </>
       )}
+
+      {/* Internal preview modal stacked on top */}
+      <SheetPreviewModal
+        sheet={previewSheet}
+        open={!!previewSheet}
+        onClose={() => setPreviewSheet(null)}
+        onDuplicate={() => navigate(`/sheets?duplicate=${previewSheet?.id}`)}
+        onSelect={() => {
+          if (previewSheet) onSelect(previewSheet.id);
+          setPreviewSheet(null);
+          onClose(); // also close the parent picker
+        }}
+        selectLabel="Select Sheet"
+        isSelectActive={selectedId === previewSheet?.id}
+      />
     </AnimatePresence>
   );
 }
@@ -233,7 +251,7 @@ export default function CreatePage() {
   const [nickname,        setNickname]        = useState('');
   const [isCreating,      setIsCreating]      = useState(false);
   const [loading,         setLoading]         = useState(true);
-  const [settings] = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true });
+  const [settings] = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true, minTwoPlayers: true });
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
@@ -422,6 +440,20 @@ export default function CreatePage() {
           </button>
         </section>
 
+        {/* ── Nickname ── */}
+        <section>
+          <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5">Your Nickname</h2>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm mb-8">
+            <input
+              value={nickname}
+              onChange={e => setNickname(e.target.value)}
+              className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-background-dark border-2 border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-bold text-sm"
+              placeholder="e.g. BingoHost"
+              type="text"
+            />
+          </div>
+        </section>
+
         {/* ── Lobby Settings (locked — coming soon) ── */}
         <section>
           <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5 flex items-center gap-2">
@@ -449,19 +481,11 @@ export default function CreatePage() {
               description="Join requires the unique room code."
               enabled={settings.privateLobby}
             />
-          </div>
-        </section>
-
-        {/* ── Nickname ── */}
-        <section>
-          <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5">Your Nickname</h2>
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm">
-            <input
-              value={nickname}
-              onChange={e => setNickname(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-background-dark border-2 border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-bold text-sm"
-              placeholder="e.g. BingoHost"
-              type="text"
+            <SettingRow
+              icon={<Users size={16} />}
+              title="Minimum 2 Players"
+              description="Requires at least 2 players to start."
+              enabled={settings.minTwoPlayers}
             />
           </div>
         </section>

@@ -163,10 +163,18 @@ export default function LobbyPage() {
     onExpire: handleLobbyExpire,
   });
 
+  const minTwoPlayers =
+    typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)
+      ? (game.config as Record<string, unknown>).minTwoPlayers as boolean | undefined ?? false
+      : false;
+
   const handleStartGame = async () => {
-    // Client-side guard: only render the button for hosts, but we also
-    // enforce this server-side via the start_game RPC.
+    // Client-side guards
     if (!currentPlayer?.is_host) return;
+    if (minTwoPlayers && players.length < 2) {
+      showError('Not Enough Players', 'This lobby requires at least 2 players to start.');
+      return;
+    }
 
     const gameId = String(id);
 
@@ -520,9 +528,10 @@ export default function LobbyPage() {
         {currentPlayer?.is_host ? (
           <button
             onClick={handleStartGame}
-            className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-2xl font-black text-lg tracking-widest active:scale-95 transition-all shadow-xl shadow-primary/30 uppercase"
+            disabled={minTwoPlayers && players.length < 2}
+            className="w-full bg-primary hover:bg-primary/90 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:shadow-none text-white py-4 rounded-2xl font-black text-lg tracking-widest active:scale-95 transition-all shadow-xl shadow-primary/30 uppercase cursor-pointer disabled:cursor-not-allowed"
           >
-            Start Game
+            {minTwoPlayers && players.length < 2 ? "Waiting for players..." : "Start Game"}
           </button>
         ) : (
           <motion.div

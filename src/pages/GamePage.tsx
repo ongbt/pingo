@@ -246,6 +246,27 @@ export default function GamePage() {
     return [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
   }, [players]);
 
+  // Enforce minTwoPlayers during gameplay
+  useEffect(() => {
+    if (!game || game.status !== 'active') return;
+
+    const minTwoPlayers =
+      typeof game.config === 'object' && game.config !== null && !Array.isArray(game.config)
+        ? (game.config as Record<string, unknown>).minTwoPlayers as boolean | undefined ?? false
+        : false;
+
+    if (minTwoPlayers && players.length < 2) {
+      // End game idempotently for the last remaining player(s) if drops below 2
+      supabase
+        .from('game')
+        .update({ status: 'finished' })
+        .eq('id', game.id)
+        .then(({ error }) => {
+          if (error) console.error('Failed to end game on player drop:', error);
+        });
+    }
+  }, [game, players.length]);
+
   // Game session timeout
   const gameTimeoutMin =
     typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)

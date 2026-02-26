@@ -386,3 +386,18 @@ All audit issues fixed in a single session. Summary of changes made:
   can hit bingo and race for high-scoring ranks.
 - Added a floating global Toast Notification ("Player got Bingo! (#1)") when
   anyone claims bingo.
+
+### UI Enhancements & Minimum Players Enforcements
+
+- Built `SheetPreviewModal.tsx` as a mobile-optimized, flex-centered popup for
+  previewing bingo sheets globally.
+- Implemented **Sheet Duplication** logic directly in the modal, parsing URL
+  parameters (`?duplicate=id`) on `SheetsPage.tsx` to pre-seed the sheet
+  creation form with a cloned copy.
+- Promoted **Nickname Input** to sit above **Lobby Settings** in
+  `CreatePage.tsx` for cleaner onboarding flow.
+- Added `minTwoPlayers: true` toggle property default in `game.config`.
+- Frontend prevents starting games dynamically in Lobby if `minTwoPlayers` is
+  active and only 1 player remains.
+- Gameplay triggers `minTwoPlayers` strict rule: If a disconnected/quit player
+  reduces the room to 1, the session forcefully sets the status to `finished`.

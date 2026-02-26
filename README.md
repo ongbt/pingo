@@ -14,11 +14,16 @@ celebrations, and a custom sheet builder.
 - **6-Character Room Codes**: Secure alphanumeric room codes (curated to avoid
   ambiguity) with collision protection.
 - **Custom Sheet Builder**: Players can create, name, and manage their own bingo
-  sheets via the My Sheets page, persisted in localStorage.
+  sheets via the My Sheets page, persisted in localStorage. Features include
+  previewing existing sheets in a mobile-optimized modal and cloning sheets via
+  Duplication.
 - **Share / Invite Links**: Lobby share button generates a deep-link
   (`/join?code=XXXXXX`) that pre-fills the code on the Join page — works via
   native OS share sheet on mobile or clipboard fallback on desktop.
 - **User Engagement**:
+  - **Tiered Scoring System**: First player to bingo earns 10 pts, followed by
+    diminishing bonuses (5, 3, 1) to keep the competition fierce until the host
+    calls it.
   - Visual victory celebrations with confetti and grand winner modals.
   - Quick-join flow with persistent nickname memory via localStorage.
   - "Copy to Clipboard" and Share shortcut directly from the lobby.
@@ -33,7 +38,11 @@ celebrations, and a custom sheet builder.
 - **Player Controls**:
   - Non-host players can quit mid-game; their record is deleted from Supabase
     and removed from other players' leaderboards in real-time.
-- **Security**:
+- **Security & Integrity**:
+  - **Session Robustness**: Inactive games and stale lobbies auto-terminate
+    after 15-30 minutes of inactivity using client-callable RPCs.
+  - **Minimum Player Rule**: Games configured for a minimum of 2 players will
+    automatically finish if disconnects/quits drop the lobby size to 1.
   - Lobby access is gated — URL visitors without a valid player session see an
     Access Denied screen and are redirected home after 3 seconds.
   - Game start is enforced at the database layer via a `SECURITY DEFINER` RPC,
