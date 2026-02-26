@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import ErrorDialog from '@/components/ErrorDialog';
 import {
-  ArrowLeft, User, LogOut, Save, Loader2, Link as LinkIcon, Edit3
+  ArrowLeft, User, LogOut, Save, Loader2, Edit3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -149,9 +149,7 @@ export default function ProfilePage() {
             className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-4 hover:border-primary/30 transition-colors"
           >
             <div className="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-xl flex items-center justify-center">
-              <LogOut className="hidden" />
-              <LinkIcon size={20} className="hidden" />
-              <Edit3 size={20} />
+            <Edit3 size={20} />
             </div>
             <div className="flex-1 text-left">
               <h3 className="font-black text-sm text-slate-900 dark:text-white">My Custom Sheets</h3>

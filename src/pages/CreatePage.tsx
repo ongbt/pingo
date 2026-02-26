@@ -317,9 +317,8 @@ export default function CreatePage() {
       localStorage.setItem('pingo_nickname', nickname.trim());
       localStorage.setItem(`pingo_player_${game.id}`, hostPlayer.id);
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase.from('profile').upsert({ id: user.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
+      if (profile) {
+        await supabase.from('profile').upsert({ id: profile.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
       }
 
       navigate(`/lobby/${game.id}`);

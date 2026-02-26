@@ -23,7 +23,7 @@ export default function PopularSheets() {
   useEffect(() => {
     supabase
       .from('sheet')
-      .select('*')
+      .select('id, title, play_count, items')
       .order('play_count', { ascending: false })
       .limit(3)
       .then(({ data }) => {

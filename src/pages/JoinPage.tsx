@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 export default function JoinPage() {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [code, setCode] = useState('');
   const [nickname, setNickname] = useState('');
   const [isJoining, setIsJoining] = useState(false);
@@ -61,7 +61,6 @@ export default function JoinPage() {
       if (playerError) throw playerError;
 
       localStorage.setItem('pingo_nickname', nickname.trim());
-      const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         await supabase
           .from('profile')

@@ -124,24 +124,29 @@ export default function GamePage() {
       [0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24], // Vertical
       [0, 6, 12, 18, 24], [4, 8, 12, 16, 20] // Diagonal
     ];
-    // Center is 12 (Free Space) - always treated as marked
-    const markedWithCenter = [...marked, 12];
-    return wins.some(line => line.every(idx => markedWithCenter.includes(idx)));
+    // Use a Set for O(1) lookups instead of O(n) Array.includes()
+    const markedSet = new Set([...marked, 12]);
+    return wins.some(line => line.every(idx => markedSet.has(idx)));
   }, [marked]);
 
+  const isWritingRef = useRef(false);
   const toggleMark = async (index: number) => {
     if (index === 12 || !currentPlayer || !game || game.status === 'finished') return;
+    if (isWritingRef.current) return; // prevent overlapping writes on rapid taps
 
     const newMarked = marked.includes(index)
       ? marked.filter(i => i !== index)
       : [...marked, index];
-    
+
     setMarked(newMarked);
+    isWritingRef.current = true;
 
     await supabase
       .from('player')
       .update({ board_state: newMarked, score: newMarked.length })
       .eq('id', currentPlayer.id);
+
+    isWritingRef.current = false;
   };
 
   const handleBingo = async () => {
@@ -192,31 +197,19 @@ export default function GamePage() {
   }, [players]);
 
   useEffect(() => {
-    if (winner) {
-      const end = Date.now() + 3 * 1000;
-      const colors = ['#f47b25', '#fcd34d', '#22c55e', '#3b82f6'];
+    if (!winner) return;
+    let active = true;
+    const end = Date.now() + 3 * 1000;
+    const colors = ['#f47b25', '#fcd34d', '#22c55e', '#3b82f6'];
 
-      (function frame() {
-        confetti({
-          particleCount: 3,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 },
-          colors: colors
-        });
-        confetti({
-          particleCount: 3,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 },
-          colors: colors
-        });
+    (function frame() {
+      if (!active) return;
+      confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors });
+      confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    }());
 
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      }());
-    }
+    return () => { active = false; };
   }, [winner]);
 
   const sortedPlayers = useMemo(() => {

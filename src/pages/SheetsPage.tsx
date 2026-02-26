@@ -260,42 +260,36 @@ export default function SheetsPage() {
 
   useEffect(() => {
     const load = async () => {
-      // Top 5 most-played
-      const { data: top } = await supabase
-        .from('sheet')
-        .select('*')
-        .order('play_count', { ascending: false })
-        .order('created_at', { ascending: true })
-        .limit(5);
+      // Fetch top sheets and resolve auth user in parallel
+      const [{ data: top }, { data: { user } }] = await Promise.all([
+        supabase
+          .from('sheet')
+          .select('*')
+          .order('play_count', { ascending: false })
+          .order('created_at', { ascending: true })
+          .limit(5),
+        supabase.auth.getUser(),
+      ]);
       setTopSheets((top as Sheet[]) ?? []);
 
-      // My sheets from localStorage
+      // Fetch localStorage sheets and auth-owned sheets in parallel
       const ids = getLocalSheetIds();
-      if (ids.length > 0) {
-        const { data: mine } = await supabase
-          .from('sheet')
-          .select('*')
-          .in('id', ids)
-          .order('created_at', { ascending: false });
-        setMySheets((mine as Sheet[]) ?? []);
-      }
+      const [localResult, authResult] = await Promise.all([
+        ids.length > 0
+          ? supabase.from('sheet').select('*').in('id', ids).order('created_at', { ascending: false })
+          : Promise.resolve({ data: [] as Sheet[] }),
+        user
+          ? supabase.from('sheet').select('*').eq('creator_id', user.id).order('created_at', { ascending: false })
+          : Promise.resolve({ data: [] as Sheet[] }),
+      ]);
 
-      // Auth-based sheets
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: authSheets } = await supabase
-          .from('sheet')
-          .select('*')
-          .eq('creator_id', user.id)
-          .order('created_at', { ascending: false });
+      const localSheets = (localResult.data as Sheet[]) ?? [];
+      const authSheets  = (authResult.data  as Sheet[]) ?? [];
 
-        if (authSheets?.length) {
-          setMySheets(prev => {
-            const existingIds = new Set(prev.map(s => s.id));
-            return [...authSheets.filter(s => !existingIds.has(s.id)), ...prev] as Sheet[];
-          });
-        }
-      }
+      // Merge: auth-owned first, then local-only (deduplicated)
+      const mergedIds = new Set(authSheets.map(s => s.id));
+      const merged = [...authSheets, ...localSheets.filter(s => !mergedIds.has(s.id))];
+      setMySheets(merged);
 
       setLoading(false);
     };

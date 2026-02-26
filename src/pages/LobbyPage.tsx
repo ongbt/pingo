@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Copy, ArrowLeft, Send, Smile, UserPlus, Star, CheckCircle } from 'lucide-react';
+import { Copy, ArrowLeft, UserPlus, Star, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
 
@@ -30,11 +30,18 @@ export default function LobbyPage() {
         .eq('id', gameId)
         .single();
 
+      // Check error first before inspecting status
+      if (gameError) {
+        console.error('Error fetching game:', gameError);
+        return;
+      }
+
       if (gameData?.status === 'active') {
         navigate(`/game/${gameId}`);
         return;
       }
 
+      let resolvedGame = gameData;
       if (gameData?.status === 'finished') {
         await supabase
           .from('game')
@@ -51,14 +58,10 @@ export default function LobbyPage() {
           })
           .eq('game_id', gameId);
 
-        gameData.status = 'lobby';
+        // Avoid mutating the read-only Supabase response object directly
+        resolvedGame = { ...gameData, status: 'lobby' };
       }
-
-      if (gameError) {
-        console.error('Error fetching game:', gameError);
-        return;
-      }
-      setGame(gameData);
+      setGame(resolvedGame);
 
       const { data: playersData, error: playersError } = await supabase
         .from('player')
@@ -122,7 +125,8 @@ export default function LobbyPage() {
       supabase.removeChannel(gameChannel);
       supabase.removeChannel(channel);
     };
-  }, [id, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]); // navigate from React Router v6 is referentially stable — omitting intentionally
 
   const handleStartGame = async () => {
     if (!currentPlayer?.is_host) return;
@@ -146,18 +150,18 @@ export default function LobbyPage() {
 
     const totalItems = (game as unknown as { sheet?: { items?: string[] } })?.sheet?.items?.length || 25;
 
-    for (const player of players) {
-      const layout = generateShuffledLayout(totalItems);
-      const { error: layoutError } = await supabase
-        .from('player')
-        .update({ board_layout: layout })
-        .eq('id', player.id);
-
-      if (layoutError) {
-        console.error(`Error assigning layout to player ${player.nickname}:`, layoutError);
-        showError('Board Layout Error', 'Failed to assign board layouts. Please try again.');
-        return;
-      }
+    // Assign board layouts in parallel — avoids N+1 sequential DB round-trips
+    const layoutResults = await Promise.all(
+      players.map((player) => {
+        const layout = generateShuffledLayout(totalItems);
+        return supabase.from('player').update({ board_layout: layout }).eq('id', player.id);
+      })
+    );
+    const failedLayout = layoutResults.find((r) => r.error);
+    if (failedLayout) {
+      console.error('Error assigning layout to a player:', failedLayout.error);
+      showError('Board Layout Error', 'Failed to assign board layouts. Please try again.');
+      return;
     }
 
     const { error } = await supabase
@@ -208,12 +212,10 @@ export default function LobbyPage() {
         <div className="absolute inset-0 flex items-center justify-center opacity-10">
           <h2 className="text-8xl font-black text-primary rotate-[-10deg] select-none">BINGO</h2>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 flex items-end justify-center relative">
-          <img
-            alt="Bingo balls background"
-            className="object-contain object-bottom opacity-40 w-full h-full"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHv9x_gR86qD2q_z3_PAnY7hV7v8K_q7Bv9S8w"
-          />
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 flex items-end justify-center gap-6 pb-6 pointer-events-none">
+          <div className="size-14 rounded-full bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-primary/50 font-black text-xl">7</div>
+          <div className="size-20 rounded-full bg-yellow-400/20 border-2 border-yellow-400/30 flex items-center justify-center text-yellow-500/50 font-black text-2xl mb-4">42</div>
+          <div className="size-14 rounded-full bg-green-400/20 border-2 border-green-400/30 flex items-center justify-center text-green-500/50 font-black text-lg">15</div>
         </div>
         <Star className="absolute top-[15%] left-[10%] text-yellow-400 opacity-40 w-5 h-5" />
         <Star className="absolute top-[5%] right-[20%] text-yellow-400 opacity-40 w-6 h-6" />
@@ -343,33 +345,7 @@ export default function LobbyPage() {
           </div>
         </div>
 
-        {/* Lobby Chat (Mock) */}
-        <div className="p-4 mt-4">
-          <h3 className="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-widest mb-4">Lobby Chat</h3>
-          <div className="space-y-3">
-            <div className="flex gap-3">
-              <img
-                alt="Sarah"
-                className="size-8 rounded-full"
-                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sarah"
-              />
-              <div className="flex-1 bg-white/60 dark:bg-slate-800/80 p-3 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl backdrop-blur-sm border border-white/50 shadow-sm">
-                <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1">Sarah K.</p>
-                <p className="text-xs text-slate-800 dark:text-slate-200 leading-normal">Is everyone ready to lose today? 😈</p>
-              </div>
-            </div>
-            <div className="flex gap-3 justify-end">
-              <div className="max-w-[80%] bg-primary/10 border border-primary/20 p-3 rounded-tl-2xl rounded-bl-2xl rounded-br-2xl shadow-sm">
-                <p className="text-xs text-slate-800 dark:text-slate-200">Just waiting for two more people!</p>
-              </div>
-              <img
-                alt="Me"
-                className="size-8 rounded-full border-2 border-primary"
-                src="https://api.dicebear.com/7.x/adventurer/svg?seed=Me"
-              />
-            </div>
-          </div>
-        </div>
+
       </div>
 
       {/* Copy Notification */}
@@ -389,21 +365,7 @@ export default function LobbyPage() {
 
       {/* Sticky Bottom Section */}
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 space-y-4 pb-8 z-20">
-        <div className="flex gap-2">
-          <div className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-2 flex items-center">
-            <input
-              className="bg-transparent border-none focus:ring-0 text-sm w-full p-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-500"
-              placeholder="Type a message..."
-              type="text"
-            />
-            <button className="text-slate-400">
-              <Smile size={20} />
-            </button>
-          </div>
-          <button className="size-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
-            <Send size={18} />
-          </button>
-        </div>
+
         {currentPlayer?.is_host ? (
           <button
             onClick={handleStartGame}

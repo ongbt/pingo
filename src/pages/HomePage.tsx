@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
@@ -6,13 +6,12 @@ import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
 function useLivePlayerCount() {
   const [count, setCount] = useState<number | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchCount = async () => {
-      // Supabase JS client doesn't support subquery builders in .in();
-      // fetch active game IDs first, then count players in those games.
       const { data: games } = await supabase
         .from('game')
         .select('id')
@@ -33,17 +32,24 @@ function useLivePlayerCount() {
       if (!cancelled) setCount(n ?? 0);
     };
 
+    // Debounce to collapse rapid realtime bursts into a single fetch
+    const scheduleFetch = () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(fetchCount, 500);
+    };
+
     fetchCount();
 
     const channel = supabase
       .channel('live-player-count')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'player' }, () => fetchCount())
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'player' }, () => fetchCount())
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game' }, () => fetchCount())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'player' }, scheduleFetch)
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'player' }, scheduleFetch)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game' }, scheduleFetch)
       .subscribe();
 
     return () => {
       cancelled = true;
+      if (debounceRef.current) clearTimeout(debounceRef.current);
       supabase.removeChannel(channel);
     };
   }, []);

@@ -266,3 +266,28 @@ resolution.
 | 13 | `ProfilePage.tsx`                 | `LogOut` and `LinkIcon` imported but only used with `className="hidden"` — dead code.                          |
 | 14 | `PopularSheets.tsx`               | `select('*')` pulls full `items` array (25–100 strings) for a component that only needs title + play count.    |
 | 15 | `App.tsx`                         | All 9 pages eagerly imported — no route-based code splitting or `React.lazy()`.                                |
+
+### Phase 9 Fixes Applied (all 15 resolved)
+
+All audit issues fixed in a single session. Summary of changes made:
+
+| File                | Change                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| `GamePage.tsx`      | Bingo check: `Array.includes()` → `Set.has()` (O(1))                                 |
+| `GamePage.tsx`      | `toggleMark`: `isWritingRef` guard prevents overlapping DB writes on rapid taps      |
+| `GamePage.tsx`      | Confetti RAF loop: `active` flag + cleanup return prevents unmount memory leak       |
+| `LobbyPage.tsx`     | `fetchData`: error check moved before status branches; no direct response mutation   |
+| `LobbyPage.tsx`     | `handleStartGame`: sequential `for...of` → `Promise.all()` (all layouts in parallel) |
+| `LobbyPage.tsx`     | `navigate` removed from `useEffect` deps (stable ref); `eslint-disable` added        |
+| `LobbyPage.tsx`     | External Google image URL → CSS-only decorative bingo ball divs                      |
+| `LobbyPage.tsx`     | Mock "Sarah K." chat section + non-functional input bar removed                      |
+| `LobbyPage.tsx`     | `Send` / `Smile` lucide imports removed                                              |
+| `AuthContext.tsx`   | `fetchProfile` wrapped in `try/finally`; `setIsLoading(false)` always fires          |
+| `AuthContext.tsx`   | Redundant secondary `useEffect` managing `isLoading` removed                         |
+| `SheetsPage.tsx`    | 3 sequential queries → 2 parallel `Promise.all()` waves with deterministic merge     |
+| `HomePage.tsx`      | `useLivePlayerCount`: 500ms debounce collapses rapid realtime bursts into one fetch  |
+| `CreatePage.tsx`    | Removed redundant `getUser()` call — uses `profile` from `AuthContext`               |
+| `JoinPage.tsx`      | Removed redundant `getUser()` call — uses `user` from `AuthContext`                  |
+| `ProfilePage.tsx`   | Removed unused `LinkIcon` import and dead `className="hidden"` nodes                 |
+| `PopularSheets.tsx` | `select('*')` → `select('id, title, play_count, items')`                             |
+| `App.tsx`           | All 9 pages converted to `React.lazy()` + shared `<Suspense>` with `PageSpinner`     |

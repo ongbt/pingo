@@ -26,16 +26,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profile')
-      .select('id, nickname, avatar_url')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profile')
+        .select('id, nickname, avatar_url')
+        .eq('id', userId)
+        .single();
 
-    if (!error && data) {
-      setProfile(data);
-    } else {
-      setProfile(null);
+      if (!error && data) {
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
+    } finally {
+      // Always clear loading — prevents isLoading stuck=true on fetch errors
+      setIsLoading(false);
     }
   };
 
@@ -68,14 +73,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Set loading to false once profile is either loaded or confirmed not present
-  useEffect(() => {
-    if (user && profile) {
-      setIsLoading(false);
-    } else if (!user) {
-      setIsLoading(false);
-    }
-  }, [user, profile]);
+  // isLoading is cleared inside fetchProfile (authenticated path)
+  // and inline in the else branches above (unauthenticated path).
 
   const signOut = async () => {
     await supabase.auth.signOut();
