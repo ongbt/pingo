@@ -401,3 +401,12 @@ All audit issues fixed in a single session. Summary of changes made:
   active and only 1 player remains.
 - Gameplay triggers `minTwoPlayers` strict rule: If a disconnected/quit player
   reduces the room to 1, the session forcefully sets the status to `finished`.
+
+### Anti-Cheat Mode Enforced
+
+- Unlocked the "Anti-Cheat Mode" toggle on the `CreatePage.tsx` lobby settings.
+- Enforced constraint: When `antiCheat` is enabled, the game generates exactly
+  24 shared items from the pool at round start.
+- Every player receives a board populated with the exact same 24 items,
+  randomized in placement. This minimizes the randomness variance when using
+  large sheets (e.g. 50+ items).

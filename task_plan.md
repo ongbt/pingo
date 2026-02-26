@@ -76,7 +76,8 @@
 - [x] Game Board — 5x5 grid, bingo button, leaderboard, toast notifications,
       confetti.
 - [x] Sheets page — custom sheet creation and management (localStorage).
-- [ ] Anti-cheat mode — multi-player verification for marked squares.
+- [x] Anti-cheat mode — ensure all players in a game share the same set of 24
+      items.
 - [x] Sheet duplication — clone any existing sheet (default or custom) as a
       starting point for a new custom sheet.
 - [x] "Live Now: xx Players" indicator — real-time active player count badge on

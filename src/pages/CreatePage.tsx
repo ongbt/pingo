@@ -204,12 +204,18 @@ function SheetPickerModal({ open, sheets, mySheetIds, selectedId, onSelect, onCl
   );
 }
 
-// ─── Settings Row (read-only, locked at default) ──────────────────────────────
-function SettingRow({ icon, title, description, enabled }: {
-  icon: React.ReactNode; title: string; description: string; enabled: boolean;
+// ─── Settings Row ──────────────────────────────
+function SettingRow({ icon, title, description, enabled, onToggle, locked = true, badge }: {
+  icon: React.ReactNode; title: string; description: string; enabled: boolean; onToggle?: () => void; locked?: boolean; badge?: string;
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3.5 opacity-60">
+    <div 
+      className={cn(
+        "flex items-center justify-between px-4 py-3.5 transition-colors",
+        locked ? "opacity-60" : "cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 focus-within:bg-slate-50"
+      )}
+      onClick={() => { if (!locked && onToggle) onToggle(); }}
+    >
       <div className="flex gap-3 items-center">
         <div className={cn(
           'size-8 rounded-lg flex items-center justify-center shrink-0',
@@ -218,14 +224,24 @@ function SettingRow({ icon, title, description, enabled }: {
           {icon}
         </div>
         <div className="pr-3">
-          <p className="font-bold text-sm">{title}</p>
+          <div className="flex items-center gap-2">
+            <p className="font-bold text-sm">{title}</p>
+            {badge && (
+              <span className="px-1.5 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                {badge}
+              </span>
+            )}
+          </div>
           <p className="text-[10px] text-slate-400 font-medium leading-tight mt-0.5">{description}</p>
         </div>
       </div>
-      {/* Static toggle — non-interactive */}
-      <div
+      <button
+        type="button"
+        disabled={locked}
+        aria-checked={enabled}
         className={cn(
-          'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent cursor-not-allowed',
+          'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors duration-200 ease-in-out',
+          locked ? 'cursor-not-allowed' : 'cursor-pointer',
           enabled ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700',
         )}
       >
@@ -233,7 +249,7 @@ function SettingRow({ icon, title, description, enabled }: {
           'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200',
           enabled ? 'translate-x-5' : 'translate-x-0',
         )} />
-      </div>
+      </button>
     </div>
   );
 }
@@ -251,7 +267,7 @@ export default function CreatePage() {
   const [nickname,        setNickname]        = useState('');
   const [isCreating,      setIsCreating]      = useState(false);
   const [loading,         setLoading]         = useState(true);
-  const [settings] = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true, minTwoPlayers: true });
+  const [settings]            = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true, minTwoPlayers: true });
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
@@ -454,13 +470,10 @@ export default function CreatePage() {
           </div>
         </section>
 
-        {/* ── Lobby Settings (locked — coming soon) ── */}
+        {/* ── Lobby Settings ── */}
         <section>
           <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5 flex items-center gap-2">
             Lobby Settings
-            <span className="text-[9px] font-black uppercase tracking-widest bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
-              Coming Soon
-            </span>
           </h2>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 shadow-sm">
             <SettingRow
@@ -468,24 +481,32 @@ export default function CreatePage() {
               title="First Bingo Wins"
               description="Game ends when the first player scores."
               enabled={settings.firstBingoWins}
+              locked={true}
+              badge="Coming Soon"
             />
             <SettingRow
               icon={<Shield size={16} />}
               title="Anti-Cheat Mode"
-              description="Multi-player verification for marked squares."
+              description="Forces all players to share the same random 24 items."
               enabled={settings.antiCheat}
+              locked={true}
+              badge="Coming Soon"
             />
             <SettingRow
               icon={<Lock size={16} />}
               title="Private Lobby"
               description="Join requires the unique room code."
               enabled={settings.privateLobby}
+              locked={true}
+              badge="Coming Soon"
             />
             <SettingRow
               icon={<Users size={16} />}
               title="Minimum 2 Players"
               description="Requires at least 2 players to start."
               enabled={settings.minTwoPlayers}
+              locked={true}
+              badge="Coming Soon"
             />
           </div>
         </section>
