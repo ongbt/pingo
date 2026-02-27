@@ -352,7 +352,7 @@ export default function LobbyPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-[#E8F4F8] dark:bg-background-dark font-display antialiased">
+    <div className="relative flex min-h-screen w-full flex-col bg-[#E8F4F8] dark:bg-background-dark font-display antialiased">
       <ErrorDialog
         open={dialog !== null}
         title={dialog?.title ?? ''}
@@ -379,26 +379,29 @@ export default function LobbyPage() {
 
       {/* Top App Bar */}
       <div className="flex items-center p-4 border-b border-slate-200 dark:border-slate-800 relative z-10 bg-white/50 backdrop-blur-sm">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-white/80 dark:bg-slate-800 shadow-sm"
-        >
-          <ArrowLeft size={20} />
-        </button>
-        <div className="flex-1 px-4 text-center">
-          <h1 className="text-slate-900 dark:text-slate-100 text-lg font-extrabold leading-tight tracking-tight truncate">
-            {game?.room_code || 'Lobby'}
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-            Game ID: #{id?.toString().slice(0, 5)}
-          </p>
+        <div className="flex-1 w-full max-w-md mx-auto flex items-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-white/80 dark:bg-slate-800 shadow-sm"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div className="flex-1 px-4 text-center">
+            <h1 className="text-slate-900 dark:text-slate-100 text-lg font-extrabold leading-tight tracking-tight truncate">
+              {game?.room_code || 'Lobby'}
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+              Game ID: #{id?.toString().slice(0, 5)}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Scrollable Content Area */}
       <div className="flex-1 overflow-y-auto pb-40 relative z-10">
-        {/* Sharing Card */}
-        <div className="p-4 pt-6">
+        <div className="w-full max-w-md mx-auto">
+          {/* Sharing Card */}
+          <div className="p-4 pt-6">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -531,9 +534,8 @@ export default function LobbyPage() {
             </AnimatePresence>
           </div>
         </div>
-
-
       </div>
+    </div>
 
       {/* Copy / Share Notification */}
       <AnimatePresence>
@@ -551,37 +553,38 @@ export default function LobbyPage() {
       </AnimatePresence>
 
       {/* Sticky Bottom Section */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 space-y-4 pb-8 z-20">
-
-        {currentPlayer?.is_host ? (
-          <button
-            onClick={handleStartGame}
-            disabled={minTwoPlayers && players.length < 2}
-            className="w-full bg-primary hover:bg-primary/90 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:shadow-none text-white py-4 rounded-2xl font-black text-lg tracking-widest active:scale-95 transition-all shadow-xl shadow-primary/30 uppercase cursor-pointer disabled:cursor-not-allowed"
-          >
-            {minTwoPlayers && players.length < 2 ? "Waiting for players..." : "Start Game"}
-          </button>
-        ) : (
-          <motion.div
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-full bg-slate-100 dark:bg-slate-800 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-3"
-          >
-            <div className="flex items-center gap-1.5">
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="block w-2 h-2 rounded-full bg-primary"
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.18 }}
-                />
-              ))}
-            </div>
-            <span className="text-slate-500 dark:text-slate-400 font-black text-sm tracking-widest uppercase">
-              Waiting for host to start
-            </span>
-          </motion.div>
-        )}
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-8 z-20">
+        <div className="w-full max-w-md mx-auto space-y-4">
+          {currentPlayer?.is_host ? (
+            <button
+              onClick={handleStartGame}
+              disabled={minTwoPlayers && players.length < 2}
+              className="w-full bg-primary hover:bg-primary/90 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:shadow-none text-white py-4 rounded-2xl font-black text-lg tracking-widest active:scale-95 transition-all shadow-xl shadow-primary/30 uppercase cursor-pointer disabled:cursor-not-allowed"
+            >
+              {minTwoPlayers && players.length < 2 ? "Waiting for players..." : "Start Game"}
+            </button>
+          ) : (
+            <motion.div
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-full bg-slate-100 dark:bg-slate-800 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-3"
+            >
+              <div className="flex items-center gap-1.5">
+                {[0, 1, 2].map((i) => (
+                  <motion.span
+                    key={i}
+                    className="block w-2 h-2 rounded-full bg-primary"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', delay: i * 0.18 }}
+                  />
+                ))}
+              </div>
+              <span className="text-slate-500 dark:text-slate-400 font-black text-sm tracking-widest uppercase">
+                Waiting for host to start
+              </span>
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );

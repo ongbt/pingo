@@ -461,3 +461,19 @@ All audit issues fixed in a single session. Summary of changes made:
   automatically recalculates upon real-time player updates, causing the Bingo UI
   and state bounds to appropriately reflect the reality of the game and blocking
   spam click submissions.
+
+### Responsive UI & Dark Mode Audit (Final Phase 4)
+
+- **Audit Completed**: Verified dark mode classes (`dark:bg-background-dark`,
+  `dark:text-white`, etc.) are consistently implemented across all 9 pages and
+  properly fallback/override from the base light-theme colors automatically
+  following system conventions (media scheme).
+- **Responsive "Phone" Container constraint for Desktop**: Appended an
+  overarching constraint frame to the `#root` wrapper in `index.css` forcing
+  `max-w-md mx-auto`. Combined with `transform: translateZ(0)` on `#root`, this
+  creates a CSS isolated containing block for all `fixed` positional elements
+  (like the Game Page pop-ups and toasts).
+- **Result**: On widescreen desktop views, the application now comfortably
+  centers matching its core mobile-oriented design with elegant shadow/backdrop
+  cues, resolving the layout stretching issues completely without needing
+  complex CSS `grid`/`flex` modifications across the DOM hierarchy.

@@ -82,8 +82,9 @@
       starting point for a new custom sheet.
 - [x] "Live Now: xx Players" indicator — real-time active player count badge on
       the Home page, subscribed via Supabase Realtime.
-- [ ] Refine responsive layout for larger screens.
-- [ ] Dark mode consistency audit.
+- [x] Refine responsive layout for larger screens (constrained centered mobile
+      wrapper).
+- [x] Dark mode consistency audit.
 
 ## Phase 5: React Migration (Vite Consolidation) ✅
 
