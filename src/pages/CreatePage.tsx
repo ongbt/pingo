@@ -337,7 +337,7 @@ export default function CreatePage() {
 
       const { data: game, error: gameError } = await supabase
         .from('game')
-        .insert({ room_code: roomCode, sheet_id: selectedSheetId, status: 'lobby', config: settings })
+        .insert({ room_code: roomCode, sheet_id: selectedSheetId, status: 'lobby', config: settings, host_id: profile.id })
         .select().single();
       if (gameError) throw gameError;
 
@@ -353,9 +353,10 @@ export default function CreatePage() {
       await supabase.from('profile').upsert({ id: profile.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
 
       navigate(`/lobby/${game.id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating game:', error);
-      showError('Game Creation Failed', 'Something went wrong while creating the lobby. Please try again.');
+      const msg = error?.message || error?.details || JSON.stringify(error);
+      showError('Game Creation Failed', `Something went wrong: ${msg}`);
     } finally {
       setIsCreating(false);
     }
