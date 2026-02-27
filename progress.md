@@ -432,3 +432,32 @@ All audit issues fixed in a single session. Summary of changes made:
   If the player count is critically low, it correctly communicates **"Not enough
   players to continue"**. Otherwise, it accurately attributes the termination to
   the host.
+
+## 2026-02-27
+
+### Bug Fix: Non-Host Player Clicking Bingo Has No Effect
+
+- **Problem**: When a non-host player clicked "Bingo" in a game with
+  `firstBingoWins` enabled, the frontend attempted to update the `game` table
+  status to `finished`. However, Row-Level Security (RLS) policies prevent
+  non-hosts from modifying the game state, causing the update to fail silently.
+  Furthermore, the `currentPlayer` state object was stale (only set on mount),
+  so the frontend never received confirmation of the player's own win, resulting
+  in the Bingo button remaining forever clickable but non-functional.
+- **Fix 1 — Backend (RPC)**: Created
+  `20260227014930_fix_claim_bingo_first_wins.sql` migration. Rewrote the
+  `claim_bingo` RPC to safely extract `firstBingoWins` from the game's JSONB
+  `config` internally. The RPC now natively terminates the game if it is the
+  first bingo and the setting is enabled. Since the RPC runs as
+  `SECURITY DEFINER`, it bypasses the RLS constraints placed on non-hosts
+  natively.
+- **Fix 2 — Frontend (`GamePage.tsx`)**: Removed the vulnerable
+  `supabase.from('game').update(...)` call entirely from the client's
+  `handleBingo` action, securely delegating this status tracking exclusively to
+  the backend RPC.
+- **Fix 3 — Frontend (`GamePage.tsx`)**: Transitioned `currentPlayer` from state
+  (`useState`) to a computed derived state (`useMemo`) referencing the reactive
+  `players` array. This ensures the current player's own `is_winner` status
+  automatically recalculates upon real-time player updates, causing the Bingo UI
+  and state bounds to appropriately reflect the reality of the game and blocking
+  spam click submissions.

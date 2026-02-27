@@ -13,7 +13,6 @@ export default function GamePage() {
   const navigate = useNavigate();
   const [game, setGame] = useState<(Game & { sheet: Sheet }) | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [marked, setMarked] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSpectating, setIsSpectating] = useState(false);
@@ -21,6 +20,13 @@ export default function GamePage() {
   const [lastMarked, setLastMarked] = useState<{ nickname: string, item: string } | null>(null);
   const [lastLeft, setLastLeft] = useState<string | null>(null);
   const [lastBingo, setLastBingo] = useState<{ nickname: string, rank: number } | null>(null);
+
+  const currentPlayer = useMemo(() => {
+    if (!id) return null;
+    const savedPlayerId = localStorage.getItem(`pingo_player_${id}`);
+    if (!savedPlayerId) return null;
+    return players.find(p => p.id === savedPlayerId) || null;
+  }, [players, id]);
 
   // Refs to avoid stale closures in subscription callbacks
   const gameRef = useRef(game);
@@ -56,7 +62,6 @@ export default function GamePage() {
       if (savedPlayerId) {
         const p = pList.find(p => p.id === savedPlayerId);
         if (p) {
-          setCurrentPlayer(p);
           setMarked(p.board_state as number[] || []);
         }
       }
@@ -179,18 +184,6 @@ export default function GamePage() {
     if (claimError) {
       console.error('Error claiming bingo:', claimError);
       return;
-    }
-
-    const firstBingoWins =
-      typeof game.config === 'object' && game.config !== null && !Array.isArray(game.config)
-        ? (game.config as Record<string, unknown>).firstBingoWins as boolean | undefined ?? false
-        : false;
-
-    if (firstBingoWins) {
-      await supabase
-        .from('game')
-        .update({ status: 'finished' })
-        .eq('id', game.id);
     }
 
     const { error: rpcError } = await supabase.rpc('increment_sheet_play_count', { p_sheet_id: game.sheet.id });
