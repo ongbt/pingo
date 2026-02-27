@@ -25,6 +25,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Helper to check if a user is a real registered user, not an anonymous guest
+  const isRealUser = (u: User | null | undefined) => u && !u.is_anonymous;
+
   const fetchProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -47,9 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+      const activeUser = isRealUser(session?.user) ? session!.user : null;
+      setUser(activeUser);
+      if (activeUser) {
+        fetchProfile(activeUser.id);
       } else {
         setIsLoading(false);
       }
@@ -58,9 +62,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         setSession(newSession);
-        setUser(newSession?.user ?? null);
-        if (newSession?.user) {
-          fetchProfile(newSession.user.id);
+        const activeUser = isRealUser(newSession?.user) ? newSession!.user : null;
+        setUser(activeUser);
+        if (activeUser) {
+          fetchProfile(activeUser.id);
         } else {
           setProfile(null);
           setIsLoading(false);

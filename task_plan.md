@@ -298,3 +298,20 @@
 - [x] `JoinPage.tsx`: Read `?code=` query param and pre-fill the room code input
       on mount.
 - [x] Context-aware toast: "Room Code Copied!" vs "Invite Link Copied!".
+
+## Phase 11: Production Hardening (Supabase Review) ✅
+
+### 11A: Server-Side Session Cleanup (pg_cron)
+
+- [x] Enable `pg_cron` extension in a new migration.
+- [x] Schedule `expire_stale_sessions()` to run every 5 minutes automatically,
+      removing the reliance on client-side triggering.
+
+### 11B: RLS Hardening (Anonymous Auth)
+
+- [x] Enable Anonymous Sign-Ins in `supabase/config.toml`.
+- [x] Update RLS policies on the `player` table to require
+      `auth.uid() = auth_id` for `UPDATE` operations, preventing guests from
+      tampering with other players' boards.
+- [x] Refactor client-side guest session logic to use
+      `supabase.auth.signInAnonymously()` upon joining or creating a game.

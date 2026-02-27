@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 interface UseSessionTimeoutOptions {
   /**
@@ -24,8 +23,7 @@ interface UseSessionTimeoutReturn {
 
 /**
  * Drives a client-side countdown based on game.last_activity_at.
- * Every 60 seconds it also calls expire_stale_sessions() so the backend
- * stays in sync even without pg_cron.
+ * Drives a client-side countdown based on game.last_activity_at.
  */
 export function useSessionTimeout({
   lastActivityAt,
@@ -35,8 +33,6 @@ export function useSessionTimeout({
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
   const expiredRef = useRef(false);
   const expireCalledRef = useRef(false);
-  // Track when we last called the RPC to avoid hammering the DB
-  const lastRpcCallRef = useRef<number>(0);
 
   useEffect(() => {
     if (!lastActivityAt) return;
@@ -54,15 +50,6 @@ export function useSessionTimeout({
       if (remaining === 0 && !expireCalledRef.current) {
         expireCalledRef.current = true;
         onExpire();
-      }
-
-      // Call the RPC at most once per 60 seconds to expire stale sessions
-      const now = Date.now();
-      if (now - lastRpcCallRef.current >= 60_000) {
-        lastRpcCallRef.current = now;
-        supabase.rpc('expire_stale_sessions').then(({ error }) => {
-          if (error) console.warn('expire_stale_sessions error:', error.message);
-        });
       }
     };
 

@@ -57,20 +57,27 @@ export default function JoinPage() {
         return;
       }
 
+      let currentUser = user;
+      if (!currentUser) {
+        const { data: authData, error: authError } = await supabase.auth.signInAnonymously();
+        if (authError || !authData.user) {
+          throw new Error(authError?.message || 'Failed to create guest session.');
+        }
+        currentUser = authData.user;
+      }
+
       const { data: newPlayer, error: playerError } = await supabase
         .from('player')
-        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: false })
+        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: false, auth_id: currentUser.id })
         .select()
         .single();
 
       if (playerError) throw playerError;
 
       localStorage.setItem('pingo_nickname', nickname.trim());
-      if (user) {
-        await supabase
-          .from('profile')
-          .upsert({ id: user.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
-      }
+      await supabase
+        .from('profile')
+        .upsert({ id: currentUser.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
 
       localStorage.setItem(`pingo_player_${game.id}`, newPlayer.id);
       navigate(`/lobby/${game.id}`);

@@ -310,13 +310,12 @@ export default function CreatePage() {
 
   const handleCreate = async () => {
     if (isCreating) return;
-    
-    // Check authentication
+
     if (!profile) {
       showError('Authentication Required', 'You must be signed in to host a game. Please go to the Home page to sign in or sign up.');
       return;
     }
-
+    
     if (!nickname.trim()) { showError('Nickname Required', 'Please enter a nickname before creating the lobby.'); return; }
     if (!selectedSheetId) { showError('No Sheet Selected', 'Please select a bingo sheet before creating the lobby.'); return; }
 
@@ -344,16 +343,14 @@ export default function CreatePage() {
 
       const { data: hostPlayer, error: playerError } = await supabase
         .from('player')
-        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: true })
+        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: true, auth_id: profile.id })
         .select().single();
       if (playerError) throw playerError;
 
       localStorage.setItem('pingo_nickname', nickname.trim());
       localStorage.setItem(`pingo_player_${game.id}`, hostPlayer.id);
 
-      if (profile) {
-        await supabase.from('profile').upsert({ id: profile.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
-      }
+      await supabase.from('profile').upsert({ id: profile.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
 
       navigate(`/lobby/${game.id}`);
     } catch (error) {
