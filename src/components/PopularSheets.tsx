@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Doc } from "../../convex/_generated/dataModel";
 import { Sheet } from '@/types';
 import { Flame, ArrowRight, ChevronRight } from 'lucide-react';
 
 const GRADIENTS = [
   'from-orange-400 to-pink-500',
-  'from-violet-500 to-indigo-600',
+  'from-cyan-500 to-blue-600',
   'from-emerald-400 to-teal-500',
 ];
 
@@ -17,20 +18,18 @@ function formatPlayCount(n: number) {
 
 export default function PopularSheets() {
   const navigate = useNavigate();
-  const [sheets, setSheets] = useState<Sheet[]>([]);
-  const [loading, setLoading] = useState(true);
+  const popularSheets = useQuery(api.sheets.getPopular, { limit: 3 });
+  const sheets = popularSheets?.map((s: Doc<"sheet">) => ({
+    id: s._id,
+    title: s.title,
+    items: s.items,
+    play_count: s.playCount,
+    is_default: s.isDefault,
+    creator_id: s.creatorId ?? null,
+    created_at: new Date(s._creationTime).toISOString()
+  } as Sheet)) ?? [];
 
-  useEffect(() => {
-    supabase
-      .from('sheet')
-      .select('id, title, play_count, items')
-      .order('play_count', { ascending: false })
-      .limit(3)
-      .then(({ data }) => {
-        setSheets((data as Sheet[]) ?? []);
-        setLoading(false);
-      });
-  }, []);
+  const loading = popularSheets === undefined;
 
   if (loading) {
     return (
@@ -46,7 +45,7 @@ export default function PopularSheets() {
 
   return (
     <div className="grid grid-cols-1 gap-3">
-      {sheets.map((sheet, i) => (
+      {sheets.map((sheet: Sheet, i: number) => (
         <button
           key={sheet.id}
           onClick={() => navigate(`/create?sheetId=${sheet.id}`)}

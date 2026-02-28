@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthActions } from "@convex-dev/auth/react";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import ErrorDialog from '@/components/ErrorDialog';
 import {
   ArrowLeft, User, LogOut, Save, Loader2, Edit3
@@ -10,22 +12,25 @@ import { cn } from '@/lib/utils';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { user, profile, isLoading, signOut, refreshProfile } = useAuth();
+  const { user, profile, isAuthenticated } = usePingoAuth();
+  const { signOut } = useAuthActions();
+  const updateProfile = useMutation(api.users.updateProfile);
   
   const [nickname, setNickname] = useState('');
   const [saving, setSaving] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
+  const isLoading = user === undefined;
+
   useEffect(() => {
     // If auth state loaded and no user, kick them to login
-    if (!isLoading && !user) {
+    if (!isLoading && !isAuthenticated) {
       navigate('/signin');
     }
-  }, [user, isLoading, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
 
   useEffect(() => {
     if (profile?.nickname) {
-      // eslint-disable-next-line
       setNickname(profile.nickname);
     }
   }, [profile]);
@@ -39,18 +44,14 @@ export default function ProfilePage() {
     }
     
     setSaving(true);
-    const { error } = await supabase
-      .from('profile')
-      .update({ nickname: nickname.trim(), updated_at: new Date().toISOString() })
-      .eq('id', user?.id)
-
-    setSaving(false);
-
-    if (error) {
-      showError('Update Failed', error.message);
-    } else {
-      await refreshProfile();
-      localStorage.setItem('pingo_nickname', nickname.trim());
+    try {
+        await updateProfile({ nickname: nickname.trim() });
+        localStorage.setItem('pingo_nickname', nickname.trim());
+    } catch (err) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        showError('Update Failed', errMsg);
+    } finally {
+        setSaving(false);
     }
   };
 
@@ -106,7 +107,7 @@ export default function ProfilePage() {
             </div>
             
             <p className="mt-3 text-sm font-medium text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-              {user.email}
+              {user?.email || 'Anonymous Guest'}
             </p>
           </div>
 

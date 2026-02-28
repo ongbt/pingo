@@ -1,60 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/context/AuthContext';
+import { useEffect } from 'react';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
 function useLivePlayerCount() {
-  const [count, setCount] = useState<number | null>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchCount = async () => {
-      const { data: games } = await supabase
-        .from('game')
-        .select('id')
-        .in('status', ['lobby', 'active']);
-
-      const gameIds = (games ?? []).map((g: { id: string }) => g.id);
-
-      if (gameIds.length === 0) {
-        if (!cancelled) setCount(0);
-        return;
-      }
-
-      const { count: n } = await supabase
-        .from('player')
-        .select('id', { count: 'exact', head: true })
-        .in('game_id', gameIds);
-
-      if (!cancelled) setCount(n ?? 0);
-    };
-
-    // Debounce to collapse rapid realtime bursts into a single fetch
-    const scheduleFetch = () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(fetchCount, 500);
-    };
-
-    fetchCount();
-
-    const channel = supabase
-      .channel('live-player-count')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'player' }, scheduleFetch)
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'player' }, scheduleFetch)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game' }, scheduleFetch)
-      .subscribe();
-
-    return () => {
-      cancelled = true;
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  return count;
+  const stats = useQuery(api.games.getLiveStats);
+  return stats?.totalPlayers ?? null;
 }
 
 function formatLiveCount(n: number | null): string {
@@ -66,7 +19,12 @@ function formatLiveCount(n: number | null): string {
 export default function HomePage() {
   const navigate = useNavigate();
   const liveCount = useLivePlayerCount();
-  const { user, profile } = useAuth();
+  const { user, profile } = usePingoAuth();
+  const seedSheets = useMutation(api.seed.defaultSheets);
+
+  useEffect(() => {
+    seedSheets().catch(console.error);
+  }, [seedSheets]);
 
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">

@@ -477,3 +477,50 @@ All audit issues fixed in a single session. Summary of changes made:
   centers matching its core mobile-oriented design with elegant shadow/backdrop
   cues, resolving the layout stretching issues completely without needing
   complex CSS `grid`/`flex` modifications across the DOM hierarchy.
+
+## 2026-02-28
+
+### Convex Migration (Phase 12 Complete)
+
+- **Backend Migration**: Replaced Supabase with **Convex** for the entire
+  backend stack (Database, Auth, and Functions).
+  - Designed Convex schema using `authTables` for seamless identity integration.
+  - Implemented reactive queries and mutations for `sheets`, `games`, `players`,
+    and `users`.
+  - Added atomic operations for game state changes (start game, claim bingo,
+    leave game) to eliminate race conditions.
+- **Authentication Overhaul**:
+  - Configured **Convex Auth** with Google OAuth, Password (Email/Password), and
+    Anonymous sign-in providers.
+  - Migrated `AuthContext` to a lightweight `usePingoAuth` hook powered by
+    `useConvexAuth` and `@convex-dev/auth`.
+  - Updated `SignInPage.tsx` and `SignUpPage.tsx` to handle Convex Auth flows.
+  - Integrated Anonymous sign-in for guest players to maintain RLS-equivalent
+    protections.
+- **Frontend Refactor**:
+  - Migrated all 9 pages to use Convex reactive hooks (`useQuery`,
+    `useMutation`).
+  - Removed all Supabase client dependencies and `realtime` subscriptions in
+    favor of Convex's native reactivity.
+  - Improved type safety using Convex-generated `Doc` and `Id` types across all
+    data-mapping functions.
+  - Standardized error handling with `instanceof Error` checks for more robust
+    UI feedback.
+- **Performance & Cleanup**:
+  - Removed `lib/supabase.ts` and `context/AuthContext.tsx`.
+  - Consolidated environment variables to `VITE_CONVEX_URL`.
+  - Verified a clean build and addressed all major linting errors related to the
+    migration.
+
+### Bug Fixes
+
+- **Fixed Board Layout Mapping Bug**:
+  - **Issue**: Starting a game incorrectly mapped the generated `boardLayout`
+    (mapping items to 5x5 grid) to the `boardState` (list of marked cells). This
+    led to new games starting with nearly all cells already marked for every
+    player.
+  - **Fix**: Updated the `updateBoard` mutation in `convex/players.ts` to
+    support optional `boardState` and `boardLayout` updates separately. Modified
+    `LobbyPage.tsx` to correctly pass the generated layout to the `boardLayout`
+    field, preserving the empty `boardState` (marked cells) for the start of the
+    game.

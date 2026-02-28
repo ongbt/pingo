@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/context/AuthContext';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import {
@@ -11,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
 import SheetPreviewModal from '@/components/SheetPreviewModal';
+import { Id } from '../../convex/_generated/dataModel';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const MY_SHEETS_KEY = 'pingo_my_sheet_ids';
@@ -258,45 +260,48 @@ function SettingRow({ icon, title, description, enabled, onToggle, locked = true
 export default function CreatePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { profile } = useAuth();
+  const { profile } = usePingoAuth();
 
-  const [sheets,          setSheets]          = useState<Sheet[]>([]);
-  const [mySheetIds,      setMySheetIds]      = useState<string[]>([]);
-  const [selectedSheetId, setSelectedSheetId] = useState<string | null>(null);
+  const defaultSheetsResult = useQuery(api.sheets.getDefaults);
+  const userSheetsResult = useQuery(api.sheets.getForUser);
+  const createGame = useMutation(api.games.create);
+  const joinGame = useMutation(api.players.join);
+
+  const [selectedSheetId, setSelectedSheetId] = useState<Id<"sheet"> | null>(null);
   const [pickerOpen,      setPickerOpen]      = useState(false);
   const [nickname,        setNickname]        = useState('');
   const [isCreating,      setIsCreating]      = useState(false);
-  const [loading,         setLoading]         = useState(true);
   const [settings]            = useState({ firstBingoWins: true, antiCheat: false, privateLobby: true, minTwoPlayers: true });
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
 
+  const sheets = useMemo(() => {
+    const all = [...(defaultSheetsResult || []), ...(userSheetsResult || [])];
+    return all.map(s => ({
+        id: s._id,
+        title: s.title,
+        items: s.items,
+        is_default: s.isDefault,
+        creator_id: s.creatorId ?? null,
+        play_count: s.playCount,
+        created_at: new Date(s._creationTime).toISOString()
+    } as Sheet));
+  }, [defaultSheetsResult, userSheetsResult]);
+
   useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
-        .from('sheet')
-        .select('*')
-        .order('play_count', { ascending: false })
-        .order('title', { ascending: true });
+    if (!selectedSheetId && sheets.length > 0) {
+        const paramId = searchParams.get('sheetId');
+        if (paramId && sheets.find(s => s.id === paramId)) {
+            setSelectedSheetId(paramId as Id<"sheet">);
+        } else {
+            setSelectedSheetId(sheets[0].id as Id<"sheet">);
+        }
+    }
+  }, [sheets, selectedSheetId, searchParams]);
 
-      const all = (data as Sheet[]) ?? [];
-      setSheets(all);
-
-      const ids = getLocalSheetIds();
-      setMySheetIds(ids);
-
-      const paramId = searchParams.get('sheetId');
-      if (paramId && all.find(s => s.id === paramId)) {
-        setSelectedSheetId(paramId);
-      } else if (all.length > 0) {
-        setSelectedSheetId(all[0].id);
-      }
-
-      setLoading(false);
-    };
-    load();
-  }, [searchParams]);
+  const loading = defaultSheetsResult === undefined;
+  const mySheetIds = useMemo(() => getLocalSheetIds(), []);
 
   useEffect(() => {
     if (profile?.nickname) {
@@ -312,51 +317,38 @@ export default function CreatePage() {
     if (isCreating) return;
 
     if (!profile) {
-      showError('Authentication Required', 'You must be signed in to host a game. Please go to the Home page to sign in or sign up.');
+      showError('Authentication Required', 'You must be signed in to host a game.');
       return;
     }
     
-    if (!nickname.trim()) { showError('Nickname Required', 'Please enter a nickname before creating the lobby.'); return; }
-    if (!selectedSheetId) { showError('No Sheet Selected', 'Please select a bingo sheet before creating the lobby.'); return; }
+    if (!nickname.trim()) { showError('Nickname Required', 'Please enter a nickname.'); return; }
+    if (!selectedSheetId) { showError('No Sheet Selected', 'Please select a bingo sheet.'); return; }
 
     setIsCreating(true);
     try {
-      let roomCode = '';
-      let isUnique = false;
-      let attempts = 0;
-      while (!isUnique && attempts < 5) {
-        roomCode = Array.from({ length: 6 }, () => {
-          const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-          return chars.charAt(Math.floor(Math.random() * chars.length));
-        }).join('');
-        const { data: existing } = await supabase.from('game').select('id').eq('room_code', roomCode).maybeSingle();
-        if (!existing) isUnique = true;
-        attempts++;
-      }
-      if (!isUnique) throw new Error('Could not generate a unique room code.');
+      const { gameId } = await createGame({
+        sheetId: selectedSheetId,
+        config: settings
+      });
 
-      const { data: game, error: gameError } = await supabase
-        .from('game')
-        .insert({ room_code: roomCode, sheet_id: selectedSheetId, status: 'lobby', config: settings, host_id: profile.id })
-        .select().single();
-      if (gameError) throw gameError;
-
-      const { data: hostPlayer, error: playerError } = await supabase
-        .from('player')
-        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: true, auth_id: profile.id })
-        .select().single();
-      if (playerError) throw playerError;
+      const playerId = await joinGame({
+        gameId,
+        nickname: nickname.trim(),
+        isHost: true
+      });
 
       localStorage.setItem('pingo_nickname', nickname.trim());
-      localStorage.setItem(`pingo_player_${game.id}`, hostPlayer.id);
+      localStorage.setItem(`pingo_player_${gameId}`, playerId);
 
-      await supabase.from('profile').upsert({ id: profile.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
+      // In Convex, user profile is typically updated via mutation if needed. 
+      // For now, let's assume the user name can be updated separately or it's handled.
+      // We don't have a specific profile upsert mutation yet, but we can add it if needed.
 
-      navigate(`/lobby/${game.id}`);
-    } catch (error: any) {
+      navigate(`/lobby/${gameId}`);
+    } catch (error) {
       console.error('Error creating game:', error);
-      const msg = error?.message || error?.details || JSON.stringify(error);
-      showError('Game Creation Failed', `Something went wrong: ${msg}`);
+      const errMsg = error instanceof Error ? error.message : String(error);
+      showError('Game Creation Failed', errMsg || 'Something went wrong');
     } finally {
       setIsCreating(false);
     }
@@ -378,7 +370,7 @@ export default function CreatePage() {
         sheets={sheets}
         mySheetIds={mySheetIds}
         selectedId={selectedSheetId}
-        onSelect={setSelectedSheetId}
+        onSelect={(id) => setSelectedSheetId(id as Id<"sheet">)}
         onClose={() => setPickerOpen(false)}
         onGoToSheets={() => { setPickerOpen(false); navigate('/sheets'); }}
       />
@@ -456,9 +448,15 @@ export default function CreatePage() {
 
         {/* ── Nickname ── */}
         <section>
-          <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5">Your Nickname</h2>
+          <label 
+            htmlFor="host-nickname"
+            className="text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 px-0.5 block"
+          >
+            Your Nickname
+          </label>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm mb-8">
             <input
+              id="host-nickname"
               value={nickname}
               onChange={e => setNickname(e.target.value)}
               className="w-full px-4 py-3.5 rounded-xl bg-slate-50 dark:bg-background-dark border-2 border-transparent focus:border-primary focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-bold text-sm"

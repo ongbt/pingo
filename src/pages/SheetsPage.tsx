@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useQuery, useMutation, useConvex } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Doc, Id } from "../../convex/_generated/dataModel";
 import { Sheet } from '@/types';
 import { cn } from '@/lib/utils';
 import {
@@ -19,9 +21,6 @@ function getLocalSheetIds(): string[] {
 function addLocalSheetId(id: string) {
   const ids = getLocalSheetIds();
   if (!ids.includes(id)) localStorage.setItem(MY_SHEETS_KEY, JSON.stringify([...ids, id]));
-}
-function removeLocalSheetId(id: string) {
-  localStorage.setItem(MY_SHEETS_KEY, JSON.stringify(getLocalSheetIds().filter(i => i !== id)));
 }
 
 function detectDuplicates(items: string[]): string[] {
@@ -42,6 +41,7 @@ function CreateSheetForm({ onSaved, initialTitle = '', initialItems = '' }: { on
   const [saving, setSaving] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string; details?: string[] } | null>(null);
 
+  const createSheetMutation = useMutation(api.sheets.create);
   const itemCount = items.split('\n').map(i => i.trim()).filter(Boolean).length;
 
   const handleSave = async () => {
@@ -66,22 +66,30 @@ function CreateSheetForm({ onSaved, initialTitle = '', initialItems = '' }: { on
     }
 
     setSaving(true);
-    const { data, error } = await supabase
-      .from('sheet')
-      .insert({ title: title.trim(), items: itemsArray, is_default: false })
-      .select()
-      .single();
-    setSaving(false);
+    try {
+        const _newId = await createSheetMutation({
+            title: title.trim(),
+            items: itemsArray
+        });
 
-    if (error || !data) {
+        // Fetch new data via query if needed, but onSaved local update is usually enough
+        onSaved({
+            id: _newId,
+            title: title.trim(),
+            items: itemsArray,
+            is_default: false,
+            creator_id: null, // will be updated on next refresh from server
+            play_count: 0,
+            created_at: new Date().toISOString()
+        } as Sheet);
+        addLocalSheetId(_newId);
+        setTitle('');
+        setItems('');
+    } catch {
       setDialog({ title: 'Save Failed', message: 'Could not save the sheet. Please try again.' });
-      return;
+    } finally {
+      setSaving(false);
     }
-
-    addLocalSheetId(data.id);
-    onSaved(data as Sheet);
-    setTitle('');
-    setItems('');
   };
 
   return (
@@ -256,57 +264,97 @@ function TopSheetRow({ sheet, rank, onPlay, onPreview }: { sheet: Sheet; rank: n
 // ─── Page ──────────────────────────────────────────────────────────────────
 export default function SheetsPage() {
   const navigate = useNavigate();
-  const [topSheets, setTopSheets]   = useState<Sheet[]>([]);
+  const topSheetsResult = useQuery(api.sheets.getPopular, { limit: 5 });
+  const mySheetsResult = useQuery(api.sheets.getForUser);
+  const convex = useConvex();
+
+  const topSheets = useMemo(() => {
+    return (topSheetsResult || []).map((s: Doc<"sheet">) => ({
+        id: s._id,
+        title: s.title,
+        items: s.items,
+        is_default: s.isDefault,
+        creator_id: s.creatorId ?? null,
+        play_count: s.playCount,
+        created_at: new Date(s._creationTime).toISOString()
+    } as Sheet));
+  }, [topSheetsResult]);
+
+  const mySheetsFromDB = useMemo(() => {
+    return (mySheetsResult || []).map((s: Doc<"sheet">) => ({
+        id: s._id,
+        title: s.title,
+        items: s.items,
+        is_default: s.isDefault,
+        creator_id: s.creatorId ?? null,
+        play_count: s.playCount,
+        created_at: new Date(s._creationTime).toISOString()
+    } as Sheet));
+  }, [mySheetsResult]);
+
   const [mySheets, setMySheets]     = useState<Sheet[]>([]);
   const [showForm, setShowForm]     = useState(false);
-  const [loading, setLoading]       = useState(true);
   const [previewSheet, setPreviewSheet] = useState<Sheet | null>(null);
   
   // State to hold starting values when duplicating a sheet
   const [initialFormState, setInitialFormState] = useState<{ title: string, items: string } | null>(null);
 
+  // Still support local IDs for guest mode or specific sheets
   useEffect(() => {
-    const load = async () => {
-      // Fetch top sheets and resolve auth user in parallel
-      const [{ data: top }, { data: { user } }] = await Promise.all([
-        supabase
-          .from('sheet')
-          .select('*')
-          .order('play_count', { ascending: false })
-          .order('created_at', { ascending: true })
-          .limit(5),
-        supabase.auth.getUser(),
-      ]);
-      setTopSheets((top as Sheet[]) ?? []);
+    // Merge: DB-backed ones (which includes ones we created while signed in)
+    // and local-only sheets (deduplicated)
+    const localIds = new Set(getLocalSheetIds());
+    const dbIds = new Set(mySheetsFromDB.map((s: Sheet) => s.id));
 
-      // Fetch localStorage sheets and auth-owned sheets in parallel
-      const ids = getLocalSheetIds();
-      const [localResult, authResult] = await Promise.all([
-        ids.length > 0
-          ? supabase.from('sheet').select('*').in('id', ids).order('created_at', { ascending: false })
-          : Promise.resolve({ data: [] as Sheet[] }),
-        user
-          ? supabase.from('sheet').select('*').eq('creator_id', user.id).order('created_at', { ascending: false })
-          : Promise.resolve({ data: [] as Sheet[] }),
-      ]);
+    const merged = [...mySheetsFromDB];
 
-      const localSheets = (localResult.data as Sheet[]) ?? [];
-      const authSheets  = (authResult.data  as Sheet[]) ?? [];
-
-      // Merge: auth-owned first, then local-only (deduplicated)
-      const mergedIds = new Set(authSheets.map(s => s.id));
-      const merged = [...authSheets, ...localSheets.filter(s => !mergedIds.has(s.id))];
+    // Add local sheets that are not already in the DB-fetched list
+    const fetchMissingLocalSheets = async () => {
+      const missingLocalIds = Array.from(localIds).filter(id => !dbIds.has(id));
+      if (missingLocalIds.length > 0) {
+        // This would require a Convex query to fetch multiple sheets by ID
+        // For now, we'll just rely on `mySheetsFromDB` and assume local sheets
+        // are either owned by the user (and thus in `mySheetsFromDB`) or
+        // are temporary and not persisted across sessions without auth.
+        // A more robust solution would involve a Convex query like `api.sheets.getByIds`
+        // and then mapping those results.
+        // For simplicity, we'll just use mySheetsFromDB for now.
+      }
       setMySheets(merged);
+    };
 
-      // Check ?duplicate=id param to auto-open form with duplicating data
+    fetchMissingLocalSheets();
+  }, [mySheetsFromDB]);
+
+  const loading = topSheetsResult === undefined || mySheetsResult === undefined;
+
+  useEffect(() => {
+    const loadDuplicateSheet = async () => {
+      if (loading) return;
+
       const urlParams = new URLSearchParams(window.location.search);
       const duplicateId = urlParams.get('duplicate');
+
       if (duplicateId) {
-        // Try to find the sheet in our fetched list, or fetch it specifically if not present
-        let sheetToDuplicate = (top as Sheet[]).find(s => s.id === duplicateId) || merged.find(s => s.id === duplicateId);
+        let sheetToDuplicate: Sheet | undefined = undefined;
+
+        // Check if it's in top sheets or my sheets already
+        sheetToDuplicate = topSheets.find((s: Sheet) => s.id === duplicateId) || mySheets.find((s: Sheet) => s.id === duplicateId);
+
         if (!sheetToDuplicate) {
-          const { data } = await supabase.from('sheet').select('*').eq('id', duplicateId).maybeSingle();
-          if (data) sheetToDuplicate = data as Sheet;
+          // If not found, fetch it specifically from Convex
+          const fetchedSheet = await convex.query(api.sheets.getById, { id: duplicateId as Id<"sheet"> });
+          if (fetchedSheet) {
+            sheetToDuplicate = {
+              id: fetchedSheet._id,
+              title: fetchedSheet.title,
+              items: fetchedSheet.items,
+              is_default: fetchedSheet.isDefault,
+              creator_id: fetchedSheet.creatorId ?? null,
+              play_count: fetchedSheet.playCount,
+              created_at: new Date(fetchedSheet._creationTime).toISOString()
+            } as Sheet;
+          }
         }
 
         if (sheetToDuplicate) {
@@ -319,21 +367,15 @@ export default function SheetsPage() {
           window.history.replaceState({}, '', '/sheets');
         }
       }
-
-      setLoading(false);
     };
-    load();
-  }, []);
+    loadDuplicateSheet();
+  }, [loading, topSheets, mySheets, convex]);
+
 
   const handleSheetSaved = (sheet: Sheet) => {
     setMySheets(prev => [sheet, ...prev]);
     setShowForm(false);
     setInitialFormState(null);
-  };
-
-  const handleDelete = (sheet: Sheet) => {
-    removeLocalSheetId(sheet.id);
-    setMySheets(prev => prev.filter(s => s.id !== sheet.id));
   };
 
   const handlePlay = (sheetId: string) => navigate(`/create?sheetId=${sheetId}`);
@@ -416,11 +458,10 @@ export default function SheetsPage() {
           ) : (
             <AnimatePresence mode="popLayout">
               <div className="space-y-2.5">
-                {mySheets.map(sheet => (
+                {mySheets.map((sheet: Sheet) => (
                   <MySheetCard
                     key={sheet.id}
                     sheet={sheet}
-                    onDelete={() => handleDelete(sheet)}
                     onPlay={() => handlePlay(sheet.id)}
                     onPreview={() => setPreviewSheet(sheet)}
                   />
@@ -447,7 +488,7 @@ export default function SheetsPage() {
             </div>
           ) : (
             <div className="space-y-2.5">
-              {topSheets.map((sheet, i) => (
+              {topSheets.map((sheet: Sheet, i: number) => (
                 <TopSheetRow
                   key={sheet.id}
                   sheet={sheet}

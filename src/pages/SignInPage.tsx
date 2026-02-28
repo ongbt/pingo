@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useAuthActions } from "@convex-dev/auth/react";
 import ErrorDialog from '@/components/ErrorDialog';
 import { ArrowLeft, Mail, Lock, LogIn, Loader2 } from 'lucide-react';
 
@@ -16,6 +16,7 @@ const GoogleIcon = () => (
 
 export default function SignInPage() {
   const navigate = useNavigate();
+  const { signIn } = useAuthActions();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,17 +26,13 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
-    });
-    if (error) {
+    try {
+      await signIn("google");
+    } catch (err) {
       setLoading(false);
-      showError('Google Sign In Failed', error.message);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      showError('Google Sign In Failed', errMsg);
     }
-    // No set loading false if successful, as we will be redirected
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -46,17 +43,14 @@ export default function SignInPage() {
     }
     
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (error) {
-      showError('Sign In Failed', error.message);
-    } else {
+    try {
+      await signIn("password", { email, password, flow: "signIn" });
       navigate('/');
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      showError('Sign In Failed', errMsg);
+    } finally {
+      setLoading(false);
     }
   };
 

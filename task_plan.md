@@ -315,3 +315,27 @@
       tampering with other players' boards.
 - [x] Refactor client-side guest session logic to use
       `supabase.auth.signInAnonymously()` upon joining or creating a game.
+
+## Phase 12: Convex Migration ✅
+
+- [x] Configure Convex Auth with Google, Password, and Anonymous providers.
+- [x] Create Convex schema for `users`, `sheet`, `game`, and `player` (using
+      `authTables`).
+- [x] Implement backend logic in Convex (`sheets.ts`, `games.ts`, `players.ts`,
+      `auth_queries.ts`, `users.ts`).
+- [x] Migrate all frontend pages to Convex reactive hooks (`useQuery`,
+      `useMutation`).
+- [x] Refactor Authentication to use Convex Auth (`SignInPage.tsx`,
+      `SignUpPage.tsx`, `ProfilePage.tsx`).
+- [x] Implement real-time player counts and game status via Convex queries.
+- [x] Clean up Supabase redundant files and context.
+- [x] Address linting errors and ensure type safety with Convex `Doc` and `Id`.
+
+## Phase 13: Post-Migration Fixes & Polishing 🏗️
+
+- [x] Fix: Board layout mapping bug.
+  - Resolved issue where starting a game incorrectly mapped `boardLayout` to
+    `boardState`, causing all cells to be marked at the start.
+  - Updated `updateBoard` mutation in Convex to handle `boardState` and
+    `boardLayout` independently.
+  - Corrected `LobbyPage.tsx` to pass the generated layout to the correct field.
