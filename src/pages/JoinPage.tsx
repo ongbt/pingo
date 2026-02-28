@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/context/AuthContext';
+import { useMutation, useConvex } from "convex/react";
+import { useAuthActions } from "@convex-dev/auth/react";
+import { api } from "../../convex/_generated/api";
+import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import { ArrowLeft, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function JoinPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { profile, user } = useAuth();
-  // Pre-fill code from ?code= query param (set by the host's Share link)
+  const { profile, isAuthenticated } = usePingoAuth();
+  const { signIn } = useAuthActions();
+  const convex = useConvex();
+  const joinGame = useMutation(api.players.join);
+
   const [code, setCode] = useState(() => {
     const param = searchParams.get('code') ?? '';
     return param.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
@@ -42,13 +47,9 @@ export default function JoinPage() {
     setError('');
 
     try {
-      const { data: game, error: gameError } = await supabase
-        .from('game')
-        .select('id, status')
-        .eq('room_code', code)
-        .single();
+      const game = await convex.query(api.games.getByCode, { roomCode: code });
 
-      if (gameError || !game) {
+      if (!game) {
         setError('Game not found. Double-check the code.');
         return;
       }
@@ -57,33 +58,26 @@ export default function JoinPage() {
         return;
       }
 
-      let currentUser = user;
-      if (!currentUser) {
-        const { data: authData, error: authError } = await supabase.auth.signInAnonymously();
-        if (authError || !authData.user) {
-          throw new Error(authError?.message || 'Failed to create guest session.');
-        }
-        currentUser = authData.user;
+      if (!isAuthenticated) {
+        await signIn("anonymous");
+        // Re-check profile after sign-in? Convex Auth hooks will update state.
+        // But for this mutation, we might need the new ID.
+        // Actually, the mutation will pick up the new user ID from ctx automatically.
       }
 
-      const { data: newPlayer, error: playerError } = await supabase
-        .from('player')
-        .insert({ game_id: game.id, nickname: nickname.trim(), is_host: false, auth_id: currentUser.id })
-        .select()
-        .single();
-
-      if (playerError) throw playerError;
+      const playerId = await joinGame({
+        gameId: game._id,
+        nickname: nickname.trim(),
+        isHost: false
+      });
 
       localStorage.setItem('pingo_nickname', nickname.trim());
-      await supabase
-        .from('profile')
-        .upsert({ id: currentUser.id, nickname: nickname.trim(), updated_at: new Date().toISOString() });
-
-      localStorage.setItem(`pingo_player_${game.id}`, newPlayer.id);
-      navigate(`/lobby/${game.id}`);
+      localStorage.setItem(`pingo_player_${game._id}`, playerId);
+      navigate(`/lobby/${game._id}`);
     } catch (err) {
       console.error('Error joining game:', err);
-      setError(err instanceof Error ? err.message : 'Failed to join game.');
+      const errMsg = err instanceof Error ? err.message : String(err);
+      setError(errMsg || 'Failed to join game.');
     } finally {
       setIsJoining(false);
     }
@@ -123,11 +117,15 @@ export default function JoinPage() {
         <div className="w-full space-y-5 mb-8">
           {/* Room Code */}
           <div className="space-y-2">
-            <label className="text-xs font-black tracking-widest uppercase text-slate-500 dark:text-slate-400 pl-1">
+            <label 
+              htmlFor="room-code"
+              className="text-xs font-black tracking-widest uppercase text-slate-500 dark:text-slate-400 pl-1"
+            >
               Room Code
             </label>
             <div className="relative group">
               <input
+                id="room-code"
                 autoFocus
                 value={code}
                 onChange={handleCodeChange}
@@ -145,10 +143,14 @@ export default function JoinPage() {
 
           {/* Nickname */}
           <div className="space-y-2 pt-4">
-            <label className="text-xs font-black tracking-widest uppercase text-slate-500 dark:text-slate-400 pl-1">
+            <label 
+              htmlFor="nickname"
+              className="text-xs font-black tracking-widest uppercase text-slate-500 dark:text-slate-400 pl-1"
+            >
               Your Nickname
             </label>
             <input
+              id="nickname"
               value={nickname}
               onChange={(e) => { setNickname(e.target.value); setError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleJoin()}

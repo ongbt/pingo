@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5174,
+    port: 5173,
     strictPort: true, // fail fast if the port is busy rather than silently picking another
   },
 });

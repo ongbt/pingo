@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { convex } from './lib/convex-client';
 
 // Route-level code splitting: each page is its own chunk, loaded on demand
 const HomePage    = lazy(() => import('./pages/HomePage'));
@@ -23,7 +24,7 @@ function PageSpinner() {
 
 export default function App() {
   return (
-    <AuthProvider>
+    <ConvexAuthProvider client={convex}>
       <BrowserRouter>
         <Suspense fallback={<PageSpinner />}>
           <Routes>
@@ -39,6 +40,6 @@ export default function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
-    </AuthProvider>
+    </ConvexAuthProvider>
   );
 }

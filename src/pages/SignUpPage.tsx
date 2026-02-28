@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useAuthActions } from "@convex-dev/auth/react";
 import ErrorDialog from '@/components/ErrorDialog';
 import { ArrowLeft, Mail, Lock, UserPlus, Loader2 } from 'lucide-react';
 
@@ -16,6 +16,7 @@ const GoogleIcon = () => (
 
 export default function SignUpPage() {
   const navigate = useNavigate();
+  const { signIn } = useAuthActions();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,15 +27,12 @@ export default function SignUpPage() {
 
   const handleGoogleSignUp = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
-    });
-    if (error) {
+    try {
+      await signIn("google");
+    } catch (err) {
       setLoading(false);
-      showError('Google Sign Up Failed', error.message);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      showError('Google Sign Up Failed', errMsg);
     }
   };
 
@@ -46,24 +44,14 @@ export default function SignUpPage() {
     }
     
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      // If we want to set a nickname directly during sign up, we can pass metadata here
-      // But we can let them configure profile after sign up, or just use email part
-      options: {
-        data: {
-          nickname: email.split('@')[0],
-        }
-      }
-    });
-
-    setLoading(false);
-
-    if (error) {
-      showError('Sign Up Failed', error.message);
-    } else {
+    try {
+      await signIn("password", { email, password, flow: "signUp" });
       setSuccess(true);
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      showError('Sign Up Failed', errMsg);
+    } finally {
+      setLoading(false);
     }
   };
 

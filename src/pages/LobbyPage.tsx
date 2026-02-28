@@ -1,150 +1,93 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Doc } from '../../convex/_generated/dataModel';
+import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import { Game, Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Copy, Share2, ArrowLeft, UserPlus, Star, CheckCircle, ShieldOff, Timer } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ErrorDialog from '@/components/ErrorDialog';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
+import { Id } from '../../convex/_generated/dataModel';
 
 export default function LobbyPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [game, setGame] = useState<Game | null>(null);
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  usePingoAuth(); // Keep for auth side effects if any, though usePingoAuth is usually reactive
+  
+  const gameId = id as Id<"game">;
+  const gameResult = useQuery(api.games.getWithSheet, { gameId });
+  const playersResult = useQuery(api.players.getForGame, { gameId });
+  const startGameMutation = useMutation(api.games.start);
+  const updatePlayerBoard = useMutation(api.players.updateBoard);
+
   const [copiedMsg, setCopiedMsg] = useState<string | null>(null);
-  const [isUnauthorized, setIsUnauthorized] = useState(false);
   const [dialog, setDialog] = useState<{ title: string; message: string } | null>(null);
 
   const showError = (title: string, message: string) => setDialog({ title, message });
 
+  const game = useMemo(() => {
+    if (!gameResult) return null;
+    return {
+        id: gameResult._id,
+        room_code: gameResult.roomCode,
+        host_id: gameResult.hostId ?? null,
+        sheet_id: gameResult.sheetId,
+        status: gameResult.status,
+        config: gameResult.config,
+        last_activity_at: new Date(gameResult.lastActivityAt).toISOString(),
+        sheet: gameResult.sheet ? {
+            id: gameResult.sheet._id,
+            title: gameResult.sheet.title,
+            items: gameResult.sheet.items,
+            is_default: gameResult.sheet.isDefault,
+            creator_id: gameResult.sheet.creatorId ?? null,
+            play_count: gameResult.sheet.playCount,
+            created_at: new Date(gameResult.sheet._creationTime).toISOString()
+        } : undefined
+    } as unknown as Game;
+  }, [gameResult]);
+
+  const players = useMemo(() => {
+    if (!playersResult) return [];
+    return (playersResult as Doc<"player">[]).map(p => ({
+        id: p._id,
+        game_id: p.gameId,
+        auth_id: p.authId ?? null,
+        nickname: p.nickname,
+        is_host: p.isHost,
+        board_state: p.boardState,
+        board_layout: p.boardLayout ?? null,
+        score: p.score,
+        is_winner: p.isWinner,
+        bingo_rank: p.bingoRank ?? null,
+        created_at: new Date(p._creationTime).toISOString()
+    } as Player));
+  }, [playersResult]);
+
+  const currentPlayer = useMemo(() => {
+    const savedPlayerId = localStorage.getItem(`pingo_player_${gameId}`);
+    return (players as Player[]).find(p => p.id === savedPlayerId) ?? null;
+  }, [players, gameId]);
+
+  const loading = gameResult === undefined || playersResult === undefined;
+  const isUnauthorized = !loading && !currentPlayer;
+
+  // Auto-redirect unauthorized visitors back to home after a short delay
   useEffect(() => {
-    if (!id) return;
-    const gameId = String(id);
+    if (!isUnauthorized) return;
+    const t = setTimeout(() => navigate('/', { replace: true }), 3000);
+    return () => clearTimeout(t);
+  }, [isUnauthorized, navigate]);
 
-    const fetchData = async () => {
-      const { data: gameData, error: gameError } = await supabase
-        .from('game')
-        .select('*, sheet(*)')
-        .eq('id', gameId)
-        .single();
-
-      // Check error first before inspecting status
-      if (gameError) {
-        console.error('Error fetching game:', gameError);
-        return;
-      }
-
-      if (gameData?.status === 'active') {
-        navigate(`/game/${gameId}`);
-        return;
-      }
-
-      let resolvedGame = gameData;
-      if (gameData?.status === 'finished') {
-        await supabase
-          .from('game')
-          .update({ status: 'lobby' })
-          .eq('id', gameId);
-
-        await supabase
-          .from('player')
-          .update({
-            board_state: [],
-            board_layout: null,
-            score: 0,
-            is_winner: false,
-          })
-          .eq('game_id', gameId);
-
-        // Avoid mutating the read-only Supabase response object directly
-        resolvedGame = { ...gameData, status: 'lobby' };
-      }
-      setGame(resolvedGame);
-
-      const { data: playersData, error: playersError } = await supabase
-        .from('player')
-        .select('*')
-        .eq('game_id', gameId);
-
-      if (playersError) {
-        console.error('Error fetching players:', playersError);
-        return;
-      }
-
-      const pList = playersData || [];
-      setPlayers(pList);
-
-      // Identify the current player only from the persisted session ID.
-      // If there's no localStorage entry (or the ID is stale/unknown) the
-      // visitor has no business being in this lobby — block them.
-      const savedPlayerId = localStorage.getItem(`pingo_player_${gameId}`);
-      const found = savedPlayerId ? pList.find(p => p.id === savedPlayerId) ?? null : null;
-
-      if (!found) {
-        setIsUnauthorized(true);
-        setLoading(false);
-        return;
-      }
-
-      setCurrentPlayer(found);
-      setLoading(false);
-    };
-
-    fetchData();
-
-    const gameChannel = supabase
-      .channel(`game_status:${gameId}`)
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'game', filter: `id=eq.${gameId}` },
-        (payload) => {
-          if (payload.new.status === 'active') {
-            navigate(`/game/${gameId}`);
-          } else if (payload.new.status === 'finished') {
-            // Server-side expiry (e.g., via expire_stale_sessions RPC) — go home
-            navigate('/', { replace: true });
-          } else {
-            // Sync last_activity_at so the countdown stays accurate
-            setGame((prev) => prev ? { ...prev, last_activity_at: payload.new.last_activity_at as string } : prev);
-          }
-        }
-      )
-      .subscribe();
-
-    const channel = supabase
-      .channel(`lobby_players:${gameId}`)
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'player', filter: `game_id=eq.${gameId}` },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setPlayers((prev) => {
-              // Guard against the channel replaying an INSERT that the initial
-              // fetch already captured (common on first subscribe).
-              if (prev.some(p => p.id === (payload.new as Player).id)) return prev;
-              return [...prev, payload.new as Player];
-            });
-          } else if (payload.eventType === 'DELETE') {
-            setPlayers((prev) => prev.filter((p) => p.id !== payload.old.id));
-          } else if (payload.eventType === 'UPDATE') {
-            setPlayers((prev) =>
-              prev.map((p) => (p.id === payload.new.id ? (payload.new as Player) : p))
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(gameChannel);
-      supabase.removeChannel(channel);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]); // navigate from React Router v6 is referentially stable — omitting intentionally
+  // Effect to navigate if game goes active
+  useEffect(() => {
+    if (game?.status === 'active') {
+      navigate(`/game/${gameId}`);
+    }
+  }, [game?.status, gameId, navigate]);
 
   // Read configurable thresholds from game.config (defaults: 15 min lobby, 30 min game)
   const lobbyTimeoutMin =
@@ -154,8 +97,7 @@ export default function LobbyPage() {
 
   const handleLobbyExpire = useCallback(() => {
     navigate('/', { replace: true });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigate]);
 
   const timeout = useSessionTimeout({
     lastActivityAt: game?.last_activity_at,
@@ -175,8 +117,6 @@ export default function LobbyPage() {
       showError('Not Enough Players', 'This lobby requires at least 2 players to start.');
       return;
     }
-
-    const gameId = String(id);
 
     const antiCheat =
       typeof game?.config === 'object' && game.config !== null && !Array.isArray(game.config)
@@ -199,14 +139,12 @@ export default function LobbyPage() {
     const generateShuffledLayout = (totalPoolCount: number, sharedPool: number[] | null): number[] => {
       let selected: number[];
       if (sharedPool) {
-        // If anti-cheat is on, randomly shuffle the *exact same 24 items* for this player
         selected = [...sharedPool];
         for (let i = selected.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [selected[i], selected[j]] = [selected[j], selected[i]];
         }
       } else {
-        // Otherwise, fully randomize their card from the entire possible pool of items
         const pool = Array.from({ length: totalPoolCount }, (_, i) => i);
         for (let i = pool.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -223,35 +161,25 @@ export default function LobbyPage() {
       return layout;
     };
 
-    // Assign board layouts in parallel — avoids N+1 sequential DB round-trips
-    const layoutResults = await Promise.all(
-      players.map((player) => {
-        const layout = generateShuffledLayout(totalItems, sharedItemIndices);
-        return supabase.from('player').update({ board_layout: layout }).eq('id', player.id);
-      })
-    );
-    const failedLayout = layoutResults.find((r) => r.error);
-    if (failedLayout) {
-      console.error('Error assigning layout to a player:', failedLayout.error);
-      showError('Board Layout Error', 'Failed to assign board layouts. Please try again.');
-      return;
+    try {
+        // Assign board layouts in parallel
+        await Promise.all(
+          players.map((player) => {
+            const layout = generateShuffledLayout(totalItems, sharedItemIndices);
+            return updatePlayerBoard({ 
+                playerId: player.id as Id<"player">, 
+                boardLayout: layout 
+            });
+          })
+        );
+
+        await startGameMutation({ gameId });
+        navigate(`/game/${gameId}`);
+    } catch (error) {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        console.error('Error starting game:', error);
+        showError('Start Game Failed', errMsg || 'Failed to start the game.');
     }
-
-    // Use the start_game RPC so that host verification is enforced
-    // server-side — a non-host visitor who directly calls the Supabase
-    // API cannot start the game even if they know the game ID.
-    const { error } = await supabase.rpc('start_game', {
-      p_game_id: gameId,
-      p_player_id: currentPlayer.id,
-    });
-
-    if (error) {
-      console.error('Error starting game:', error);
-      showError('Start Game Failed', 'Failed to start the game. Please try again.');
-      return;
-    }
-
-    navigate(`/game/${gameId}`);
   };
 
   const handleCopy = async () => {
@@ -276,12 +204,10 @@ export default function LobbyPage() {
           url: joinUrl,
         });
         return;
-      } catch (err) {
-        // User cancelled share sheet — do nothing
-        if ((err as Error).name === 'AbortError') return;
+      } catch (err: unknown) {
+        if ((err as Error)?.name === 'AbortError') return;
       }
     }
-    // Fallback: copy the join URL to clipboard
     try {
       await navigator.clipboard.writeText(joinUrl);
       setCopiedMsg('Invite Link Copied!');
@@ -290,14 +216,6 @@ export default function LobbyPage() {
       console.error('Failed to share:', err);
     }
   };
-
-  // Auto-redirect unauthorized visitors back to home after a short delay
-  useEffect(() => {
-    if (!isUnauthorized) return;
-    const t = setTimeout(() => navigate('/', { replace: true }), 3000);
-    return () => clearTimeout(t);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUnauthorized]);
 
   if (loading) {
     return (
