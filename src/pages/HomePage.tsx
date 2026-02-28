@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect } from 'react'; 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { usePingoAuth } from '@/hooks/use-pingo-auth';
@@ -19,12 +19,7 @@ function formatLiveCount(n: number | null): string {
 export default function HomePage() {
   const navigate = useNavigate();
   const liveCount = useLivePlayerCount();
-  const { user, profile } = usePingoAuth();
-  const seedSheets = useMutation(api.seed.run);
-
-  useEffect(() => {
-    seedSheets().catch(console.error);
-  }, [seedSheets]);
+  const { user, profile } = useAuth();
 
   return (
     <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
