@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "convex": {
+      "source": "waynesutton/convexskills",
+      "sourceType": "github",
+      "computedHash": "0a9f0151c7776f13ab3affca28a04d55fcb4ea3af9f53eeadebe934552975a8f"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
