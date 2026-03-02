@@ -16,11 +16,11 @@ up, run, and deploy the Pingo application across **Local**, **Development**, and
 
 ### Environment Targets
 
-| Target    | Purpose              | Frontend URL                      | Backend URL                      |
-| :-------- | :------------------- | :-------------------------------- | :------------------------------- |
-| **Local** | Feature development  | `http://localhost:5173`           | `http://127.0.0.1:3210`          |
-| **Dev**   | Staging / QA testing | `https://staging-pingo.pages.dev` | `https://dev-slug.convex.cloud`  |
-| **Prod**  | Live application     | `https://pingo.bouncybison.click` | `https://prod-slug.convex.cloud` |
+| Target    | Purpose              | Frontend URL                          | Backend URL                                   |
+| :-------- | :------------------- | :------------------------------------ | :-------------------------------------------- |
+| **Local** | Feature development  | `http://localhost:5173`               | `http://127.0.0.1:3210`                       |
+| **Dev**   | Staging / QA testing | `https://staging.pingo-31m.pages.dev` | `https://fabulous-bandicoot-305.convex.cloud` |
+| **Prod**  | Live application     | `https://pingo.bouncybison.click`     | `https://fearless-axolotl-554.convex.cloud`   |
 
 ---
 
@@ -90,21 +90,24 @@ Pingo uses Google OAuth for secure sign-in. You must configure a client in the
 
 ### Step 2: Configure Redirects per Environment
 
-| Env       | Authorized JavaScript Origins                    | Authorized Redirect URIs                                 |
-| :-------- | :----------------------------------------------- | :------------------------------------------------------- |
-| **Local** | `http://localhost:5173`, `http://127.0.0.1:5173` | `http://127.0.0.1:3211/api/auth/callback/google`         |
-| **Dev**   | `https://staging-pingo.pages.dev`                | `https://dev-slug.convex.site/api/auth/callback/google`  |
-| **Prod**  | `https://pingo.bouncybison.click`                | `https://prod-slug.convex.site/api/auth/callback/google` |
-
-> **IMPORTANT**: Replace `dev-slug` with your actual Convex deployment name
-> (e.g., `fine-salamander-480`). You can find this in the Convex Dashboard.
+| Env       | Authorized JavaScript Origins                    | Authorized Redirect URIs                                              |
+| :-------- | :----------------------------------------------- | :-------------------------------------------------------------------- |
+| **Local** | `http://localhost:5173`, `http://127.0.0.1:5173` | `http://127.0.0.1:3211/api/auth/callback/google`                      |
+| **Dev**   | `https://staging.pingo-31m.pages.dev`            | `https://fabulous-bandicoot-305.convex.site/api/auth/callback/google` |
+| **Prod**  | `https://pingo.bouncybison.click`                | `https://fearless-axolotl-554.convex.site/api/auth/callback/google`   |
 
 ### Step 3: Add Secrets to Convex
 
-In your Convex Dashboard (**Settings > Environment Variables**), add:
+In your Convex Dashboard (**Settings > Environment Variables**), add the Google
+OAuth credentials.
 
-- `AUTH_GOOGLE_ID`: Your Client ID
-- `AUTH_GOOGLE_SECRET`: Your Client Secret
+> **💡 Best Practice**: Create **separate** OAuth Client IDs in the Google Cloud
+> Console for each environment (Local, Staging, Production). This ensures that a
+> compromise in one environment does not affect the others and allows for clean
+> redirect URI management.
+
+- `AUTH_GOOGLE_ID`: Your environment-specific Client ID
+- `AUTH_GOOGLE_SECRET`: Your environment-specific Client Secret
 
 ---
 
@@ -141,23 +144,66 @@ Connect your GitHub repository to Cloudflare Pages.
 **Settings > Environment Variables:** Set these variables for **Production** and
 **Preview** (Dev/Staging):
 
-| Variable               | Environment    | Example Value                    |
-| :--------------------- | :------------- | :------------------------------- |
-| `VITE_CONVEX_URL`      | **Production** | `https://prod-slug.convex.cloud` |
-| `VITE_CONVEX_SITE_URL` | **Production** | `https://prod-slug.convex.site`  |
-| `VITE_CONVEX_URL`      | **Preview**    | `https://dev-slug.convex.cloud`  |
-| `VITE_CONVEX_SITE_URL` | **Preview**    | `https://dev-slug.convex.site`   |
+| Variable               | Environment    | Example Value                                |
+| :--------------------- | :------------- | :------------------------------------------- |
+| `VITE_CONVEX_URL`      | **Production** | `https://fearless-axolotl-554.convex.cloud`  |
+| `VITE_CONVEX_SITE_URL` | **Production** | `https://fearless-axolotl-554.convex.site`   |
+| `VITE_CONVEX_URL`      | **Preview**    | (Auto-injected by build command)             |
+| `VITE_CONVEX_SITE_URL` | **Preview**    | `https://fabulous-bandicoot-305.convex.site` |
+
+### C. Automated Previews (Cloudflare + Convex)
+
+For branch-based previews (e.g., `staging`), you can automate the backend
+creation during the frontend build.
+
+#### 1. Generate a Preview Deploy Key
+
+1. Log in to your [Convex Dashboard](https://dashboard.convex.dev).
+2. Go to **Settings > Deploy Keys** and generate a **Preview Deploy Key**.
+
+#### 2. Configure Cloudflare
+
+1. In Cloudflare Pages **Settings > Environment variables**, add
+   `CONVEX_DEPLOY_KEY` to the **Preview** environment.
+2. Under **Settings > Build & Deploy**, set the **Build command** for
+   **Previews** to:
+   ```bash
+   npx convex deploy --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+   ```
+
+#### 3. Stable Staging Backend (Configured)
+
+To avoid updating Google OAuth redirects for every branch, use our stable
+backend:
+
+```bash
+npx convex deploy --preview-create fabulous-bandicoot-305 --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+```
+
+Redirect URI:
+`https://fabulous-bandicoot-305.convex.site/api/auth/callback/google`
 
 ---
 
-## 🛠️ 4. Advanced: Configuration Mapping
+## 🛠️ 4. Master Environment Matrix
 
-| Variable               | Purpose                                   | Where to check                    |
-| :--------------------- | :---------------------------------------- | :-------------------------------- |
-| `SITE_URL`             | (Backend) Where to redirect after login   | Convex Dash > Settings > Env Vars |
-| `CONVEX_SITE_URL`      | (Backend) Internal URL for auth callbacks | Generated automatically by Convex |
-| `VITE_CONVEX_URL`      | (Frontend) Main API endpoint              | `.env.*` files or Cloudflare UI   |
-| `VITE_CONVEX_SITE_URL` | (Frontend) Auth redirect endpoint         | `.env.*` files or Cloudflare UI   |
+The following table summarizes all configuration required for the Pingo
+ecosystem.
+
+| Component      | Setting / Variable            | **Local** Environment             | **Staging** (Staging)                        | **Production** (Live)                       |
+| :------------- | :---------------------------- | :-------------------------------- | :------------------------------------------- | :------------------------------------------ |
+| **Vite App**   | `VITE_CONVEX_URL`             | `http://localhost:3210`           | _(Auto-injected)_                            | `https://fearless-axolotl-554.convex.cloud` |
+| **Vite App**   | `VITE_CONVEX_SITE_URL`        | `http://localhost:3211`           | `https://fabulous-bandicoot-305.convex.site` | `https://fearless-axolotl-554.convex.site`  |
+| **Cloudflare** | `CONVEX_DEPLOY_KEY`           | N/A                               | `preview:ongbt:pingo\|...`                   | `preview:ongbt:pingo\|...`                  |
+| **Convex**     | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`            | `610855938258-00if...`                       | `610855938258-00ifu...`                     |
+| **Convex**     | `AUTH_GOOGLE_SECRET`          | `****J8HM`                        | `****GpfN`                                   | `****QoQq`                                  |
+| **Convex**     | `SITE_URL`                    | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`        | `https://pingo.bouncybison.click`           |
+| **Google**     | Authorized JavaScript origins | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`        | `https://pingo.bouncybison.click`           |
+| **Google**     | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`* | `https://...305.convex.site/callback`*       | `https://...554.convex.site/callback`*      |
+
+_\* Full Redirect URI path: `/api/auth/callback/google`_
+
+---
 
 ---
 

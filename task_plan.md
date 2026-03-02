@@ -112,8 +112,10 @@
 - [x] Configure `public/_redirects` for Cloudflare SPA routing.
 - [x] Setup `.env.production` with `VITE_` prefixed secrets.
 - [x] Verify production build (`npm run build`) passes.
-- [ ] Connect GitHub repo to Cloudflare Pages (User action required).
-- [ ] Setup custom domain on Cloudflare Pages.
+- [x] Connect GitHub repo to Cloudflare Pages (User action required).
+- [x] Setup custom domain on Cloudflare Pages.
+- [x] Configure Convex Preview Deploy Key in Cloudflare.
+- [x] Configure stable staging redirect URI in Google OAuth.
 
 ## Phase 8: Authentication & Profiles ✅
 
@@ -352,3 +354,14 @@
   - Provided a verification checklist for deployment readiness.
 - [x] **Project Connectivity Map**: Documented the relationship between Vite
       environment variables and Convex backend configuration.
+
+## Phase 15: Environment Synchronization ✅
+
+- [x] **Preview Setup Guide**: Integrated instructions for branch-based staging
+      environments into `ENV_SETUP.md`.
+- [x] **Google OAuth Audit**: Finalize redirect URIs for the stable staging
+      backend name.
+- [x] **Verification**: Confirm Cloudflare build successfully creates a backend
+      preview and links it to the frontend via `VITE_CONVEX_URL`.
+- [x] **Deploy Frontend to Cloudflare Pages**: Connect staging frontend to
+      Convex preview.

@@ -569,3 +569,13 @@ All audit issues fixed in a single session. Summary of changes made:
     in local and cloud environments.
 - **Integration**: Updated `README.md` to link to the new environment setup
   guide as a core prerequisite for developers.
+- **Preview Deployment Strategy**: Integrated the process for linking Convex
+  Backend Previews with Cloudflare Pages Frontend Previews into `ENV_SETUP.md`.
+  Defined the CLI command strategy to automate backend creation during the
+  frontend build process.
+- **Staging Connectivity**: Successfully synchronized Cloudflare Pages staging
+  deployment with the stable Convex staging backend (`fabulous-bandicoot-305`).
+- **Google OAuth**: Verified and documented the redirect URI configuration for
+  all 3 environments (Local, Staging, Production).
+- **Environment Automation**: Configured the Cloudflare build command to
+  automatically provision and link the Convex backend preview.

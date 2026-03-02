@@ -60,7 +60,7 @@ celebrations, and a custom sheet builder.
 
 - Node.js 20+
 - [Environment Setup & Deployment Strategy](./ENV_SETUP.md) — Read this for
-  configuring Local, Dev, and Prod.
+  configuring Local, Dev, Prod, and automated Preview environments.
 
 ### 2. Configure Environment
 
