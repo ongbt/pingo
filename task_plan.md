@@ -112,8 +112,10 @@
 - [x] Configure `public/_redirects` for Cloudflare SPA routing.
 - [x] Setup `.env.production` with `VITE_` prefixed secrets.
 - [x] Verify production build (`npm run build`) passes.
-- [ ] Connect GitHub repo to Cloudflare Pages (User action required).
-- [ ] Setup custom domain on Cloudflare Pages.
+- [x] Connect GitHub repo to Cloudflare Pages (User action required).
+- [x] Setup custom domain on Cloudflare Pages.
+- [x] Configure Convex Preview Deploy Key in Cloudflare.
+- [x] Configure stable staging redirect URI in Google OAuth.
 
 ## Phase 8: Authentication & Profiles ✅
 
@@ -315,3 +317,51 @@
       tampering with other players' boards.
 - [x] Refactor client-side guest session logic to use
       `supabase.auth.signInAnonymously()` upon joining or creating a game.
+
+## Phase 12: Convex Migration ✅
+
+- [x] Configure Convex Auth with Google, Password, and Anonymous providers.
+- [x] Create Convex schema for `users`, `sheet`, `game`, and `player` (using
+      `authTables`).
+- [x] Implement backend logic in Convex (`sheets.ts`, `games.ts`, `players.ts`,
+      `auth_queries.ts`, `users.ts`).
+- [x] Migrate all frontend pages to Convex reactive hooks (`useQuery`,
+      `useMutation`).
+- [x] Refactor Authentication to use Convex Auth (`SignInPage.tsx`,
+      `SignUpPage.tsx`, `ProfilePage.tsx`).
+- [x] Implement real-time player counts and game status via Convex queries.
+- [x] Clean up Supabase redundant files and context.
+- [x] Address linting errors and ensure type safety with Convex `Doc` and `Id`.
+
+## Phase 13: Post-Migration Fixes & Polishing ✅
+
+- [x] Fix: Board layout mapping bug.
+  - Resolved issue where starting a game incorrectly mapped `boardLayout` to
+    `boardState`, causing all cells to be marked at the start.
+  - Updated `updateBoard` mutation in Convex to handle `boardState` and
+    `boardLayout` independently.
+  - Corrected `LobbyPage.tsx` to pass the generated layout to the correct field.
+
+## Phase 14: Handover & Documentation ✅
+
+- [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
+      comprehensive steps for local, dev, and prod environments.
+  - Included step-by-step instructions for cloning and initial setup
+    (`npm install`, `npx convex dev`).
+  - Detailed Google OAuth redirect URI patterns for all environments.
+  - Added a troubleshooting section for common auth issues (corrupted keys,
+    mismatched URLs).
+  - Provided a verification checklist for deployment readiness.
+- [x] **Project Connectivity Map**: Documented the relationship between Vite
+      environment variables and Convex backend configuration.
+
+## Phase 15: Environment Synchronization ✅
+
+- [x] **Preview Setup Guide**: Integrated instructions for branch-based staging
+      environments into `ENV_SETUP.md`.
+- [x] **Google OAuth Audit**: Finalize redirect URIs for the stable staging
+      backend name.
+- [x] **Verification**: Confirm Cloudflare build successfully creates a backend
+      preview and links it to the frontend via `VITE_CONVEX_URL`.
+- [x] **Deploy Frontend to Cloudflare Pages**: Connect staging frontend to
+      Convex preview.

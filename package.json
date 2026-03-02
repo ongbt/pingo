@@ -9,9 +9,12 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@auth/core": "^0.37.4",
+    "@convex-dev/auth": "^0.0.91",
     "@supabase/supabase-js": "^2.97.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "convex": "^1.32.0",
     "framer-motion": "^12.34.3",
     "lucide-react": "^0.575.0",
     "react": "^18.3.1",

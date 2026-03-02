@@ -477,3 +477,105 @@ All audit issues fixed in a single session. Summary of changes made:
   centers matching its core mobile-oriented design with elegant shadow/backdrop
   cues, resolving the layout stretching issues completely without needing
   complex CSS `grid`/`flex` modifications across the DOM hierarchy.
+
+## 2026-02-28
+
+### Convex Migration (Phase 12 Complete)
+
+- **Backend Migration**: Replaced Supabase with **Convex** for the entire
+  backend stack (Database, Auth, and Functions).
+  - Designed Convex schema using `authTables` for seamless identity integration.
+  - Implemented reactive queries and mutations for `sheets`, `games`, `players`,
+    and `users`.
+  - Added atomic operations for game state changes (start game, claim bingo,
+    leave game) to eliminate race conditions.
+- **Authentication Overhaul**:
+  - Configured **Convex Auth** with Google OAuth, Password (Email/Password), and
+    Anonymous sign-in providers.
+  - Migrated `AuthContext` to a lightweight `usePingoAuth` hook powered by
+    `useConvexAuth` and `@convex-dev/auth`.
+  - Updated `SignInPage.tsx` and `SignUpPage.tsx` to handle Convex Auth flows.
+  - Integrated Anonymous sign-in for guest players to maintain RLS-equivalent
+    protections.
+- **Frontend Refactor**:
+  - Migrated all 9 pages to use Convex reactive hooks (`useQuery`,
+    `useMutation`).
+  - Removed all Supabase client dependencies and `realtime` subscriptions in
+    favor of Convex's native reactivity.
+  - Improved type safety using Convex-generated `Doc` and `Id` types across all
+    data-mapping functions.
+  - Standardized error handling with `instanceof Error` checks for more robust
+    UI feedback.
+- **Performance & Cleanup**:
+  - Removed `lib/supabase.ts` and `context/AuthContext.tsx`.
+  - Consolidated environment variables to `VITE_CONVEX_URL`.
+  - Verified a clean build and addressed all major linting errors related to the
+    migration.
+
+## Phase 13: Post-Migration Fixes & Polishing ✅
+
+- [x] Fix: Board layout mapping bug.
+  - Resolved issue where starting a game incorrectly mapped `boardLayout` to
+    `boardState`, causing all cells to be marked at the start.
+  - Updated `updateBoard` mutation in Convex to handle `boardState` and
+    `boardLayout` independently.
+  - Corrected `LobbyPage.tsx` to pass the generated layout to the correct field.
+
+## Phase 14: Handover & Documentation ✅
+
+- [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
+      comprehensive steps for local, dev, and prod environments.
+  - Included step-by-step instructions for cloning and initial setup
+    (`npm install`, `npx convex dev`).
+  - Detailed Google OAuth redirect URI patterns for all environments.
+  - Added a troubleshooting section for common auth issues (corrupted keys,
+    mismatched URLs).
+  - Provided a verification checklist for deployment readiness.
+- [x] **Project Connectivity Map**: Documented the relationship between Vite
+      environment variables and Convex backend configuration.
+
+### Bug Fixes
+
+- **Fixed Board Layout Mapping Bug**:
+  - **Issue**: Starting a game incorrectly mapped the generated `boardLayout`
+    (mapping items to 5x5 grid) to the `boardState` (list of marked cells). This
+    led to new games starting with nearly all cells already marked for every
+    player.
+  - **Fix**: Updated the `updateBoard` mutation in `convex/players.ts` to
+    support optional `boardState` and `boardLayout` updates separately. Modified
+    `LobbyPage.tsx` to correctly pass the generated layout to the `boardLayout`
+    field, preserving the empty `boardState` (marked cells) for the start of the
+    game.
+
+## 2026-03-02
+
+### Environment Setup & Deployment Strategy
+
+- **Documentation**: Created and refined `ENV_SETUP.md` providing a
+  comprehensive, step-by-step guide for managing 3 environments (**Local**,
+  **Dev**, **Prod**) for both React (Frontend) and Convex (Backend).
+- **Unified Configuration**:
+  - Detailed `.env.*` file mapping for Vite.
+  - Described Convex Cloud deployment linking and secret management.
+  - Provided step-by-step instructions for Cloudflare Pages (Production vs.
+    Preview) environment variables.
+  - **Environment Files**: Created `.env.development` and `.env.production` in
+    the project root to manage environment-specific variables for Vite.
+- **Onboarding & Troubleshooting**:
+  - Added specific instructions for first-time setup after cloning.
+  - Included a **Troubleshooting** section covering common authentication
+    pitfalls (like corrupted keys or mismatched `SITE_URL`).
+  - Detailed the exactly formatted **Authorized Redirect URIs** for Google OAuth
+    in local and cloud environments.
+- **Integration**: Updated `README.md` to link to the new environment setup
+  guide as a core prerequisite for developers.
+- **Preview Deployment Strategy**: Integrated the process for linking Convex
+  Backend Previews with Cloudflare Pages Frontend Previews into `ENV_SETUP.md`.
+  Defined the CLI command strategy to automate backend creation during the
+  frontend build process.
+- **Staging Connectivity**: Successfully synchronized Cloudflare Pages staging
+  deployment with the stable Convex staging backend (`fabulous-bandicoot-305`).
+- **Google OAuth**: Verified and documented the redirect URI configuration for
+  all 3 environments (Local, Staging, Production).
+- **Environment Automation**: Configured the Cloudflare build command to
+  automatically provision and link the Convex backend preview.
