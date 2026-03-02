@@ -127,8 +127,7 @@ npx convex deploy
 **For Production:**
 
 ```bash
-# Push directly to production
-npx convex deploy --prod
+# Push directly to production$env:CONVEX_DEPLOY_KEY="prod:fearless-axolotl-554|eyJ2MiI..." ; npx convex deploy; npx convex run seed:run
 ```
 
 ### B. Frontend Deployment (Cloudflare Pages)
