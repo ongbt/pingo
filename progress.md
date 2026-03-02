@@ -512,6 +512,28 @@ All audit issues fixed in a single session. Summary of changes made:
   - Verified a clean build and addressed all major linting errors related to the
     migration.
 
+## Phase 13: Post-Migration Fixes & Polishing ✅
+
+- [x] Fix: Board layout mapping bug.
+  - Resolved issue where starting a game incorrectly mapped `boardLayout` to
+    `boardState`, causing all cells to be marked at the start.
+  - Updated `updateBoard` mutation in Convex to handle `boardState` and
+    `boardLayout` independently.
+  - Corrected `LobbyPage.tsx` to pass the generated layout to the correct field.
+
+## Phase 14: Handover & Documentation ✅
+
+- [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
+      comprehensive steps for local, dev, and prod environments.
+  - Included step-by-step instructions for cloning and initial setup
+    (`npm install`, `npx convex dev`).
+  - Detailed Google OAuth redirect URI patterns for all environments.
+  - Added a troubleshooting section for common auth issues (corrupted keys,
+    mismatched URLs).
+  - Provided a verification checklist for deployment readiness.
+- [x] **Project Connectivity Map**: Documented the relationship between Vite
+      environment variables and Convex backend configuration.
+
 ### Bug Fixes
 
 - **Fixed Board Layout Mapping Bug**:
@@ -524,3 +546,26 @@ All audit issues fixed in a single session. Summary of changes made:
     `LobbyPage.tsx` to correctly pass the generated layout to the `boardLayout`
     field, preserving the empty `boardState` (marked cells) for the start of the
     game.
+
+## 2026-03-02
+
+### Environment Setup & Deployment Strategy
+
+- **Documentation**: Created and refined `ENV_SETUP.md` providing a
+  comprehensive, step-by-step guide for managing 3 environments (**Local**,
+  **Dev**, **Prod**) for both React (Frontend) and Convex (Backend).
+- **Unified Configuration**:
+  - Detailed `.env.*` file mapping for Vite.
+  - Described Convex Cloud deployment linking and secret management.
+  - Provided step-by-step instructions for Cloudflare Pages (Production vs.
+    Preview) environment variables.
+  - **Environment Files**: Created `.env.development` and `.env.production` in
+    the project root to manage environment-specific variables for Vite.
+- **Onboarding & Troubleshooting**:
+  - Added specific instructions for first-time setup after cloning.
+  - Included a **Troubleshooting** section covering common authentication
+    pitfalls (like corrupted keys or mismatched `SITE_URL`).
+  - Detailed the exactly formatted **Authorized Redirect URIs** for Google OAuth
+    in local and cloud environments.
+- **Integration**: Updated `README.md` to link to the new environment setup
+  guide as a core prerequisite for developers.

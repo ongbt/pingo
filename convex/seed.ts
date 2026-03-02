@@ -1,6 +1,14 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
-export const defaultSheets = mutation({
+export const isSeeded = query({
+  args: {},
+  handler: async (ctx) => {
+    const sheet = await ctx.db.query("sheet").filter(q => q.eq(q.field("isDefault"), true)).first();
+    return !!sheet;
+  }
+});
+
+export const run = mutation({
   args: {},
   handler: async (ctx) => {
     const existingSheets = await ctx.db.query("sheet").filter((q) => q.eq(q.field("isDefault"), true)).collect();
@@ -17,7 +25,7 @@ export const defaultSheets = mutation({
           "Disruptive", "Core competency", "In the loop", "Roadmap", "Pivotal"
         ],
         isDefault: true,
-        playCount: 0,
+        playCount: 1540,
       });
     }
 
@@ -33,7 +41,7 @@ export const defaultSheets = mutation({
           "Chimpanzee", "Orangutan", "Gibbon", "Wallaby", "Wombat"
         ],
         isDefault: true,
-        playCount: 0,
+        playCount: 842,
       });
     }
 
@@ -49,7 +57,7 @@ export const defaultSheets = mutation({
           "Peter Pan", "Wendy", "Captain Hook", "Tinker Bell", "Alice"
         ],
         isDefault: true,
-        playCount: 0,
+        playCount: 2310,
       });
     }
   },

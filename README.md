@@ -59,6 +59,8 @@ celebrations, and a custom sheet builder.
 ### 1. Prerequisites
 
 - Node.js 20+
+- [Environment Setup & Deployment Strategy](./ENV_SETUP.md) — Read this for
+  configuring Local, Dev, and Prod.
 
 ### 2. Configure Environment
 

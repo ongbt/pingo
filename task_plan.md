@@ -331,7 +331,7 @@
 - [x] Clean up Supabase redundant files and context.
 - [x] Address linting errors and ensure type safety with Convex `Doc` and `Id`.
 
-## Phase 13: Post-Migration Fixes & Polishing 🏗️
+## Phase 13: Post-Migration Fixes & Polishing ✅
 
 - [x] Fix: Board layout mapping bug.
   - Resolved issue where starting a game incorrectly mapped `boardLayout` to
@@ -339,3 +339,16 @@
   - Updated `updateBoard` mutation in Convex to handle `boardState` and
     `boardLayout` independently.
   - Corrected `LobbyPage.tsx` to pass the generated layout to the correct field.
+
+## Phase 14: Handover & Documentation ✅
+
+- [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
+      comprehensive steps for local, dev, and prod environments.
+  - Included step-by-step instructions for cloning and initial setup
+    (`npm install`, `npx convex dev`).
+  - Detailed Google OAuth redirect URI patterns for all environments.
+  - Added a troubleshooting section for common auth issues (corrupted keys,
+    mismatched URLs).
+  - Provided a verification checklist for deployment readiness.
+- [x] **Project Connectivity Map**: Documented the relationship between Vite
+      environment variables and Convex backend configuration.

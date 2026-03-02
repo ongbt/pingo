@@ -20,7 +20,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const liveCount = useLivePlayerCount();
   const { user, profile } = usePingoAuth();
-  const seedSheets = useMutation(api.seed.defaultSheets);
+  const seedSheets = useMutation(api.seed.run);
 
   useEffect(() => {
     seedSheets().catch(console.error);
