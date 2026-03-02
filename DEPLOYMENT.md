@@ -37,15 +37,15 @@ resolutions for issues encountered during the process.
   This is required for Cloudflare Pages to handle deep-linking.
 - **Environment**: All secrets use `VITE_` prefix for Vite client exposure.
 
-| Setting                    | Value                                      |
-| -------------------------- | ------------------------------------------ |
-| **Framework Preset**       | Vite                                       |
-| **Build Command**          | `npm run build`                            |
-| **Build Output Directory** | `dist`                                     |
-| **NODE_VERSION**           | `20`                                       |
-| **VITE_CONVEX_URL**        | `https://fine-salamander-480.convex.cloud` |
-| **VITE_CONVEX_SITE_URL**   | `https://fine-salamander-480.convex.site`  |
-| **Production Slug**        | `fine-salamander-480`                      |
+| Setting                    | Value                                       |
+| -------------------------- | ------------------------------------------- |
+| **Framework Preset**       | Vite                                        |
+| **Build Command**          | `npm run build`                             |
+| **Build Output Directory** | `dist`                                      |
+| **NODE_VERSION**           | `20`                                        |
+| **VITE_CONVEX_URL**        | `https://fearless-axolotl-554.convex.cloud` |
+| **VITE_CONVEX_SITE_URL**   | `https://fearless-axolotl-554.convex.site`  |
+| **Production Slug**        | `fearless-axolotl-554`                      |
 
 ---
 

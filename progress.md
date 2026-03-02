@@ -573,9 +573,34 @@ All audit issues fixed in a single session. Summary of changes made:
   Backend Previews with Cloudflare Pages Frontend Previews into `ENV_SETUP.md`.
   Defined the CLI command strategy to automate backend creation during the
   frontend build process.
+- **Verification**: Confirm Cloudflare build successfully creates a backend
+  preview and links it to the frontend via `VITE_CONVEX_URL`.
 - **Staging Connectivity**: Successfully synchronized Cloudflare Pages staging
-  deployment with the stable Convex staging backend (`fabulous-bandicoot-305`).
+  deployment with the stable Convex staging backend (`combative-mouse-848`).
 - **Google OAuth**: Verified and documented the redirect URI configuration for
   all 3 environments (Local, Staging, Production).
 - **Environment Automation**: Configured the Cloudflare build command to
   automatically provision and link the Convex backend preview.
+
+### Authentication & JWT Verification Fix
+
+- **Issue**: Users were not shown as signed in after redirect on the production
+  site (`pingo.bouncybison.click`).
+- **Root Cause**:
+  1. **Mismatched URLs**: The `VITE_CONVEX_URL` was pointing to an older
+     deployment (`fine-salamander-480`) instead of the active one
+     (`fearless-axolotl-554`).
+  2. **Missing CONVEX_SITE_URL**: The `auth.config.ts` was looking for
+     `CONVEX_SITE_URL` which is a built-in variable in Convex Cloud but was
+     missing in the manual local configuration equivalents.
+  3. **JWKS Sync**: The `JWKS` keys needed to be manually regenerated because
+     the `@convex-dev/auth` CLI tool was crashing on Windows + Node v24 due to a
+     libuv assertion failure.
+- **Resolution**:
+  - Updated `ENV_SETUP.md` and `DEPLOYMENT.md` with the correct production URLs.
+  - Provided a manual Node.js script to generate `JWKS` and `JWT_PRIVATE_KEY`
+    without using the broken CLI tool.
+  - Verified that `CONVEX_SITE_URL` is a built-in variable and should not be
+    overridden.
+  - Users are now successfully authenticated and recognized after the Google
+    OAuth redirect.
