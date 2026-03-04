@@ -93,7 +93,7 @@
   `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
 - **SPA Routing**: `public/_redirects` contains `/* /index.html 200` for
   Cloudflare Pages to handle client-side navigation.
-- **Testing**: Local development first using Supabase CLI + Docker.
+- **Testing**: Local development first using Convex CLI .
 
 ## 🗃️ Migration History
 

@@ -382,3 +382,35 @@
     Denied" state to an `H2`.
 - [x] **Pass Master Checklist**: Zero failed checks remaining across all 6 core
       audit tools.
+
+## Phase 17: Software Engineering Improvements 🏗️
+
+### 17A: Automated Testing (Unit & Component)
+
+- [ ] Install Vitest, React Testing Library, and jsdom.
+- [ ] Configure `vitest.config.ts` and update `package.json` test scripts.
+- [ ] Write unit tests for core utilities and components to reach target
+      coverage (70%+).
+
+### 17B: CI/CD Pipeline
+
+- [ ] Create GitHub Actions workflow (`.github/workflows/ci.yml`).
+- [ ] Configure linting, building, and testing in the pipeline.
+
+### 17C: Pre-commit Hooks & Formatting
+
+- [ ] Install Prettier and eslint-config-prettier.
+- [ ] Set up Husky and lint-staged to run formatting and linting on commit.
+
+### 17D: Stricter Typing & Code Hygiene
+
+- [ ] Enable `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
+- [ ] Enforce stricter ESLint rules (e.g., error on `any`).
+- [ ] Fix any resulting TypeScript or ESLint errors.
+
+### 17E: End-to-End (E2E) Testing
+
+- [ ] Install `@playwright/test` for E2E testing.
+- [ ] Write integration tests simulating multiple players (e.g., Guest joining,
+      Host starting game).
+- [ ] Add `test:e2e` to package.json scripts and CI pipeline.

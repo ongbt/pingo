@@ -630,3 +630,22 @@ All audit issues fixed in a single session. Summary of changes made:
 - **Checklist Passed**: The Master Checklist (`checklist.py`) was successfully
   run. Core checks (Security, Lint, Schema, Tests, UX Audit, SEO Audit) all
   reported **PASSED** with exit code 0.
+
+### Software Engineering Improvements (Phase 17)
+
+- **Automated Testing Setup**:
+  - Installed `vitest`, `@testing-library/react`, `@testing-library/jest-dom`,
+    and `jsdom` for unit and component testing.
+  - Configured `vite.config.ts` to support Vitest and coverage reporting.
+  - Set up `src/setupTests.ts` to automatically inject `jest-dom` matchers and
+    clean up the DOM after each test.
+  - Added npm scripts: `test` and `test:coverage`.
+- **First Unit Tests Written**:
+  - `src/lib/utils.test.ts`: Tested Tailwind class merging (`cn` utility).
+  - `src/hooks/useSessionTimeout.test.ts`: Tested the timer hook using Vitest
+    fake timers.
+  - `src/components/ErrorDialog.test.tsx`: Component test assuring correct
+    rendering of titles, messages, and details lists.
+  - `src/components/SheetPreviewModal.test.tsx`: Component test for modal
+    visibility and action handlers.
+- **Results**: First batch of unit tests passing successfully.
