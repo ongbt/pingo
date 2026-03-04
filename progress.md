@@ -649,3 +649,20 @@ All audit issues fixed in a single session. Summary of changes made:
   - `src/components/SheetPreviewModal.test.tsx`: Component test for modal
     visibility and action handlers.
 - **Results**: First batch of unit tests passing successfully.
+
+## 2026-03-05
+
+### Software Engineering Improvements (Phase 17A Continued)
+
+- **High Coverage Achievement**:
+  - Expanded unit test suite to cover all core pages and critical hooks.
+  - **Overall Line Coverage**: **89.69%** (surpassing the 85% goal).
+  - **LobbyPage.tsx**: Increased to **88.46%** with new tests for session
+    timeouts, anti-cheat board generation, error handling, and Web Share API.
+  - **GamePage.tsx**: Reached **84.34%** coverage.
+  - **JoinPage.tsx**: Reached **96.88%** coverage.
+  - **HomePage.tsx**: Reached **93.33%** coverage.
+- **Improved Test Infrastructure**:
+  - Refined Convex hook mocking in Vitest to handle complex data scenarios and
+    mutation tracking.
+  - Verified stability of session timeout logic through deep integration tests.

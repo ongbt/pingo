@@ -5,6 +5,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import LobbyPage from './LobbyPage';
 import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import { useQuery, useMutation } from 'convex/react';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 
 const mockNavigate = vi.fn();
 
@@ -23,6 +24,10 @@ vi.mock('@/hooks/use-pingo-auth', () => ({
 vi.mock('convex/react', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
+}));
+
+vi.mock('@/hooks/useSessionTimeout', () => ({
+  useSessionTimeout: vi.fn(),
 }));
 
 vi.mock('../../convex/_generated/api', () => ({
@@ -53,10 +58,20 @@ describe('LobbyPage', () => {
       signOut: vi.fn(),
       isAuthenticated: true
     });
-    vi.mocked(useMutation).mockImplementation((apiFn: any) => {
-      if (apiFn === 'mock-start') return mockStartGame;
-      if (apiFn === 'mock-updateBoard') return mockUpdateBoard;
-      return vi.fn();
+    vi.mocked(useMutation).mockImplementation((..._args: any[]) => {
+      const apiFn = _args[0];
+      let mockMutation: any;
+      if (apiFn === 'mock-start') mockMutation = mockStartGame;
+      else if (apiFn === 'mock-updateBoard') mockMutation = mockUpdateBoard;
+      else mockMutation = vi.fn();
+
+      mockMutation.withOptimisticUpdate = vi.fn().mockReturnValue(mockMutation);
+      return mockMutation;
+    });
+    vi.mocked(useSessionTimeout).mockReturnValue({
+      secondsLeft: 600,
+      label: '10:00',
+      isUrgent: false,
     });
   });
 
@@ -78,7 +93,8 @@ describe('LobbyPage', () => {
 
   it('redirects unauthorized users to home', async () => {
     // Current player not in the players list
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { _id: 'g1', roomCode: 'ROOM1', status: 'lobby', lastActivityAt: Date.now() };
       if (apiFn === 'mock-getForGame') return [];
       return undefined;
@@ -96,7 +112,8 @@ describe('LobbyPage', () => {
   it('displays game details and players correctly as host', () => {
     localStorage.setItem('pingo_player_g1', 'p1');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -123,7 +140,8 @@ describe('LobbyPage', () => {
   it('prevents starting if minTwoPlayers is true and only 1 player', async () => {
     localStorage.setItem('pingo_player_g1', 'p1');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -147,7 +165,8 @@ describe('LobbyPage', () => {
   it('allows host to start game and navigates to game page', async () => {
     localStorage.setItem('pingo_player_g1', 'p1');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -179,7 +198,8 @@ describe('LobbyPage', () => {
   it('shows waiting UI for non-host player', () => {
     localStorage.setItem('pingo_player_g1', 'p2');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -202,7 +222,8 @@ describe('LobbyPage', () => {
   it('navigates to game if status becomes active', () => {
     localStorage.setItem('pingo_player_g1', 'p2');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -224,7 +245,8 @@ describe('LobbyPage', () => {
   it('can copy invite link', async () => {
     localStorage.setItem('pingo_player_g1', 'p1');
 
-    vi.mocked(useQuery).mockImplementation((apiFn: any) => {
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return { 
         _id: 'g1', 
         roomCode: 'ROOM12', 
@@ -247,5 +269,111 @@ describe('LobbyPage', () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('ROOM12');
       expect(screen.getByText('Room Code Copied!')).toBeInTheDocument();
     });
+  });
+
+  it('triggers onExpire when session expires and navigates home', async () => {
+    localStorage.setItem('pingo_player_g1', 'p1');
+    let expireCallback: () => void = () => {};
+
+    vi.mocked(useSessionTimeout).mockImplementation(({ onExpire }: any) => {
+      expireCallback = onExpire;
+      return { secondsLeft: 0, label: '00:00', isUrgent: true };
+    });
+
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
+      if (apiFn === 'mock-getWithSheet') return { _id: 'g1', roomCode: 'ROOM12', status: 'lobby', lastActivityAt: Date.now() };
+      if (apiFn === 'mock-getForGame') return [{ _id: 'p1', nickname: 'Host', isHost: true, _creationTime: Date.now() }];
+      return undefined;
+    });
+
+    renderLobby();
+    
+    // Simulate timeout
+    expireCallback();
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+    });
+  });
+
+  it('shows error dialog if starting game fails', async () => {
+    localStorage.setItem('pingo_player_g1', 'p1');
+    mockStartGame.mockRejectedValueOnce(new Error('Backend failure'));
+
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
+      if (apiFn === 'mock-getWithSheet') return { 
+        _id: 'g1', 
+        roomCode: 'ROOM12', 
+        status: 'lobby', 
+        lastActivityAt: Date.now(),
+        sheet: { items: new Array(25).fill('A'), _creationTime: Date.now() }
+      };
+      if (apiFn === 'mock-getForGame') return [{ _id: 'p1', nickname: 'Host', isHost: true, _creationTime: Date.now() }];
+      return undefined;
+    });
+
+    renderLobby();
+    
+    const startBtn = screen.getByRole('button', { name: /Start Game/i });
+    fireEvent.click(startBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Start Game Failed')).toBeInTheDocument();
+      expect(screen.getByText('Backend failure')).toBeInTheDocument();
+    });
+  });
+
+  it('uses anti-cheat board generation if enabled', async () => {
+    localStorage.setItem('pingo_player_g1', 'p1');
+
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
+      if (apiFn === 'mock-getWithSheet') return { 
+        _id: 'g1', 
+        roomCode: 'ROOM1', 
+        status: 'lobby', 
+        config: { antiCheat: true }, // <--- Anti-cheat enabled
+        lastActivityAt: Date.now(),
+        sheet: { items: Array.from({ length: 30 }, (_, i) => i.toString()), _creationTime: Date.now() }
+      };
+      if (apiFn === 'mock-getForGame') return [{ _id: 'p1', nickname: 'Host', isHost: true, _creationTime: Date.now() }];
+      return undefined;
+    });
+
+    renderLobby();
+    fireEvent.click(screen.getByRole('button', { name: /Start Game/i }));
+
+    await waitFor(() => {
+        expect(mockUpdateBoard).toHaveBeenCalled();
+        const callArgs = mockUpdateBoard.mock.calls[0][0];
+        expect(callArgs.boardLayout).toHaveLength(25);
+        expect(callArgs.boardLayout[12]).toBe(-1); // FREE center
+    });
+  });
+
+  it('calls navigator.share if available', async () => {
+    localStorage.setItem('pingo_player_g1', 'p1');
+    const mockShare = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { share: mockShare });
+
+    vi.mocked(useQuery).mockImplementation((...args: any[]) => {
+      const apiFn = args[0];
+      if (apiFn === 'mock-getWithSheet') return { _id: 'g1', roomCode: 'ROOM12', status: 'lobby', lastActivityAt: Date.now() };
+      if (apiFn === 'mock-getForGame') return [{ _id: 'p1', nickname: 'Host', isHost: true, _creationTime: Date.now() }];
+      return undefined;
+    });
+
+    const { container } = renderLobby();
+    const shareBtn = container.querySelector('button .lucide-share-2')?.parentElement;
+    if (shareBtn) fireEvent.click(shareBtn);
+
+    await waitFor(() => {
+      expect(mockShare).toHaveBeenCalled();
+    });
+    
+    // Cleanup
+    Object.assign(navigator, { share: undefined });
   });
 });

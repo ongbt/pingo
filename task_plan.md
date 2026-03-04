@@ -387,10 +387,12 @@
 
 ### 17A: Automated Testing (Unit & Component)
 
-- [ ] Install Vitest, React Testing Library, and jsdom.
-- [ ] Configure `vitest.config.ts` and update `package.json` test scripts.
-- [ ] Write unit tests for core utilities and components to reach target
-      coverage (70%+).
+- [x] Install Vitest, React Testing Library, and jsdom.
+- [x] Configure `vitest.config.ts` and update `package.json` test scripts.
+- [x] Write unit tests for core utilities and components to reach target
+      coverage (85%+ achieved). - [x] `GamePage.test.tsx` (84% coverage) - [x]
+      `JoinPage.test.tsx` (96% coverage) - [x] `LobbyPage.test.tsx` (88%
+      coverage) - [x] `HomePage.test.tsx` (93% coverage)
 
 ### 17B: CI/CD Pipeline
 

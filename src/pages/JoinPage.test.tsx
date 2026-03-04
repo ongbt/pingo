@@ -157,4 +157,68 @@ describe('JoinPage', () => {
     expect(nickInput.value).toBe('ProGamer');
     expect(localStorage.getItem('pingo_nickname')).toBe('ProGamer');
   });
+
+  it('shows error when game has already started or ended', async () => {
+    mockConvexQuery.mockResolvedValueOnce({ _id: 'game-123', status: 'active' });
+
+    render(
+      <MemoryRouter initialEntries={['/join']}>
+        <JoinPage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'STARTED' } });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/already started or ended/i)).toBeInTheDocument();
+    });
+  });
+
+  it('shows server error message when joinGame mutation throws', async () => {
+    mockConvexQuery.mockResolvedValueOnce({ _id: 'game-456', status: 'lobby' });
+    mockSignIn.mockResolvedValueOnce(undefined);
+    mockJoinGame.mockRejectedValueOnce(new Error('Lobby is full'));
+
+    render(
+      <MemoryRouter initialEntries={['/join']}>
+        <JoinPage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'ABCDE1' } });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Lobby is full/i)).toBeInTheDocument();
+    });
+  });
+
+  it('pre-fills nickname from localStorage if no profile', () => {
+    localStorage.setItem('pingo_nickname', 'OldNick');
+
+    render(
+      <MemoryRouter initialEntries={['/join']}>
+        <JoinPage />
+      </MemoryRouter>
+    );
+
+    const nickInput = screen.getByLabelText(/Your Nickname/i) as HTMLInputElement;
+    expect(nickInput.value).toBe('OldNick');
+  });
+
+  it('join button stays disabled when code is shorter than 6 characters', () => {
+    render(
+      <MemoryRouter initialEntries={['/join']}>
+        <JoinPage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'ABC' } });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+
+    expect(screen.getByRole('button', { name: /Let's Play!/i })).toBeDisabled();
+  });
 });
