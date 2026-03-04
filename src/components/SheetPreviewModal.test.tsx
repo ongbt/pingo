@@ -16,13 +16,17 @@ describe('SheetPreviewModal', () => {
   it('does not render if open is false or sheet is null', () => {
     render(<SheetPreviewModal sheet={null} open={true} onClose={vi.fn()} />);
     expect(screen.queryByText('Test Sheet')).not.toBeInTheDocument();
-    
-    render(<SheetPreviewModal sheet={mockSheet} open={false} onClose={vi.fn()} />);
+
+    render(
+      <SheetPreviewModal sheet={mockSheet} open={false} onClose={vi.fn()} />
+    );
     expect(screen.queryByText('Test Sheet')).not.toBeInTheDocument();
   });
 
   it('renders sheet details when open', () => {
-    render(<SheetPreviewModal sheet={mockSheet} open={true} onClose={vi.fn()} />);
+    render(
+      <SheetPreviewModal sheet={mockSheet} open={true} onClose={vi.fn()} />
+    );
     expect(screen.getByText('Test Sheet')).toBeInTheDocument();
     expect(screen.getByText('2 items')).toBeInTheDocument();
     expect(screen.getByText('Item 1')).toBeInTheDocument();
@@ -33,15 +37,15 @@ describe('SheetPreviewModal', () => {
     const onSelect = vi.fn();
     const onDuplicate = vi.fn();
     render(
-      <SheetPreviewModal 
-        sheet={mockSheet} 
-        open={true} 
-        onClose={vi.fn()} 
+      <SheetPreviewModal
+        sheet={mockSheet}
+        open={true}
+        onClose={vi.fn()}
         onSelect={onSelect}
         onDuplicate={onDuplicate}
       />
     );
-    
+
     fireEvent.click(screen.getByText('Select Sheet'));
     expect(onSelect).toHaveBeenCalledTimes(1);
 

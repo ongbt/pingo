@@ -6,16 +6,16 @@
 
 ```json
 {
-   "id": "uuid",
-   "room_code": "string (6 chars, alphanumeric, curated set)",
-   "host_id": "uuid",
-   "sheet_id": "uuid",
-   "status": "lobby | active | finished",
-   "config": {
-      "anti_cheating": "boolean",
-      "win_condition": "first_bingo | custom"
-   },
-   "created_at": "timestamp"
+  "id": "uuid",
+  "room_code": "string (6 chars, alphanumeric, curated set)",
+  "host_id": "uuid",
+  "sheet_id": "uuid",
+  "status": "lobby | active | finished",
+  "config": {
+    "anti_cheating": "boolean",
+    "win_condition": "first_bingo | custom"
+  },
+  "created_at": "timestamp"
 }
 ```
 
@@ -23,14 +23,14 @@
 
 ```json
 {
-   "id": "uuid",
-   "game_id": "uuid",
-   "nickname": "string",
-   "is_host": "boolean",
-   "board_state": "object (5x5 grid — cell index: boolean)",
-   "board_layout": "string[] (25 items — shuffled from sheet)",
-   "score": "number",
-   "is_winner": "boolean"
+  "id": "uuid",
+  "game_id": "uuid",
+  "nickname": "string",
+  "is_host": "boolean",
+  "board_state": "object (5x5 grid — cell index: boolean)",
+  "board_layout": "string[] (25 items — shuffled from sheet)",
+  "score": "number",
+  "is_winner": "boolean"
 }
 ```
 
@@ -38,13 +38,13 @@
 
 ```json
 {
-   "id": "uuid",
-   "creator_id": "uuid | null",
-   "title": "string",
-   "items": "string[] (min 25 items)",
-   "is_default": "boolean",
-   "play_count": "number",
-   "created_at": "timestamp"
+  "id": "uuid",
+  "creator_id": "uuid | null",
+  "title": "string",
+  "items": "string[] (min 25 items)",
+  "is_default": "boolean",
+  "play_count": "number",
+  "created_at": "timestamp"
 }
 ```
 
@@ -52,9 +52,9 @@
 
 ```json
 {
-   "id": "uuid (auth.uid)",
-   "nickname": "string",
-   "updated_at": "timestamp"
+  "id": "uuid (auth.uid)",
+  "nickname": "string",
+  "updated_at": "timestamp"
 }
 ```
 

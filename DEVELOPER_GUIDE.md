@@ -243,21 +243,21 @@ Follow these conventions:
 
 ```typescript
 // src/pages/ExamplePage.test.tsx
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 // Mock Convex hooks — pattern used throughout the project
-vi.mock("convex/react", () => ({
-    useQuery: vi.fn(),
-    useMutation: vi.fn(),
+vi.mock('convex/react', () => ({
+  useQuery: vi.fn(),
+  useMutation: vi.fn(),
 }));
 
 // Mock the generated API (strings act as type-safe keys in tests)
-vi.mock("../../convex/_generated/api", () => ({
-    api: {
-        games: { getWithSheet: "mock-getWithSheet" },
-    },
+vi.mock('../../convex/_generated/api', () => ({
+  api: {
+    games: { getWithSheet: 'mock-getWithSheet' },
+  },
 }));
 ```
 

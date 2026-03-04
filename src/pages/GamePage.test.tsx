@@ -156,10 +156,11 @@ describe('GamePage', () => {
     vi.mocked(useQuery).mockImplementation((...args: any[]) => {
       const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return makeGame();
-      if (apiFn === 'mock-getForGame') return [
-        makePlayer({ _id: 'p1', nickname: 'Alice', score: 10 }),
-        makePlayer({ _id: 'p2', nickname: 'Bob', isHost: false, score: 5 }),
-      ];
+      if (apiFn === 'mock-getForGame')
+        return [
+          makePlayer({ _id: 'p1', nickname: 'Alice', score: 10 }),
+          makePlayer({ _id: 'p2', nickname: 'Bob', isHost: false, score: 5 }),
+        ];
       return undefined;
     });
 
@@ -259,10 +260,11 @@ describe('GamePage', () => {
     vi.mocked(useQuery).mockImplementation((...args: any[]) => {
       const apiFn = args[0];
       if (apiFn === 'mock-getWithSheet') return makeGame();
-      if (apiFn === 'mock-getForGame') return [
-        makePlayer({ _id: 'p1', isHost: true }),
-        makePlayer({ _id: 'p2', nickname: 'Guest', isHost: false }),
-      ];
+      if (apiFn === 'mock-getForGame')
+        return [
+          makePlayer({ _id: 'p1', isHost: true }),
+          makePlayer({ _id: 'p2', nickname: 'Guest', isHost: false }),
+        ];
       return undefined;
     });
 
@@ -291,7 +293,9 @@ describe('GamePage', () => {
     });
 
     renderGame();
-    expect(screen.getByRole('button', { name: /End Game/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /End Game/i })
+    ).toBeInTheDocument();
   });
 
   it('opens confirmation modal when End Game is clicked', async () => {
@@ -352,7 +356,9 @@ describe('GamePage', () => {
     await waitFor(() => screen.getByText(/End the Game\?/i));
 
     // Click the confirm button inside the modal (id disambiguates from the floating host button)
-    const confirmBtn = container.querySelector('#end-game-confirm-btn') as HTMLElement;
+    const confirmBtn = container.querySelector(
+      '#end-game-confirm-btn'
+    ) as HTMLElement;
     expect(confirmBtn).not.toBeNull();
     fireEvent.click(confirmBtn);
 
@@ -368,10 +374,17 @@ describe('GamePage', () => {
 
     vi.mocked(useQuery).mockImplementation((...args: any[]) => {
       const apiFn = args[0];
-      if (apiFn === 'mock-getWithSheet') return makeGame({ status: 'finished' });
-      if (apiFn === 'mock-getForGame') return [
-        makePlayer({ _id: 'p1', nickname: 'Alice', isWinner: true, score: 5 }),
-      ];
+      if (apiFn === 'mock-getWithSheet')
+        return makeGame({ status: 'finished' });
+      if (apiFn === 'mock-getForGame')
+        return [
+          makePlayer({
+            _id: 'p1',
+            nickname: 'Alice',
+            isWinner: true,
+            score: 5,
+          }),
+        ];
       return undefined;
     });
 
@@ -385,10 +398,10 @@ describe('GamePage', () => {
 
     vi.mocked(useQuery).mockImplementation((...args: any[]) => {
       const apiFn = args[0];
-      if (apiFn === 'mock-getWithSheet') return makeGame({ status: 'finished' });
-      if (apiFn === 'mock-getForGame') return [
-        makePlayer({ _id: 'p1', isWinner: false }),
-      ];
+      if (apiFn === 'mock-getWithSheet')
+        return makeGame({ status: 'finished' });
+      if (apiFn === 'mock-getForGame')
+        return [makePlayer({ _id: 'p1', isWinner: false })];
       return undefined;
     });
 
@@ -402,15 +415,24 @@ describe('GamePage', () => {
 
     vi.mocked(useQuery).mockImplementation((...args: any[]) => {
       const apiFn = args[0];
-      if (apiFn === 'mock-getWithSheet') return makeGame({ status: 'finished' });
-      if (apiFn === 'mock-getForGame') return [
-        makePlayer({ _id: 'p1', nickname: 'Alice', isWinner: true, score: 5 }),
-      ];
+      if (apiFn === 'mock-getWithSheet')
+        return makeGame({ status: 'finished' });
+      if (apiFn === 'mock-getForGame')
+        return [
+          makePlayer({
+            _id: 'p1',
+            nickname: 'Alice',
+            isWinner: true,
+            score: 5,
+          }),
+        ];
       return undefined;
     });
 
     renderGame();
-    const playAgainBtns = screen.getAllByRole('button', { name: /Play Again/i });
+    const playAgainBtns = screen.getAllByRole('button', {
+      name: /Play Again/i,
+    });
     fireEvent.click(playAgainBtns[0]);
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });

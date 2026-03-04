@@ -191,16 +191,16 @@ Redirect URI: `https://combative-mouse-848.convex.site/api/auth/callback/google`
 The following table summarizes all configuration required for the Pingo
 ecosystem.
 
-| Component       | Setting / Variable            | **Local** Environment             | **Staging** (Staging)                  | **Production** (Live)                       |
-| :-------------- | :---------------------------- | :-------------------------------- | :------------------------------------- | :------------------------------------------ |
-| **Vite App**    | `VITE_CONVEX_URL`             | `http://localhost:3210`           | _(Auto-injected)_                      | `https://fearless-axolotl-554.convex.cloud` |
-| **Convex (BE)** | `CONVEX_SITE_URL`             | `http://127.0.0.1:3211`           | _(Built-in)_                           | _(Built-in)_                                |
-| **Cloudflare**  | `CONVEX_DEPLOY_KEY`           | N/A                               | `preview:ongbt:pingo\|...`             | `preview:ongbt:pingo\|...`                  |
-| **Convex (BE)** | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`            | `610855938258-00if...`                 | `610855938258-00ifu...`                     |
-| **Convex (BE)** | `AUTH_GOOGLE_SECRET`          | `****J8HM`                        | `****GpfN`                             | `****QoQq`                                  |
-| **Convex (BE)** | `SITE_URL`                    | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`  | `https://pingo.bouncybison.click`           |
-| **Google**      | Authorized JavaScript origins | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`  | `https://pingo.bouncybison.click`           |
-| **Google**      | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`* | `https://...848.convex.site/callback`* | `https://...554.convex.site/callback`*      |
+| Component       | Setting / Variable            | **Local** Environment              | **Staging** (Staging)                   | **Production** (Live)                       |
+| :-------------- | :---------------------------- | :--------------------------------- | :-------------------------------------- | :------------------------------------------ |
+| **Vite App**    | `VITE_CONVEX_URL`             | `http://localhost:3210`            | _(Auto-injected)_                       | `https://fearless-axolotl-554.convex.cloud` |
+| **Convex (BE)** | `CONVEX_SITE_URL`             | `http://127.0.0.1:3211`            | _(Built-in)_                            | _(Built-in)_                                |
+| **Cloudflare**  | `CONVEX_DEPLOY_KEY`           | N/A                                | `preview:ongbt:pingo\|...`              | `preview:ongbt:pingo\|...`                  |
+| **Convex (BE)** | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`             | `610855938258-00if...`                  | `610855938258-00ifu...`                     |
+| **Convex (BE)** | `AUTH_GOOGLE_SECRET`          | `****J8HM`                         | `****GpfN`                              | `****QoQq`                                  |
+| **Convex (BE)** | `SITE_URL`                    | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
+| **Google**      | Authorized JavaScript origins | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
+| **Google**      | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`\* | `https://...848.convex.site/callback`\* | `https://...554.convex.site/callback`\*     |
 
 _\* Full Redirect URI path: `/api/auth/callback/google`_
 

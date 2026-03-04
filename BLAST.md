@@ -9,19 +9,16 @@
 Before any code is written or tools are built:
 
 1. **Initialize Project Memory**
-    - Create:
-        - `task_plan.md` → Phases, goals, and checklists
-        - `findings.md` → Research, discoveries, constraints
-        - `progress.md` → What was done, errors, tests, results
-    - Initialize `gemini.md` as the **Project Constitution**:
-        - Data schemas
-        - Behavioral rules
-        - Architectural invariants
+   - Create:
+     - `task_plan.md` → Phases, goals, and checklists
+     - `findings.md` → Research, discoveries, constraints
+     - `progress.md` → What was done, errors, tests, results
+   - Initialize `gemini.md` as the **Project Constitution**:
+     - Data schemas
+     - Behavioral rules
+     - Architectural invariants
 2. **Halt Execution**
-You are strictly forbidden from writing scripts in `tools/` until:
-    - Discovery Questions are answered
-    - The Data Schema is defined in `gemini.md`
-    - `task_plan.md` has an approved Blueprint
+   You are strictly forbidden from writing scripts in `tools/` until: - Discovery Questions are answered - The Data Schema is defined in `gemini.md` - `task_plan.md` has an approved Blueprint
 
 ---
 
@@ -37,7 +34,7 @@ You are strictly forbidden from writing scripts in `tools/` until:
 
 **2. Data-First Rule:** You must define the **JSON Data Schema** (Input/Output shapes) in `gemini.md`. Coding only begins once the "Payload" shape is confirmed.
 
-**3. Research:** Search github repos and other databases for any helpful resources for this project 
+**3. Research:** Search github repos and other databases for any helpful resources for this project
 
 ---
 
@@ -97,16 +94,16 @@ Before building any Tool, you must define the **Data Schema** in `gemini.md`.
 - What does the processed output look like?
 - Coding only begins once the "Payload" shape is confirmed.
 - After any meaningful task:
-    - Update `progress.md` with what happened and any errors.
-    - Store discoveries in `findings.md`.
-    - Only update `gemini.md` when:
-        - A schema changes
-        - A rule is added
-        - Architecture is modified
+  - Update `progress.md` with what happened and any errors.
+  - Store discoveries in `findings.md`.
+  - Only update `gemini.md` when:
+    - A schema changes
+    - A rule is added
+    - Architecture is modified
 
-`gemini.md` is *law*.
+`gemini.md` is _law_.
 
-The planning files are *memory*.
+The planning files are _memory_.
 
 ### 2. Self-Annealing (The Repair Loop)
 
@@ -126,8 +123,9 @@ When a Tool fails or an error occurs:
 
 Plaintext
 
-```├── gemini.md          # Project Map & State Tracking
+````├── gemini.md          # Project Map & State Tracking
 ├── .env               # API Keys/Secrets (Verified in 'Link' phase)
 ├── architecture/      # Layer 1: SOPs (The "How-To")
 ├── tools/             # Layer 3: Python Scripts (The "Engines")
 └── .tmp/              # Temporary Workbench (Intermediates)```
+````

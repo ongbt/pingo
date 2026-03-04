@@ -14,7 +14,11 @@ describe('useSessionTimeout', () => {
 
   it('returns null and --:-- when lastActivityAt is null', () => {
     const { result } = renderHook(() =>
-      useSessionTimeout({ lastActivityAt: null, timeoutMinutes: 5, onExpire: vi.fn() })
+      useSessionTimeout({
+        lastActivityAt: null,
+        timeoutMinutes: 5,
+        onExpire: vi.fn(),
+      })
     );
 
     expect(result.current.secondsLeft).toBeNull();
@@ -27,9 +31,13 @@ describe('useSessionTimeout', () => {
     vi.setSystemTime(now);
 
     const lastActivity = new Date('2026-03-04T11:58:00Z').toISOString(); // 2 mins ago
-    
+
     const { result } = renderHook(() =>
-      useSessionTimeout({ lastActivityAt: lastActivity, timeoutMinutes: 5, onExpire: vi.fn() })
+      useSessionTimeout({
+        lastActivityAt: lastActivity,
+        timeoutMinutes: 5,
+        onExpire: vi.fn(),
+      })
     );
 
     // 5 mins = 300s. 2 mins elapsed = 120s. Remaining = 180s.
@@ -41,12 +49,16 @@ describe('useSessionTimeout', () => {
   it('triggers onExpire when time runs out', () => {
     const now = new Date('2026-03-04T12:00:00Z');
     vi.setSystemTime(now);
-    
+
     const lastActivity = new Date('2026-03-04T11:55:00Z').toISOString();
     const onExpire = vi.fn();
 
     renderHook(() =>
-      useSessionTimeout({ lastActivityAt: lastActivity, timeoutMinutes: 5, onExpire })
+      useSessionTimeout({
+        lastActivityAt: lastActivity,
+        timeoutMinutes: 5,
+        onExpire,
+      })
     );
 
     act(() => {

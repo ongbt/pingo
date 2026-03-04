@@ -32,7 +32,7 @@ describe('PopularSheets Component', () => {
   it('renders loading skeletons when data is undefined', () => {
     mockUseQuery.mockReturnValue(undefined);
     const { container } = render(<PopularSheets />);
-    
+
     // There should be 3 skeleton divs with animate-pulse
     const skeletons = container.querySelectorAll('.animate-pulse');
     expect(skeletons.length).toBe(3);
@@ -63,11 +63,11 @@ describe('PopularSheets Component', () => {
         isDefault: false,
         creatorId: 'user-789',
         _creationTime: 1672531200000,
-      }
+      },
     ]);
 
     render(<PopularSheets />);
-    
+
     // Check titles
     expect(screen.getByText('Super Fun Bingo')).toBeInTheDocument();
     expect(screen.getByText('Mildly Fun Bingo')).toBeInTheDocument();
@@ -88,11 +88,11 @@ describe('PopularSheets Component', () => {
         isDefault: true,
         creatorId: null,
         _creationTime: 0,
-      }
+      },
     ]);
 
     render(<PopularSheets />);
-    
+
     const sheetButton = screen.getByRole('button');
     fireEvent.click(sheetButton);
     expect(mockNavigate).toHaveBeenCalledWith('/create?sheetId=sheet-123');

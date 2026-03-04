@@ -9,7 +9,13 @@ interface ErrorDialogProps {
   onClose: () => void;
 }
 
-export default function ErrorDialog({ open, title, message, details, onClose }: ErrorDialogProps) {
+export default function ErrorDialog({
+  open,
+  title,
+  message,
+  details,
+  onClose,
+}: ErrorDialogProps) {
   return (
     <AnimatePresence>
       {open && (
@@ -29,33 +35,40 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', duration: 0.35, bounce: 0.2 }}
-            className="fixed z-[101] bottom-0 inset-x-0 max-w-md mx-auto p-4 pb-8"
+            className="fixed inset-x-0 bottom-0 z-[101] mx-auto max-w-md p-4 pb-8"
           >
-            <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+            <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
               <div className="flex items-start justify-between p-5 pb-0">
                 <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-900/30">
                     <AlertTriangle size={20} className="text-red-500" />
                   </div>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white leading-tight">{title}</h3>
+                  <h3 className="text-base font-black leading-tight text-slate-900 dark:text-white">
+                    {title}
+                  </h3>
                 </div>
                 <button
                   onClick={onClose}
-                  className="size-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 transition-colors shrink-0"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   <X size={16} />
                 </button>
               </div>
 
-              <div className="p-5 space-y-3">
-                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{message}</p>
+              <div className="space-y-3 p-5">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  {message}
+                </p>
 
                 {details && details.length > 0 && (
-                  <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 max-h-40 overflow-y-auto">
+                  <div className="max-h-40 overflow-y-auto rounded-2xl bg-red-50 p-4 dark:bg-red-900/20">
                     <ul className="space-y-1">
                       {details.map((item, i) => (
-                        <li key={i} className="text-xs font-medium text-red-700 dark:text-red-300 flex items-center gap-2">
-                          <span className="size-1.5 rounded-full bg-red-400 shrink-0" />
+                        <li
+                          key={i}
+                          className="flex items-center gap-2 text-xs font-medium text-red-700 dark:text-red-300"
+                        >
+                          <span className="size-1.5 shrink-0 rounded-full bg-red-400" />
                           {item}
                         </li>
                       ))}
@@ -67,7 +80,7 @@ export default function ErrorDialog({ open, title, message, details, onClose }: 
               <div className="px-5 pb-5">
                 <button
                   onClick={onClose}
-                  className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black py-3.5 rounded-2xl text-sm uppercase tracking-widest active:scale-[0.98] transition-transform"
+                  className="w-full rounded-2xl bg-slate-900 py-3.5 text-sm font-black uppercase tracking-widest text-white transition-transform active:scale-[0.98] dark:bg-white dark:text-slate-900"
                 >
                   Got it
                 </button>

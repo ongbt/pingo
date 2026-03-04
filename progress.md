@@ -678,3 +678,27 @@ All audit issues fixed in a single session. Summary of changes made:
   - `npm run build` to validate type safety and bundle creation.
 - **Reporting**: Configured artifact uploads for coverage results to facilitate
   remote review.
+
+### Pre-commit Hooks & Formatting (Phase 17C)
+
+- **Code Style Infrastructure**:
+  - Installed `prettier`, `prettier-plugin-tailwindcss`, and
+    `eslint-config-prettier`.
+  - Configured `.prettierrc` for consistent project-wide formatting
+    (semi-colons, single quotes, tailwind class sorting).
+  - Integrated Prettier into ESLint to prevent rule conflicts.
+- **Automated Quality Checks**:
+  - Set up **Husky** for pre-commit git hooks.
+  - Configured **lint-staged** to automatically run ESLint (with `--fix`) and
+    Prettier on changed files before every commit.
+- **Stricter Typing & Code Hygiene (Phase 17D Started)**:
+  - Enabled `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
+  - Promoted ESLint `@typescript-eslint/no-explicit-any` and `no-unused-vars` to
+    **ERROR** severity.
+  - Fixed 8+ lint and type errors in `JoinPage.tsx`, `HomePage.test.tsx`, and
+    `JoinPage.test.tsx`.
+- **Project-wide Formatting**:
+  - Executed a full-codebase Prettier pass to ensure all files comply with the
+    new style guide.
+- **Verification**: Verified that `npm run lint` and `npm test` pass with the
+  stricter rules.

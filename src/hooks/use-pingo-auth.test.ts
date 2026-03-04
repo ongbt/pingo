@@ -30,7 +30,10 @@ describe('usePingoAuth hook', () => {
   });
 
   it('handles unauthenticated state', () => {
-    mockUseConvexAuth.mockReturnValue({ isAuthenticated: false, isLoading: false });
+    mockUseConvexAuth.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+    });
     mockUseQuery.mockReturnValue(undefined);
 
     const { result } = renderHook(() => usePingoAuth());
@@ -42,7 +45,10 @@ describe('usePingoAuth hook', () => {
   });
 
   it('handles loading state', () => {
-    mockUseConvexAuth.mockReturnValue({ isAuthenticated: false, isLoading: true });
+    mockUseConvexAuth.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: true,
+    });
     mockUseQuery.mockReturnValue(undefined); // user query hasn't resolved
 
     const { result } = renderHook(() => usePingoAuth());
@@ -51,7 +57,10 @@ describe('usePingoAuth hook', () => {
   });
 
   it('maps profile correctly for authenticated user without name/image', () => {
-    mockUseConvexAuth.mockReturnValue({ isAuthenticated: true, isLoading: false });
+    mockUseConvexAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+    });
     mockUseQuery.mockReturnValue({
       _id: 'user-001',
       // no name, no image
@@ -68,7 +77,10 @@ describe('usePingoAuth hook', () => {
   });
 
   it('maps profile correctly for authenticated user with Google details', () => {
-    mockUseConvexAuth.mockReturnValue({ isAuthenticated: true, isLoading: false });
+    mockUseConvexAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+    });
     mockUseQuery.mockReturnValue({
       _id: 'user-002',
       name: 'John Doe',
@@ -85,7 +97,10 @@ describe('usePingoAuth hook', () => {
   });
 
   it('exposes a signOut function that calls convexSignOut', async () => {
-    mockUseConvexAuth.mockReturnValue({ isAuthenticated: true, isLoading: false });
+    mockUseConvexAuth.mockReturnValue({
+      isAuthenticated: true,
+      isLoading: false,
+    });
     mockUseQuery.mockReturnValue({ _id: '123' });
 
     const { result } = renderHook(() => usePingoAuth());

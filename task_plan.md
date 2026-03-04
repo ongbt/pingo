@@ -402,8 +402,8 @@
 
 ### 17C: Pre-commit Hooks & Formatting
 
-- [ ] Install Prettier and eslint-config-prettier.
-- [ ] Set up Husky and lint-staged to run formatting and linting on commit.
+- [x] Install Prettier and eslint-config-prettier.
+- [x] Set up Husky and lint-staged to run formatting and linting on commit.
 
 ### 17D: Stricter Typing & Code Hygiene
 

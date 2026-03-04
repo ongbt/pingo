@@ -11,6 +11,11 @@ describe('cn utility', () => {
   });
 
   it('handles arrays and objects', () => {
-    expect(cn('text-sm', ['font-bold', 'italic'], { 'text-red-500': true, 'text-blue-500': false })).toBe('text-sm font-bold italic text-red-500');
+    expect(
+      cn('text-sm', ['font-bold', 'italic'], {
+        'text-red-500': true,
+        'text-blue-500': false,
+      })
+    ).toBe('text-sm font-bold italic text-red-500');
   });
 });

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, useSearchParams } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import JoinPage from './JoinPage';
 
 // Mock dependencies
@@ -44,11 +45,11 @@ describe('JoinPage', () => {
     vi.clearAllMocks();
     localStorage.clear();
     vi.mocked(usePingoAuth).mockReturnValue({
-      user: null as unknown as any,
-      profile: null as unknown as any,
+      user: null as unknown as Record<string, unknown> as any,
+      profile: null as unknown as Record<string, unknown> as any,
       isLoading: false,
       signOut: vi.fn(),
-      isAuthenticated: false
+      isAuthenticated: false,
     });
   });
 
@@ -60,10 +61,12 @@ describe('JoinPage', () => {
     );
 
     expect(screen.getByText(/Enter & Play/i)).toBeInTheDocument();
-    
+
     // The inputs
     const codeInput = screen.getByLabelText(/Room Code/i) as HTMLInputElement;
-    const nicknameInput = screen.getByLabelText(/Your Nickname/i) as HTMLInputElement;
+    const nicknameInput = screen.getByLabelText(
+      /Your Nickname/i
+    ) as HTMLInputElement;
 
     // Type a mixed string, should only keep A-Z and 0-9 up to 6 chars
     fireEvent.change(codeInput, { target: { value: 'a b-c!1234' } });
@@ -97,8 +100,12 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'XYZ789' } });
-    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.change(screen.getByLabelText(/Room Code/i), {
+      target: { value: 'XYZ789' },
+    });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), {
+      target: { value: 'Tester' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
 
     await waitFor(() => {
@@ -117,8 +124,12 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'BINGO1' } });
-    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.change(screen.getByLabelText(/Room Code/i), {
+      target: { value: 'BINGO1' },
+    });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), {
+      target: { value: 'Tester' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
 
     await waitFor(() => {
@@ -140,11 +151,11 @@ describe('JoinPage', () => {
 
   it('uses authenticated profile nickname automatically', () => {
     vi.mocked(usePingoAuth).mockReturnValue({
-      user: { email: 'a@b.com' } as any,
-      profile: { id: 'usr', nickname: 'ProGamer', avatar_url: null },
+      user: { email: 'a@b.com' } as Record<string, unknown> as any,
+      profile: { id: 'usr', nickname: 'ProGamer', avatar_url: null } as any,
       isLoading: false,
       signOut: vi.fn(),
-      isAuthenticated: true
+      isAuthenticated: true,
     });
 
     render(
@@ -153,13 +164,18 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    const nickInput = screen.getByLabelText(/Your Nickname/i) as HTMLInputElement;
+    const nickInput = screen.getByLabelText(
+      /Your Nickname/i
+    ) as HTMLInputElement;
     expect(nickInput.value).toBe('ProGamer');
     expect(localStorage.getItem('pingo_nickname')).toBe('ProGamer');
   });
 
   it('shows error when game has already started or ended', async () => {
-    mockConvexQuery.mockResolvedValueOnce({ _id: 'game-123', status: 'active' });
+    mockConvexQuery.mockResolvedValueOnce({
+      _id: 'game-123',
+      status: 'active',
+    });
 
     render(
       <MemoryRouter initialEntries={['/join']}>
@@ -167,8 +183,12 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'STARTED' } });
-    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.change(screen.getByLabelText(/Room Code/i), {
+      target: { value: 'STARTED' },
+    });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), {
+      target: { value: 'Tester' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
 
     await waitFor(() => {
@@ -187,8 +207,12 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'ABCDE1' } });
-    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.change(screen.getByLabelText(/Room Code/i), {
+      target: { value: 'ABCDE1' },
+    });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), {
+      target: { value: 'Tester' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /Let's Play!/i }));
 
     await waitFor(() => {
@@ -205,7 +229,9 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    const nickInput = screen.getByLabelText(/Your Nickname/i) as HTMLInputElement;
+    const nickInput = screen.getByLabelText(
+      /Your Nickname/i
+    ) as HTMLInputElement;
     expect(nickInput.value).toBe('OldNick');
   });
 
@@ -216,8 +242,12 @@ describe('JoinPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByLabelText(/Room Code/i), { target: { value: 'ABC' } });
-    fireEvent.change(screen.getByLabelText(/Your Nickname/i), { target: { value: 'Tester' } });
+    fireEvent.change(screen.getByLabelText(/Room Code/i), {
+      target: { value: 'ABC' },
+    });
+    fireEvent.change(screen.getByLabelText(/Your Nickname/i), {
+      target: { value: 'Tester' },
+    });
 
     expect(screen.getByRole('button', { name: /Let's Play!/i })).toBeDisabled();
   });
