@@ -245,9 +245,9 @@ export default function LobbyPage() {
           </div>
 
           <div>
-            <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-2">
+            <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-2">
               Access Denied
-            </h1>
+            </h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-relaxed">
               You haven&apos;t joined this lobby. Ask the host for the room code and join from the home screen.
             </p>

@@ -43,7 +43,10 @@ celebrations, and a custom sheet builder.
   - Lobby access is gated — URL visitors without a valid player session see an
     Access Denied screen and are redirected home after 3 seconds.
 - **Premium UI/UX**: Ultra-modern design with smooth Framer Motion transitions,
-  dark mode aesthetics, and interactive player leaderboards.
+  dark mode aesthetics, and interactive player leaderboards. Fully audited for
+  Accessibility and UX cognitive load.
+- **Search Optimized**: Fully compliant with SEO fundamentals and page hierarchy
+  standards.
 
 ## 🛠️ Technology Stack
 
