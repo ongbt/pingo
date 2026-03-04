@@ -56,6 +56,9 @@ celebrations, and a custom sheet builder.
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
+- **CI/CD**: GitHub Actions (Automated Linting, Unit Testing, and Production
+  Builds)
+- **Testing**: Vitest + React Testing Library (85%+ High Coverage)
 
 ## 🛠️ Developer Onboarding
 

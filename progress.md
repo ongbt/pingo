@@ -666,3 +666,15 @@ All audit issues fixed in a single session. Summary of changes made:
   - Refined Convex hook mocking in Vitest to handle complex data scenarios and
     mutation tracking.
   - Verified stability of session timeout logic through deep integration tests.
+
+### CI/CD Pipeline Established (Phase 17B)
+
+- **Automated Workflow**: Created `.github/workflows/ci.yml` to automate quality
+  checks on push and PR to `main`.
+- **Validation Steps**:
+  - `npm ci` for clean dependency installs.
+  - `npm run lint` to enforce formatting and best practices.
+  - `npm run test:coverage` to verify logic and prevent coverage regression.
+  - `npm run build` to validate type safety and bundle creation.
+- **Reporting**: Configured artifact uploads for coverage results to facilitate
+  remote review.

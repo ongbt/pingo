@@ -396,8 +396,9 @@
 
 ### 17B: CI/CD Pipeline
 
-- [ ] Create GitHub Actions workflow (`.github/workflows/ci.yml`).
-- [ ] Configure linting, building, and testing in the pipeline.
+- [x] Create GitHub Actions workflow (`.github/workflows/ci.yml`).
+- [x] Configure linting, building, and testing in the pipeline. - [x] Added
+      Lint, Test:Coverage, and Build steps.
 
 ### 17C: Pre-commit Hooks & Formatting
 
