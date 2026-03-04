@@ -57,34 +57,36 @@ celebrations, and a custom sheet builder.
 - **Animations**: Framer Motion
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
 
-## 🚀 Getting Started
+## 🛠️ Developer Onboarding
 
-### 1. Prerequisites
+> **New developer?** See the **[Developer Guide](./DEVELOPER_GUIDE.md)** for a
+> complete walkthrough: installing dependencies, environment setup, running
+> tests, quality checklist, and deploying to production.
+
+## 🚀 Quick Start
+
+### Prerequisites
 
 - Node.js 20+
-- [Environment Setup & Deployment Strategy](./ENV_SETUP.md) — Read this for
-  configuring Local, Dev, Prod, and automated Preview environments.
+- Python 3.10+ (for `.agent/` audit scripts)
 
-### 2. Configure Environment
+### 5-Minute Setup
 
-Copy `.env.local` and fill in your Convex credentials:
+```powershell
+# 1. Install
+npm install
 
-```
-VITE_CONVEX_URL=https://<your-convex-deployment>.convex.cloud
-```
-
-### 3. Run the App
-
-```bash
-# Start Convex dev server (in one terminal)
+# 2. Start Convex backend (Terminal 1)
 npx convex dev
 
-# Start Vite dev server (in another terminal)
+# 3. Start Vite frontend (Terminal 2)
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) for the high-octane Bingo
-experience.
+Open [http://localhost:5173](http://localhost:5173).
+
+See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for full environment setup, test
+instructions, and deployment steps.
 
 ## 📁 Project Structure
 
