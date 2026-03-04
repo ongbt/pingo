@@ -172,6 +172,8 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 | `npm run preview`       | Preview the production build locally           |
 | `npm run test`          | Run Vitest in watch mode                       |
 | `npm run test:coverage` | Run all tests once + generate coverage report  |
+| `npm run test:e2e`      | Run all Playwright E2E tests                   |
+| `npm run test:e2e:ui`   | Run Playwright tests with tracing UI           |
 | `npm run lint`          | Run ESLint (zero warnings policy)              |
 
 ---
@@ -243,49 +245,44 @@ Follow these conventions:
 
 ```typescript
 // src/pages/ExamplePage.test.tsx
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 // Mock Convex hooks — pattern used throughout the project
-vi.mock('convex/react', () => ({
+vi.mock("convex/react", () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
 }));
 
 // Mock the generated API (strings act as type-safe keys in tests)
-vi.mock('../../convex/_generated/api', () => ({
+vi.mock("../../convex/_generated/api", () => ({
   api: {
-    games: { getWithSheet: 'mock-getWithSheet' },
+    games: { getWithSheet: "mock-getWithSheet" },
   },
 }));
 ```
 
-### 5.4 E2E Tests (Playwright) — Planned
+### 5.4 E2E Tests (Playwright)
 
-> E2E tests are defined in Phase 17E of `task_plan.md` and are not yet
-> implemented.
+Pingo employs Playwright for high-fidelity End-to-End (E2E) UI testing across
+Chrome, Firefox, and Safari.
 
-Once set up, E2E tests will be run with:
+Run E2E tests with the following commands:
 
 ```powershell
-# Install browsers (first time only)
-npx playwright install
+# Run all E2E tests in the background (headless)
+npm run test:e2e
 
-# Run all E2E tests
-npx playwright test
-
-# Run with the Playwright UI
-npx playwright test --ui
+# Run with the Playwright UI (helpful for debugging)
+npm run test:e2e:ui
 ```
 
-E2E test files will live in `e2e/`:
+E2E test files live in the `e2e/` directory:
 
 ```
 e2e/
-├── join-and-play.spec.ts    ← full multiplayer flow
-├── lobby-host.spec.ts       ← host controls
-└── auth.spec.ts             ← sign-in/sign-up
+└── home.spec.ts             ← home page routing tests
 ```
 
 ---
@@ -585,16 +582,19 @@ npx vitest run
 # 5. Run with coverage
 npm run test:coverage
 
-# 6. Lint
+# 6. Run E2E tests
+npm run test:e2e
+
+# 7. Lint
 npm run lint
 
-# 7. Run quality checklist
+# 8. Run quality checklist
 python .agent/scripts/checklist.py .
 
-# 8. Deploy backend to production
+# 9. Deploy backend to production
 npx convex deploy --prod
 
-# 9. Deploy frontend (build only — Cloudflare CI handles the rest)
+# 10. Deploy frontend (build only — Cloudflare CI handles the rest)
 npm run build
 ```
 

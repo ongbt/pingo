@@ -207,7 +207,7 @@ describe('LobbyPage', () => {
           config: { minTwoPlayers: false },
           lastActivityAt: Date.now(),
           sheet: {
-            items: new Array(30).fill('A').map((n, i) => i.toString()),
+            items: new Array(30).fill('A').map((_, i) => i.toString()),
             _creationTime: Date.now(),
           },
         };

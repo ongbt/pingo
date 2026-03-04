@@ -691,14 +691,31 @@ All audit issues fixed in a single session. Summary of changes made:
   - Set up **Husky** for pre-commit git hooks.
   - Configured **lint-staged** to automatically run ESLint (with `--fix`) and
     Prettier on changed files before every commit.
-- **Stricter Typing & Code Hygiene (Phase 17D Started)**:
+- **Stricter Typing & Code Hygiene (Phase 17D Completed)**:
   - Enabled `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
   - Promoted ESLint `@typescript-eslint/no-explicit-any` and `no-unused-vars` to
     **ERROR** severity.
-  - Fixed 8+ lint and type errors in `JoinPage.tsx`, `HomePage.test.tsx`, and
-    `JoinPage.test.tsx`.
+  - Fixed all resulting lint and type errors across the project, including a
+    final `'n' is declared but its value is never read` error in
+    `LobbyPage.test.tsx`.
 - **Project-wide Formatting**:
   - Executed a full-codebase Prettier pass to ensure all files comply with the
     new style guide.
 - **Verification**: Verified that `npm run lint` and `npm test` pass with the
   stricter rules.
+
+### End-to-End (E2E) Testing (Phase 17E Completed)
+
+- **Test Infrastructure Setup**:
+  - Installed `@playwright/test` for robust cross-browser E2E testing.
+  - Configured `playwright.config.ts` to automatically spin up the Vite dev
+    server on port 5173 for tests.
+  - Initialized standard configurations for Chromium, Firefox, and WebKit test
+    running.
+- **Initial Test Suite**:
+  - Authored baseline E2E tests in `e2e/home.spec.ts` guaranteeing that the
+    layout core routing flows (navigating to `/create` and `/join` from home)
+    succeed.
+- **CI Integration**:
+  - Appended a dedicated `End-to-End Tests` job to `.github/workflows/ci.yml`.
+  - Added script shortcuts (`test:e2e` and `test:e2e:ui`) to `package.json`.

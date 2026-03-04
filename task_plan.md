@@ -407,13 +407,13 @@
 
 ### 17D: Stricter Typing & Code Hygiene
 
-- [ ] Enable `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
-- [ ] Enforce stricter ESLint rules (e.g., error on `any`).
-- [ ] Fix any resulting TypeScript or ESLint errors.
+- [x] Enable `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
+- [x] Enforce stricter ESLint rules (e.g., error on `any`).
+- [x] Fix any resulting TypeScript or ESLint errors.
 
 ### 17E: End-to-End (E2E) Testing
 
-- [ ] Install `@playwright/test` for E2E testing.
-- [ ] Write integration tests simulating multiple players (e.g., Guest joining,
+- [x] Install `@playwright/test` for E2E testing.
+- [x] Write integration tests simulating multiple players (e.g., Guest joining,
       Host starting game).
-- [ ] Add `test:e2e` to package.json scripts and CI pipeline.
+- [x] Add `test:e2e` to package.json scripts and CI pipeline.
