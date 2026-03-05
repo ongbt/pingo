@@ -16,11 +16,11 @@ up, run, and deploy the Pingo application across **Local**, **Development**, and
 
 ### Environment Targets
 
-| Target    | Purpose              | Frontend URL                          | Backend URL                                   |
-| :-------- | :------------------- | :------------------------------------ | :-------------------------------------------- |
-| **Local** | Feature development  | `http://localhost:5173`               | `http://127.0.0.1:3210`                       |
-| **Dev**   | Staging / QA testing | `https://staging.pingo-31m.pages.dev` | `https://fabulous-bandicoot-305.convex.cloud` |
-| **Prod**  | Live application     | `https://pingo.bouncybison.click`     | `https://fearless-axolotl-554.convex.cloud`   |
+| Target    | Purpose              | Frontend URL                          | Backend URL                                 |
+| :-------- | :------------------- | :------------------------------------ | :------------------------------------------ |
+| **Local** | Feature development  | `http://localhost:5173`               | `http://127.0.0.1:3210`                     |
+| **Dev**   | Staging / QA testing | `https://staging.pingo-31m.pages.dev` | `https://combative-mouse-848.convex.cloud`  |
+| **Prod**  | Live application     | `https://pingo.bouncybison.click`     | `https://fearless-axolotl-554.convex.cloud` |
 
 ---
 
@@ -53,7 +53,6 @@ Create or update `.env.local` in the **project root**:
 ```env
 # Point to your local Convex dev server
 VITE_CONVEX_URL=http://127.0.0.1:3210
-VITE_CONVEX_SITE_URL=http://127.0.0.1:3211
 ```
 
 ### Step 4: Configure Backend Auth (Critical)
@@ -68,6 +67,8 @@ lives.
 2. When asked for `SITE_URL`, enter: `http://localhost:5173`
 3. This tool will automatically set `SITE_URL`, `JWKS`, and `JWT_PRIVATE_KEY` on
    your Convex deployment.
+4. **Manual Step**: Ensure `CONVEX_SITE_URL` is set to `http://127.0.0.1:3211`
+   in your Convex settings (usually handled by `npx convex dev`).
 
 ### Step 5: Start Vite
 
@@ -127,7 +128,8 @@ npx convex deploy
 **For Production:**
 
 ```bash
-# Push directly to production$env:CONVEX_DEPLOY_KEY="prod:fearless-axolotl-554|eyJ2MiI..." ; npx convex deploy; npx convex run seed:run
+# Push directly to production
+npx convex deploy --prod
 ```
 
 ### B. Frontend Deployment (Cloudflare Pages)
@@ -143,12 +145,13 @@ Connect your GitHub repository to Cloudflare Pages.
 **Settings > Environment Variables:** Set these variables for **Production** and
 **Preview** (Dev/Staging):
 
-| Variable               | Environment    | Example Value                                |
-| :--------------------- | :------------- | :------------------------------------------- |
-| `VITE_CONVEX_URL`      | **Production** | `https://fearless-axolotl-554.convex.cloud`  |
-| `VITE_CONVEX_SITE_URL` | **Production** | `https://fearless-axolotl-554.convex.site`   |
-| `VITE_CONVEX_URL`      | **Preview**    | (Auto-injected by build command)             |
-| `VITE_CONVEX_SITE_URL` | **Preview**    | `https://fabulous-bandicoot-305.convex.site` |
+| Variable          | Environment    | Example Value                               |
+| :---------------- | :------------- | :------------------------------------------ |
+| `VITE_CONVEX_URL` | **Production** | `https://fearless-axolotl-554.convex.cloud` |
+| `VITE_CONVEX_URL` | **Preview**    | (Auto-injected by build command)            |
+
+> **Note**: `VITE_CONVEX_SITE_URL` is NOT required in the frontend; it is a
+> backend variable.
 
 ### C. Automated Previews (Cloudflare + Convex)
 
@@ -176,11 +179,10 @@ To avoid updating Google OAuth redirects for every branch, use our stable
 backend:
 
 ```bash
-npx convex deploy --preview-create fabulous-bandicoot-305 --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+npx convex deploy --preview-create combative-mouse-848 --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
 ```
 
-Redirect URI:
-`https://fabulous-bandicoot-305.convex.site/api/auth/callback/google`
+Redirect URI: `https://combative-mouse-848.convex.site/api/auth/callback/google`
 
 ---
 
@@ -189,16 +191,16 @@ Redirect URI:
 The following table summarizes all configuration required for the Pingo
 ecosystem.
 
-| Component      | Setting / Variable            | **Local** Environment             | **Staging** (Staging)                        | **Production** (Live)                       |
-| :------------- | :---------------------------- | :-------------------------------- | :------------------------------------------- | :------------------------------------------ |
-| **Vite App**   | `VITE_CONVEX_URL`             | `http://localhost:3210`           | _(Auto-injected)_                            | `https://fearless-axolotl-554.convex.cloud` |
-| **Vite App**   | `VITE_CONVEX_SITE_URL`        | `http://localhost:3211`           | `https://fabulous-bandicoot-305.convex.site` | `https://fearless-axolotl-554.convex.site`  |
-| **Cloudflare** | `CONVEX_DEPLOY_KEY`           | N/A                               | `preview:ongbt:pingo\|...`                   | `preview:ongbt:pingo\|...`                  |
-| **Convex**     | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`            | `610855938258-00if...`                       | `610855938258-00ifu...`                     |
-| **Convex**     | `AUTH_GOOGLE_SECRET`          | `****J8HM`                        | `****GpfN`                                   | `****QoQq`                                  |
-| **Convex**     | `SITE_URL`                    | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`        | `https://pingo.bouncybison.click`           |
-| **Google**     | Authorized JavaScript origins | `http://localhost:5173`           | `https://staging.pingo-31m.pages.dev`        | `https://pingo.bouncybison.click`           |
-| **Google**     | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`* | `https://...305.convex.site/callback`*       | `https://...554.convex.site/callback`*      |
+| Component       | Setting / Variable            | **Local** Environment              | **Staging** (Staging)                   | **Production** (Live)                       |
+| :-------------- | :---------------------------- | :--------------------------------- | :-------------------------------------- | :------------------------------------------ |
+| **Vite App**    | `VITE_CONVEX_URL`             | `http://localhost:3210`            | _(Auto-injected)_                       | `https://fearless-axolotl-554.convex.cloud` |
+| **Convex (BE)** | `CONVEX_SITE_URL`             | `http://127.0.0.1:3211`            | _(Built-in)_                            | _(Built-in)_                                |
+| **Cloudflare**  | `CONVEX_DEPLOY_KEY`           | N/A                                | `preview:ongbt:pingo\|...`              | `preview:ongbt:pingo\|...`                  |
+| **Convex (BE)** | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`             | `610855938258-00if...`                  | `610855938258-00ifu...`                     |
+| **Convex (BE)** | `AUTH_GOOGLE_SECRET`          | `****J8HM`                         | `****GpfN`                              | `****QoQq`                                  |
+| **Convex (BE)** | `SITE_URL`                    | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
+| **Google**      | Authorized JavaScript origins | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
+| **Google**      | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`\* | `https://...848.convex.site/callback`\* | `https://...554.convex.site/callback`\*     |
 
 _\* Full Redirect URI path: `/api/auth/callback/google`_
 
@@ -210,17 +212,37 @@ _\* Full Redirect URI path: `/api/auth/callback/google`_
 
 ### 1. "User not shown as signed in after redirect"
 
-This usually means the `SITE_URL` in Convex does not exactly match your frontend
-URL (including `http://` or `https://`).
+This usually means the **`SITE_URL`** in Convex does not exactly match your
+frontend URL.
 
-- Use `npx convex env set SITE_URL http://localhost:5173` to fix it locally.
-- In production, ensure it is `https://pingo.bouncybison.click`.
+- **Check Convex Dashboard**: Go to **Settings > Environment Variables**.
+- **`CONVEX_SITE_URL`**: This is **built-in** by Convex and cannot be modified.
+  It automatically points to your `.site` URL.
+- **Fix Production `SITE_URL`**: Ensure `SITE_URL` is set manually to
+  `https://pingo.bouncybison.click`.
+- **Fix Local `SITE_URL`**: Use
+  `npx convex env set SITE_URL http://localhost:5173`.
 
-### 2. "Connection lost while action was in flight"
+### 2. "Connection lost while action was in flight" (JWKS Issue)
 
 This error often occurs if `JWKS` or `JWT_PRIVATE_KEY` are corrupted or missing.
+The backend cannot verify the JWT it just issued.
 
-- Re-run `npx @convex-dev/auth` to regenerate them.
+- **Fix**: Re-run `npx @convex-dev/auth` for that deployment.
+- **Manual verification**: Check that `JWKS` exists in the Convex Dashboard
+  variables.
+
+### 2b. Manual Key Generation (If CLI crashes)
+
+If `npx @convex-dev/auth` crashes (common on Windows with Node v24), you can
+manually generate the keys using this Node command:
+
+```powershell
+node -e "const crypto = require('crypto'); const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048, publicKeyEncoding: { type: 'spki', format: 'pem' }, privateKeyEncoding: { type: 'pkcs8', format: 'pem' } }); const jwk = crypto.createPublicKey(publicKey).export({ format: 'jwk' }); const jwks = JSON.stringify({ keys: [{ ...jwk, use: 'sig', alg: 'RS256', kid: 'default' }] }); console.log('\n--- JWT_PRIVATE_KEY ---\n' + privateKey + '\n--- JWKS ---\n' + jwks + '\n')"
+```
+
+Copy the generated `JWKS` string and `JWT_PRIVATE_KEY` block into your Convex
+Dashboard environment variables manually.
 
 ### 3. Google OAuth "Unauthorized Redirect URI"
 

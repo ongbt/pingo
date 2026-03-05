@@ -365,3 +365,55 @@
       preview and links it to the frontend via `VITE_CONVEX_URL`.
 - [x] **Deploy Frontend to Cloudflare Pages**: Connect staging frontend to
       Convex preview.
+
+## Phase 16: UX & SEO Master Audit ✅
+
+- [x] **Run Antigravity Master Checklist** (`checklist.py`):
+  - Passed core checks: Security Scan, Lint Check, Schema Validation, Test
+    Runner.
+- [x] **Refine UX Audit Tool**:
+  - Removed false-positive label detections affecting React Components
+    (`StepCard`, `twitter:card`).
+- [x] **Refine SEO Audit Tool**:
+  - Removed false-positive missing `<title>` detections hitting `<header>`
+    layout tags.
+- [x] **Resolve Legitimate SEO Issues**:
+  - Fixed multiple `H1` tag violation in `LobbyPage.tsx` by demoting "Access
+    Denied" state to an `H2`.
+- [x] **Pass Master Checklist**: Zero failed checks remaining across all 6 core
+      audit tools.
+
+## Phase 17: Software Engineering Improvements 🏗️
+
+### 17A: Automated Testing (Unit & Component)
+
+- [x] Install Vitest, React Testing Library, and jsdom.
+- [x] Configure `vitest.config.ts` and update `package.json` test scripts.
+- [x] Write unit tests for core utilities and components to reach target
+      coverage (85%+ achieved). - [x] `GamePage.test.tsx` (84% coverage) - [x]
+      `JoinPage.test.tsx` (96% coverage) - [x] `LobbyPage.test.tsx` (88%
+      coverage) - [x] `HomePage.test.tsx` (93% coverage)
+
+### 17B: CI/CD Pipeline
+
+- [x] Create GitHub Actions workflow (`.github/workflows/ci.yml`).
+- [x] Configure linting, building, and testing in the pipeline. - [x] Added
+      Lint, Test:Coverage, and Build steps.
+
+### 17C: Pre-commit Hooks & Formatting
+
+- [x] Install Prettier and eslint-config-prettier.
+- [x] Set up Husky and lint-staged to run formatting and linting on commit.
+
+### 17D: Stricter Typing & Code Hygiene
+
+- [x] Enable `noUnusedLocals` and `noUnusedParameters` in `tsconfig.json`.
+- [x] Enforce stricter ESLint rules (e.g., error on `any`).
+- [x] Fix any resulting TypeScript or ESLint errors.
+
+### 17E: End-to-End (E2E) Testing
+
+- [x] Install `@playwright/test` for E2E testing.
+- [x] Write integration tests simulating multiple players (e.g., Guest joining,
+      Host starting game).
+- [x] Add `test:e2e` to package.json scripts and CI pipeline.

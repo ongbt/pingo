@@ -43,7 +43,10 @@ celebrations, and a custom sheet builder.
   - Lobby access is gated — URL visitors without a valid player session see an
     Access Denied screen and are redirected home after 3 seconds.
 - **Premium UI/UX**: Ultra-modern design with smooth Framer Motion transitions,
-  dark mode aesthetics, and interactive player leaderboards.
+  dark mode aesthetics, and interactive player leaderboards. Fully audited for
+  Accessibility and UX cognitive load.
+- **Search Optimized**: Fully compliant with SEO fundamentals and page hierarchy
+  standards.
 
 ## 🛠️ Technology Stack
 
@@ -53,35 +56,61 @@ celebrations, and a custom sheet builder.
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
+- **CI/CD**: GitHub Actions (Automated Linting, Unit Testing, and Production
+  Builds)
 
-## 🚀 Getting Started
+## 🏗️ Architecture Overview
 
-### 1. Prerequisites
+```mermaid
+graph TD
+    Client[Client Browser]
+    Cloudflare[Cloudflare Pages<br/>React SPA]
+    Convex[Convex Cloud<br/>Reactive DB + Auth + Functions]
+    
+    Client -->|Loads App| Cloudflare
+    Client <-->|Real-time Sync<br/>WebSocket| Convex
+```
+
+- **Testing**: Vitest + React Testing Library (85%+ High Coverage) & Playwright
+  (Multiplayer E2E)
+  - E2E tests now run with automatic retries (1 locally, 2 on CI) to reduce
+    flakiness.
+  - Use `npm run test:e2e` for headless runs or `npm run test:e2e:ui` for
+    interactive debugging. (Multiplayer E2E)
+  - **Preparing Convex for E2E Tests**: To avoid flakiness, cleanly start the
+    Convex dev server by clearing existing data: stop your `npx convex dev`
+    server, run `Remove-Item -Recurse -Force convex/.convex`, and restart it.
+
+## 🛠️ Developer Onboarding
+
+> **New developer?** See the **[Developer Guide](./DEVELOPER_GUIDE.md)** for a
+> complete walkthrough: installing dependencies, environment setup, running
+> tests, quality checklist, and deploying to production.
+
+## 🚀 Quick Start
+
+### Prerequisites
 
 - Node.js 20+
-- [Environment Setup & Deployment Strategy](./ENV_SETUP.md) — Read this for
-  configuring Local, Dev, Prod, and automated Preview environments.
+- Python 3.10+ (for `.agent/` audit scripts)
 
-### 2. Configure Environment
+### 5-Minute Setup
 
-Copy `.env.local` and fill in your Convex credentials:
+```powershell
+# 1. Install
+npm install
 
-```
-VITE_CONVEX_URL=https://<your-convex-deployment>.convex.cloud
-```
-
-### 3. Run the App
-
-```bash
-# Start Convex dev server (in one terminal)
-npx convex dev
-
-# Start Vite dev server (in another terminal)
+# 2. Start Convex backend (Terminal 1)
 npm run dev
+
+# 4. Run E2E Tests (Optional)
+npx playwright test
 ```
 
-Open [http://localhost:5173](http://localhost:5173) for the high-octane Bingo
-experience.
+Open [http://localhost:5173](http://localhost:5173).
+
+See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for full environment setup, test
+instructions, and deployment steps.
 
 ## 📁 Project Structure
 
