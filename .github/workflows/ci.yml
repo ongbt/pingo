@@ -68,7 +68,9 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
-          VITE_CONVEX_URL: ${{ secrets.VITE_CONVEX_URL || 'https://mock.convex.cloud' }}
+          VITE_CONVEX_URL: 'http://127.0.0.1:3210'
+          VITE_CONVEX_SITE_URL: 'http://127.0.0.1:3211'
+          CONVEX_DEPLOYMENT: 'local:ci'
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
