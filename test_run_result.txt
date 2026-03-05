@@ -1,0 +1,1199 @@
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+
+[1A[2K[WebServer] ✔ 22:28:42 Convex functions ready! (3.17s)
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › e2e\multiplayer.spec.ts:4:5 › host and guest multiplayer flow
+
+[1A[2K[WebServer] 3/4/2026, 10:28:53 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/4/2026, 10:28:53 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/4/2026, 10:28:53 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/4/2026, 10:28:54 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[chromium] › e2e\multiplayer.spec.ts:4:5 › host and guest multiplayer flow
+Room Code created: URKRME
+
+
+[1A[2K[WebServer] 3/4/2026, 10:28:55 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/4/2026, 10:28:55 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/4/2026, 10:28:55 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:09 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:10 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:10 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:10 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:11 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:11 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/4/2026, 10:30:11 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:32:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:34:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:12 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:12 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:36:12 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:41:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:42:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:42:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:09 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:13 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:13 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:13 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:42:13 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:42:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:42:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:42:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:42:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:42:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:22 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:22 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:22 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:42:22 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:43:25 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:43:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:43:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:43:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:43:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:43:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:43:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:43:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:30 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:34 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:34 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:49:34 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:38 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:40 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:40 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:49:40 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:49:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:49:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:49:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:49:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:49:56 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:51:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:51:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:51:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:51:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:52:21 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:53:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:53:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:53:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:53:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:53:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:54:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:54:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:03 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:54:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:54:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:54:07 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:54:08 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:54:10 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:54:11 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:54:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:54:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:14 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:54:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:55:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:55:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:55:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:55:47 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:26 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:39 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:40 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:56:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:17 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:19 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:19 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:19 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:19 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:57:20 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:20 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:20 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:24 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:25 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:27 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:28 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:29 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:32 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:33 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:57:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:36 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 9:57:37 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 9:57:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:57:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:45 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:45 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:57:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+[1A[2K[WebServer] 3/5/2026, 9:59:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 9:59:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 9:59:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:01 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:05 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:08 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:08 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:08 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:08 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:11 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:11 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:11 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:12 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:15 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:15 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:15 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:15 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:15 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 10:00:16 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 10:00:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:00:18 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:42 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:43 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:44 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:46 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:49 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:06:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:50 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:51 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:52 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:53 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 10:10:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 10:10:54 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:55 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:10:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:11:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:11:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:11:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:12:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:12:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:12:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:12:58 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:12:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+[1A[2K[WebServer] 3/5/2026, 10:12:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+
+[1A[2K[WebServer] 3/5/2026, 10:12:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+[1A[2K[WebServer] 3/5/2026, 10:12:59 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+
+[1A[2K[WebServer] 3/5/2026, 10:13:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:00 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:02 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:04 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: createAccountFromCredentials'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: signIn'
+
+[1A[2K[WebServer] 3/5/2026, 10:13:06 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 10:18:18 Convex functions ready! (3.09s)
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 10:19:10 Convex functions ready! (2.95s)
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 10:19:43 Convex functions ready! (2.95s)
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 10:20:10 Convex functions ready! (2.9s)
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 10:26:42 Convex functions ready! (3.15s)
+
+[1A[2K[WebServer] 3/5/2026, 10:31:57 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 11:31:48 AM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] 3/5/2026, 2:13:34 PM [CONVEX M(auth:store)] [INFO] '`auth:store` type: refreshSession'
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✖ In order to push, add `convex` to your package.json dependencies.
+
+[1A[2K[WebServer] - Preparing Convex functions...
+[WebServer] 
+
+[1A[2K[WebServer] ✔ 14:30:36 Convex functions ready! (3.37s)
