@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react'; 
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { usePingoAuth } from '@/hooks/use-pingo-auth';
 import PopularSheets, { SeeAllLink } from '@/components/PopularSheets';
 
@@ -19,7 +18,7 @@ function formatLiveCount(n: number | null): string {
 export default function HomePage() {
   const navigate = useNavigate();
   const liveCount = useLivePlayerCount();
-  const { user, profile } = useAuth();
+  const { user, profile } = usePingoAuth();
 
   return (
     <div className="flex min-h-screen flex-col bg-background-light font-display text-slate-900 dark:bg-background-dark dark:text-slate-100">
