@@ -58,6 +58,19 @@ celebrations, and a custom sheet builder.
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
 - **CI/CD**: GitHub Actions (Automated Linting, Unit Testing, and Production
   Builds)
+
+## 🏗️ Architecture Overview
+
+```mermaid
+graph TD
+    Client[Client Browser]
+    Cloudflare[Cloudflare Pages<br/>React SPA]
+    Convex[Convex Cloud<br/>Reactive DB + Auth + Functions]
+    
+    Client -->|Loads App| Cloudflare
+    Client <-->|Real-time Sync<br/>WebSocket| Convex
+```
+
 - **Testing**: Vitest + React Testing Library (85%+ High Coverage) & Playwright
   (Multiplayer E2E)
   - E2E tests now run with automatic retries (1 locally, 2 on CI) to reduce

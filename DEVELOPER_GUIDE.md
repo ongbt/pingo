@@ -440,6 +440,46 @@ while `npx convex dev` is running.
 | `sheet`   | `creator_id`, `title`, `items[]`, `is_default`, `play_count`                         |
 | `profile` | `id` (auth UID), `nickname`, `updated_at`                                            |
 
+### Schema Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    GAME ||--o{ PLAYER : contains
+    SHEET ||--o{ GAME : uses
+    PROFILE ||--o{ SHEET : creates
+    
+    GAME {
+        string room_code
+        uuid host_id
+        uuid sheet_id
+        string status
+        object config
+    }
+    
+    PLAYER {
+        uuid game_id
+        string nickname
+        boolean is_host
+        object board_state
+        array board_layout
+        number score
+    }
+    
+    SHEET {
+        uuid creator_id
+        string title
+        array items
+        boolean is_default
+        number play_count
+    }
+    
+    PROFILE {
+        uuid id
+        string nickname
+        timestamp updated_at
+    }
+```
+
 ### Key Convex functions
 
 ```
