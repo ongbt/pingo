@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Define the multiplayer test scenario
-test.skip('host and guest multiplayer flow', async ({ browser }) => {
+test('host and guest multiplayer flow', async ({ browser }) => {
   // Create two isolated browser contexts
   const hostContext = await browser.newContext();
   const guestContext = await browser.newContext();
@@ -9,32 +9,32 @@ test.skip('host and guest multiplayer flow', async ({ browser }) => {
   const hostPage = await hostContext.newPage();
   const guestPage = await guestContext.newPage();
 
-  // 1. Host registers an account: Since we want to use anonymous auth,
-  // we can use a clever trick: submitting a dummy code on the Join page
-  // signs the user in anonymously before checking the code.
-  await hostPage.goto('/join');
-  await hostPage.getByLabel('Room Code').fill('000000');
-  await hostPage.getByLabel('Your Nickname').fill('TestHost');
-  await hostPage.getByRole('button', { name: /Let's Play/i }).click();
+  // 1. Host registers an account
+  await hostPage.goto('/signup');
+  const uniqueEmail = `host${Date.now()}@example.com`;
 
-  // Wait for the "Game not found" error to confirm sign-in
-  await expect(hostPage.getByText(/Game not found/i)).toBeVisible();
+  // Fill the sign up form
+  await hostPage.getByLabel('Email').fill(uniqueEmail);
+  await hostPage.getByLabel('Password').fill('password123');
+  await hostPage.getByRole('button', { name: 'Sign Up', exact: true }).click();
 
-  // The host is authenticated now (anonymously). Navigate to Create Game
+  // Wait for success screen
+  await expect(hostPage.getByText(/Check your email/i)).toBeVisible({
+    timeout: 15000,
+  });
+
+  // Navigate to Create Game
   await hostPage.goto('/create');
 
-  // The host should bypass the "You must be signed in" barrier and see the Nickname field
+  // Choose nickname and host
   await expect(hostPage.getByLabel('Your Nickname')).toBeVisible();
   await hostPage.getByLabel('Your Nickname').fill('TestHost');
-
-  // Create the Lobby
   await hostPage.getByRole('button', { name: /Create Lobby/i }).click();
 
   // Host is now in Lobby
   await expect(hostPage).toHaveURL(/.*\/lobby\/.*/);
 
   // Extract Room Code
-  // The room code is likely the only h1 or can be grabbed by getting the element with text XXXXXX
   const roomCodeLocator = hostPage
     .locator('h1')
     .filter({ hasText: /^[A-Z0-9]{6}$/ });
@@ -47,20 +47,21 @@ test.skip('host and guest multiplayer flow', async ({ browser }) => {
   await guestPage.goto('/');
   await guestPage.getByRole('link', { name: /Join a Game/i }).click();
 
-  // They are redirected to /join. Fill in the code and name.
   await expect(guestPage).toHaveURL(/.*\/join/);
   await guestPage.getByLabel('Room Code').fill(roomCode);
   await guestPage.getByLabel('Your Nickname').fill('TestGuest');
+  console.log('Guest joining with code:', roomCode);
   await guestPage.getByRole('button', { name: /Let's Play/i }).click();
 
   // Guest is now in the Lobby
   await expect(guestPage).toHaveURL(/.*\/lobby\/.*/);
+  console.log('Guest joined lobby successfully');
 
   // 3. Host sees the guest and starts the game
-  // Wait for guest to appear in host's lobby display
-  await expect(hostPage.getByText('TestGuest')).toBeVisible();
+  console.log('Waiting for host to see TestGuest...');
+  await expect(hostPage.getByText(/TestGuest/i)).toBeVisible();
+  console.log('Host saw TestGuest');
 
-  // Wait for the start game button to become active and click it
   const startGameBtn = hostPage.getByRole('button', { name: /Start Game/i });
   await expect(startGameBtn).toBeEnabled();
   await startGameBtn.click();
@@ -69,16 +70,16 @@ test.skip('host and guest multiplayer flow', async ({ browser }) => {
   await expect(hostPage).toHaveURL(/.*\/game\/.*/);
   await expect(guestPage).toHaveURL(/.*\/game\/.*/);
 
-  // Optionally, Host can end the game
+  // Host can end the game
   await hostPage.getByRole('button', { name: /End Game/i }).click();
 
   // Wait for confirm End Game modal and click confirm
   await hostPage
-    .getByRole('dialog')
-    .getByRole('button', { name: /End Game/i })
+    .getByRole('button', { name: 'End Game', exact: true })
+    .nth(1)
     .click();
 
-  // Wait for Game Over screen to appear for both players
+  // Wait for Game Over screen to appear
   await expect(hostPage.getByText(/Game Over/i)).toBeVisible();
   await expect(guestPage.getByText(/Game Over/i)).toBeVisible();
 

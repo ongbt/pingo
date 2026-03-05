@@ -268,7 +268,26 @@ vi.mock("../../convex/_generated/api", () => ({
 Pingo employs Playwright for high-fidelity End-to-End (E2E) UI testing across
 Chrome, Firefox, and Safari.
 
-Run E2E tests with the following commands:
+### Preparing the Convex Backend for E2E Tests
+
+Before running E2E tests, it's highly recommended to start with a clean Convex
+development database to avoid test flakiness caused by leftover data from
+previous tests or manual testing.
+
+Since `npx convex dev --reset` is not always available, you can reset your local
+Convex dev environment by:
+
+1. Stopping your `npx convex dev` process.
+2. Deleting the local SQLite database directory:
+   ```powershell
+   Remove-Item -Recurse -Force convex/.convex
+   ```
+3. Restarting the `npx convex dev` server.
+
+Run E2E tests with the following commands. **Note**: These commands
+automatically manage the backend and frontend dev servers using the
+configuration in `playwright.config.ts`, so you don't need to have them running
+beforehand.
 
 ```powershell
 # Run all E2E tests in the background (headless)
@@ -282,7 +301,8 @@ E2E test files live in the `e2e/` directory:
 
 ```
 e2e/
-└── home.spec.ts             ← home page routing tests
+├── home.spec.ts             ← home page routing tests
+└── multiplayer.spec.ts      ← host and guest game flow tests
 ```
 
 ---

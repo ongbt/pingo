@@ -58,7 +58,15 @@ celebrations, and a custom sheet builder.
 - **Visuals**: Lucide Icons, DiceBear Avatars, Canvas-Confetti
 - **CI/CD**: GitHub Actions (Automated Linting, Unit Testing, and Production
   Builds)
-- **Testing**: Vitest + React Testing Library (85%+ High Coverage)
+- **Testing**: Vitest + React Testing Library (85%+ High Coverage) & Playwright
+  (Multiplayer E2E)
+  - E2E tests now run with automatic retries (1 locally, 2 on CI) to reduce
+    flakiness.
+  - Use `npm run test:e2e` for headless runs or `npm run test:e2e:ui` for
+    interactive debugging. (Multiplayer E2E)
+  - **Preparing Convex for E2E Tests**: To avoid flakiness, cleanly start the
+    Convex dev server by clearing existing data: stop your `npx convex dev`
+    server, run `Remove-Item -Recurse -Force convex/.convex`, and restart it.
 
 ## 🛠️ Developer Onboarding
 
@@ -80,10 +88,10 @@ celebrations, and a custom sheet builder.
 npm install
 
 # 2. Start Convex backend (Terminal 1)
-npx convex dev
-
-# 3. Start Vite frontend (Terminal 2)
 npm run dev
+
+# 4. Run E2E Tests (Optional)
+npx playwright test
 ```
 
 Open [http://localhost:5173](http://localhost:5173).
