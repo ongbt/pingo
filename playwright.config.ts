@@ -39,21 +39,13 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-  webServer: [
-    {
-      command: 'npx convex dev',
-      url: 'http://127.0.0.1:3210',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-      env: {
-        CONVEX_AGENT_MODE: 'anonymous',
-      },
+  webServer: {
+    command: 'npx convex dev --run-sh "npm run dev"',
+    url: 'http://127.0.0.1:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 180 * 1000,
+    env: {
+      CONVEX_AGENT_MODE: 'anonymous',
     },
-    {
-      command: 'npm run dev',
-      url: 'http://127.0.0.1:5173',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-    },
-  ],
+  },
 });

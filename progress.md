@@ -719,3 +719,18 @@ All audit issues fixed in a single session. Summary of changes made:
 - **CI Integration**:
   - Appended a dedicated `End-to-End Tests` job to `.github/workflows/ci.yml`.
   - Added script shortcuts (`test:e2e` and `test:e2e:ui`) to `package.json`.
+
+### CI/CD Pipeline Fixes (Phase 17F)
+
+- **Fixed E2E Test Timeout in CI**:
+  - Found that the CI was failing due to a 120s timeout while waiting for the
+    web servers.
+  - Consolidated the Convex backend and Vite frontend into a single `webServer`
+    entry in `playwright.config.ts`.
+  - Used `npx convex dev --run-sh "npm run dev"` to ensure the backend is fully
+    prepared and environment variables are injected before the frontend starts.
+  - Increased the `webServer` timeout to 180s to account for binary downloads in
+    CI environments.
+  - Verified that this configuration correctly links the two services and
+    provides a stable readiness signal for Playwright via the frontend URL
+    (`127.0.0.1:5173`).

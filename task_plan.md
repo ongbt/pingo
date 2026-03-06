@@ -417,3 +417,8 @@
 - [x] Write integration tests simulating multiple players (e.g., Guest joining,
       Host starting game).
 - [x] Add `test:e2e` to package.json scripts and CI pipeline.
+
+### 17F: CI Stability Fixes
+
+- [x] Fix E2E test timeout in CI by consolidating Convex and Vite servers via
+      `npx convex dev --run-sh`.
