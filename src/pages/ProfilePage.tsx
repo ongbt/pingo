@@ -32,7 +32,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (profile?.nickname) {
-      setNickname(profile.nickname);
+      queueMicrotask(() => setNickname(profile.nickname));
     }
   }, [profile]);
 

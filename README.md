@@ -75,7 +75,7 @@ graph TD
   (Multiplayer E2E)
   - E2E tests now run with automatic retries (1 locally, 2 on CI) to reduce
     flakiness.
-  - Use `npm run test:e2e` for headless runs or `npm run test:e2e:ui` for
+  - Use `pnpm run test:e2e` for headless runs or `pnpm run test:e2e:ui` for
     interactive debugging. (Multiplayer E2E)
   - **Preparing Convex for E2E Tests**: To avoid flakiness, cleanly start the
     Convex dev server by clearing existing data: stop your `npx convex dev`
@@ -98,10 +98,10 @@ graph TD
 
 ```powershell
 # 1. Install
-npm install
+pnpm install
 
 # 2. Start Convex backend (Terminal 1)
-npm run dev
+pnpm run dev
 
 # 4. Run E2E Tests (Optional)
 npx playwright test
@@ -150,7 +150,7 @@ pingo/
 ## 🚢 Deployment
 
 - **Frontend**: Cloudflare Pages (Vite SPA)
-  - Build Command: `npm run build`
+  - Build Command: `pnpm run build`
   - Output Directory: `dist`
   - Environment Variables: `VITE_CONVEX_URL`
 - **Backend**: Convex Cloud

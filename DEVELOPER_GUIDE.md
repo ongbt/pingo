@@ -27,7 +27,7 @@
 | -------------- | ---------- | ----------------------------------------- |
 | **Node.js**    | 20+        | [nodejs.org](https://nodejs.org)          |
 | **npm**        | 10+        | Bundled with Node.js                      |
-| **Convex CLI** | Latest     | `npm i -g convex` _(or use `npx convex`)_ |
+| **Convex CLI** | Latest     | `pnpm add -g convex` _(or use `npx convex`)_ |
 | **Git**        | Any modern | [git-scm.com](https://git-scm.com)        |
 | **Python**     | 3.10+      | Required for `.agent/` audit scripts      |
 
@@ -44,7 +44,7 @@ git clone <your-repo-url>
 cd pingo
 
 # Install all npm dependencies (frontend + dev tools)
-npm install
+pnpm install
 ```
 
 This installs:
@@ -148,7 +148,7 @@ npx convex dev
 **Terminal 2 — Vite frontend:**
 
 ```powershell
-npm run dev
+pnpm run dev
 ```
 
 Open **[http://localhost:5173](http://localhost:5173)** in your browser.
@@ -160,14 +160,14 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
 | Command                 | Description                                    |
 | ----------------------- | ---------------------------------------------- |
-| `npm run dev`           | Start local Vite dev server with HMR           |
-| `npm run build`         | TypeScript check + production build to `dist/` |
-| `npm run preview`       | Preview the production build locally           |
-| `npm run test`          | Run Vitest in watch mode                       |
-| `npm run test:coverage` | Run all tests once + generate coverage report  |
-| `npm run test:e2e`      | Run all Playwright E2E tests                   |
-| `npm run test:e2e:ui`   | Run Playwright tests with tracing UI           |
-| `npm run lint`          | Run ESLint (zero warnings policy)              |
+| `pnpm run dev`           | Start local Vite dev server with HMR           |
+| `pnpm run build`         | TypeScript check + production build to `dist/` |
+| `pnpm run preview`       | Preview the production build locally           |
+| `pnpm run test`          | Run Vitest in watch mode                       |
+| `pnpm run test:coverage` | Run all tests once + generate coverage report  |
+| `pnpm run test:e2e`      | Run all Playwright E2E tests                   |
+| `pnpm run test:e2e:ui`   | Run Playwright tests with tracing UI           |
+| `pnpm run lint`          | Run ESLint (zero warnings policy)              |
 
 ---
 
@@ -180,13 +180,13 @@ is set up for **Playwright** E2E tests.
 
 ```powershell
 # Watch mode (re-runs on file save — use during development)
-npm run test
+pnpm run test
 
 # Single run (used in CI)
 npx vitest run
 
 # With coverage report
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 Coverage output appears in the terminal table and in `coverage/` (open
@@ -284,10 +284,10 @@ beforehand.
 
 ```powershell
 # Run all E2E tests in the background (headless)
-npm run test:e2e
+pnpm run test:e2e
 
 # Run with the Playwright UI (helpful for debugging)
-npm run test:e2e:ui
+pnpm run test:e2e:ui
 ```
 
 E2E test files live in the `e2e/` directory:
@@ -530,7 +530,7 @@ The frontend is deployed automatically via **GitHub CI** on every push to
 | Setting                       | Value                                       |
 | ----------------------------- | ------------------------------------------- |
 | Framework preset              | Vite                                        |
-| Build command                 | `npm run build`                             |
+| Build command                 | `pnpm run build`                             |
 | Build output directory        | `dist`                                      |
 | `VITE_CONVEX_URL` (prod)      | `https://fearless-axolotl-554.convex.cloud` |
 | `CONVEX_DEPLOY_KEY` (preview) | See Convex Dashboard → Deploy Keys          |
@@ -538,7 +538,7 @@ The frontend is deployed automatically via **GitHub CI** on every push to
 **Manual deploy from local:**
 
 ```powershell
-npm run build
+pnpm run build
 # Then upload `dist/` in the Cloudflare Pages dashboard manually,
 # or use wrangler:
 npx wrangler pages deploy dist --project-name pingo
@@ -549,7 +549,7 @@ npx wrangler pages deploy dist --project-name pingo
 For branch-based previews, the Cloudflare **Preview** build command is:
 
 ```bash
-npx convex deploy --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+npx convex deploy --cmd "pnpm run build" --cmd-url-env-var-name VITE_CONVEX_URL
 ```
 
 This auto-provisions a Convex preview backend and injects its URL into the
@@ -559,7 +559,7 @@ build.
 branch):
 
 ```bash
-npx convex deploy --preview-create combative-mouse-848 --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+npx convex deploy --preview-create combative-mouse-848 --cmd "pnpm run build" --cmd-url-env-var-name VITE_CONVEX_URL
 ```
 
 ### 9.4 Environment Matrix
@@ -585,7 +585,7 @@ npx convex deploy --preview-create combative-mouse-848 --cmd "npm run build" --c
 
 ### App is blank after deployment
 
-1. Check **Build Command** = `npm run build` and **Output Dir** = `dist` in
+1. Check **Build Command** = `pnpm run build` and **Output Dir** = `dist` in
    Cloudflare.
 2. Ensure `VITE_CONVEX_URL` is set in Cloudflare environment variables.
 3. Verify `public/_redirects` exists in the repo with content
@@ -621,25 +621,25 @@ errors.
 
 ```powershell
 # 1. Install
-npm install
+pnpm install
 
 # 2. Start backend (keep running)
 npx convex dev
 
 # 3. Start frontend (new terminal)
-npm run dev
+pnpm run dev
 
 # 4. Run tests
 npx vitest run
 
 # 5. Run with coverage
-npm run test:coverage
+pnpm run test:coverage
 
 # 6. Run E2E tests
-npm run test:e2e
+pnpm run test:e2e
 
 # 7. Lint
-npm run lint
+pnpm run lint
 
 # 8. Run quality checklist
 python .agent/scripts/checklist.py .
@@ -648,7 +648,7 @@ python .agent/scripts/checklist.py .
 npx convex deploy --prod
 
 # 10. Deploy frontend (build only — Cloudflare CI handles the rest)
-npm run build
+pnpm run build
 ```
 
 ---
