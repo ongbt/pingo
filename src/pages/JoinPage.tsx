@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMutation, useConvex } from 'convex/react';
 import { useAuthActions } from '@convex-dev/auth/react';
@@ -28,11 +28,11 @@ export default function JoinPage() {
 
   useEffect(() => {
     if (profile?.nickname) {
-      setNickname(profile.nickname);
+      queueMicrotask(() => setNickname(profile.nickname));
       localStorage.setItem('pingo_nickname', profile.nickname);
     } else {
       const saved = localStorage.getItem('pingo_nickname');
-      if (saved) setNickname(saved);
+      if (saved) queueMicrotask(() => setNickname(saved));
     }
   }, [profile]);
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
@@ -417,9 +417,9 @@ export default function CreatePage() {
     if (!selectedSheetId && sheets.length > 0) {
       const paramId = searchParams.get('sheetId');
       if (paramId && sheets.find((s) => s.id === paramId)) {
-        setSelectedSheetId(paramId as Id<'sheet'>);
+        queueMicrotask(() => setSelectedSheetId(paramId as Id<'sheet'>));
       } else {
-        setSelectedSheetId(sheets[0].id as Id<'sheet'>);
+        queueMicrotask(() => setSelectedSheetId(sheets[0].id as Id<'sheet'>));
       }
     }
   }, [sheets, selectedSheetId, searchParams]);
@@ -429,11 +429,11 @@ export default function CreatePage() {
 
   useEffect(() => {
     if (profile?.nickname) {
-      setNickname(profile.nickname);
+      queueMicrotask(() => setNickname(profile.nickname));
       localStorage.setItem('pingo_nickname', profile.nickname);
     } else {
       const saved = localStorage.getItem('pingo_nickname');
-      if (saved) setNickname(saved);
+      if (saved) queueMicrotask(() => setNickname(saved));
     }
   }, [profile]);
 
