@@ -89,26 +89,28 @@ Pingo uses Google OAuth for secure sign-in. You must configure a client in the
 2. Click **Create Credentials > OAuth client ID**.
 3. Select **Web application**.
 
-### Step 2: Configure Redirects per Environment
+### Step 2: Configure Redirects (Single Client)
 
-| Env       | Authorized JavaScript Origins                    | Authorized Redirect URIs                                              |
-| :-------- | :----------------------------------------------- | :-------------------------------------------------------------------- |
-| **Local** | `http://localhost:5173`, `http://127.0.0.1:5173` | `http://127.0.0.1:3211/api/auth/callback/google`                      |
-| **Dev**   | `https://staging.pingo-31m.pages.dev`            | `https://fabulous-bandicoot-305.convex.site/api/auth/callback/google` |
-| **Prod**  | `https://pingo.bouncybison.click`                | `https://fearless-axolotl-554.convex.site/api/auth/callback/google`   |
+Pingo uses a **single Google OAuth client** across all environments. Add **all**
+origins and redirect URIs to the same client:
+
+**Authorized JavaScript Origins:**
+
+- `http://localhost:5173`
+- `http://127.0.0.1:5173`
+- `https://staging.pingo-31m.pages.dev`
+- `https://pingo.bouncybison.click`
+
+**Authorized Redirect URIs:**
+
+- `http://127.0.0.1:3211/api/auth/callback/google`
+- `https://combative-mouse-848.convex.site/api/auth/callback/google`
+- `https://fearless-axolotl-554.convex.site/api/auth/callback/google`
 
 ### Step 3: Add Secrets to Convex
 
-In your Convex Dashboard (**Settings > Environment Variables**), add the Google
-OAuth credentials.
-
-> **💡 Best Practice**: Create **separate** OAuth Client IDs in the Google Cloud
-> Console for each environment (Local, Staging, Production). This ensures that a
-> compromise in one environment does not affect the others and allows for clean
-> redirect URI management.
-
-- `AUTH_GOOGLE_ID`: Your environment-specific Client ID
-- `AUTH_GOOGLE_SECRET`: Your environment-specific Client Secret
+Set the **same** `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` on every Convex
+deployment (local, dev, prod) — they all share the single client.
 
 ---
 
@@ -196,8 +198,8 @@ ecosystem.
 | **Vite App**    | `VITE_CONVEX_URL`             | `http://localhost:3210`            | _(Auto-injected)_                       | `https://fearless-axolotl-554.convex.cloud` |
 | **Convex (BE)** | `CONVEX_SITE_URL`             | `http://127.0.0.1:3211`            | _(Built-in)_                            | _(Built-in)_                                |
 | **Cloudflare**  | `CONVEX_DEPLOY_KEY`           | N/A                                | `preview:ongbt:pingo\|...`              | `preview:ongbt:pingo\|...`                  |
-| **Convex (BE)** | `AUTH_GOOGLE_ID`              | `610855938258-8ukr...`             | `610855938258-00if...`                  | `610855938258-00ifu...`                     |
-| **Convex (BE)** | `AUTH_GOOGLE_SECRET`          | `****J8HM`                         | `****GpfN`                              | `****QoQq`                                  |
+| **Convex (BE)** | `AUTH_GOOGLE_ID`              | _(shared across all envs)_         | _(shared across all envs)_              | _(shared across all envs)_                  |
+| **Convex (BE)** | `AUTH_GOOGLE_SECRET`          | _(shared across all envs)_         | _(shared across all envs)_              | _(shared across all envs)_                  |
 | **Convex (BE)** | `SITE_URL`                    | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
 | **Google**      | Authorized JavaScript origins | `http://localhost:5173`            | `https://staging.pingo-31m.pages.dev`   | `https://pingo.bouncybison.click`           |
 | **Google**      | Authorized redirect URIs      | `http://127.0.0.1:3211/callback`\* | `https://...848.convex.site/callback`\* | `https://...554.convex.site/callback`\*     |
