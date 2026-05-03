@@ -31,7 +31,7 @@ Follow these steps after cloning the repository.
 ### Step 1: Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Step 2: Initialize Convex
@@ -73,7 +73,7 @@ lives.
 ### Step 5: Start Vite
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ---
@@ -140,7 +140,7 @@ Connect your GitHub repository to Cloudflare Pages.
 
 **Settings > Build & Deploy:**
 
-- **Build command**: `npm run build`
+- **Build command**: `pnpm run build`
 - **Build output directory**: `dist`
 - **Root directory**: `/`
 
@@ -172,7 +172,7 @@ creation during the frontend build.
 2. Under **Settings > Build & Deploy**, set the **Build command** for
    **Previews** to:
    ```bash
-   npx convex deploy --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+   npx convex deploy --cmd "pnpm run build" --cmd-url-env-var-name VITE_CONVEX_URL
    ```
 
 #### 3. Stable Staging Backend (Configured)
@@ -181,7 +181,7 @@ To avoid updating Google OAuth redirects for every branch, use our stable
 backend:
 
 ```bash
-npx convex deploy --preview-create combative-mouse-848 --cmd "npm run build" --cmd-url-env-var-name VITE_CONVEX_URL
+npx convex deploy --preview-create combative-mouse-848 --cmd "pnpm run build" --cmd-url-env-var-name VITE_CONVEX_URL
 ```
 
 Redirect URI: `https://combative-mouse-848.convex.site/api/auth/callback/google`

@@ -40,7 +40,7 @@ resolutions for issues encountered during the process.
 | Setting                    | Value                                       |
 | -------------------------- | ------------------------------------------- |
 | **Framework Preset**       | Vite                                        |
-| **Build Command**          | `npm run build`                             |
+| **Build Command**          | `pnpm run build`                             |
 | **Build Output Directory** | `dist`                                      |
 | **NODE_VERSION**           | `20`                                        |
 | **VITE_CONVEX_URL**        | `https://fearless-axolotl-554.convex.cloud` |
@@ -81,7 +81,7 @@ If your app is blank after deployment, check these settings in your Cloudflare
 Pages dashboard:
 
 1. **Build Settings**:
-   - Ensure **Build Command** is set to `npm run build`.
+   - Ensure **Build Command** is set to `pnpm run build`.
    - Ensure **Build Output Directory** is set to `dist`.
    - _If these are still pointing to Next.js paths, the page will be blank
      or 404._
@@ -103,8 +103,8 @@ Pages dashboard:
 - [x] Set environment variables in the Convex Dashboard (OAuth secrets).
 - [x] `public/_redirects` committed and pushed.
 - [x] Set `VITE_CONVEX_URL` in Cloudflare with the production URL.
-- [x] Set Build Command to `npm run build` and Output Directory to `dist`.
-- [x] Verify local build (`npm run build`) passes without errors.
+- [x] Set Build Command to `pnpm run build` and Output Directory to `dist`.
+- [x] Verify local build (`pnpm run build`) passes without errors.
 - [ ] Connect GitHub repo to Cloudflare Pages (Manual step — requires GitHub
       OAuth in CF dashboard).
 - [ ] Set up custom domain DNS in Cloudflare.

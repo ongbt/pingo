@@ -111,7 +111,7 @@
 - [x] Enable Realtime for `game` and `player` tables in production.
 - [x] Configure `public/_redirects` for Cloudflare SPA routing.
 - [x] Setup `.env.production` with `VITE_` prefixed secrets.
-- [x] Verify production build (`npm run build`) passes.
+- [x] Verify production build (`pnpm run build`) passes.
 - [x] Connect GitHub repo to Cloudflare Pages (User action required).
 - [x] Setup custom domain on Cloudflare Pages.
 - [x] Configure Convex Preview Deploy Key in Cloudflare.
@@ -347,7 +347,7 @@
 - [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
       comprehensive steps for local, dev, and prod environments.
   - Included step-by-step instructions for cloning and initial setup
-    (`npm install`, `npx convex dev`).
+    (`pnpm install`, `npx convex dev`).
   - Detailed Google OAuth redirect URI patterns for all environments.
   - Added a troubleshooting section for common auth issues (corrupted keys,
     mismatched URLs).

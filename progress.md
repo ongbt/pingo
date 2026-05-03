@@ -194,7 +194,7 @@ largely complete:
   standard Vite patterns.
 - **Environment Update**: Transitioned all environment variables from
   `NEXT_PUBLIC_` to `VITE_` prefix.
-- **Build & Lint**: Verified a clean production build (`npm run build`) and
+- **Build & Lint**: Verified a clean production build (`pnpm run build`) and
   established a standard ESLint config for React.
 - **Verification**: Confirmed all 6 main routes are functional and visually
   consistent via local verification.
@@ -526,7 +526,7 @@ All audit issues fixed in a single session. Summary of changes made:
 - [x] **Detailed Environment Setup Guide**: Created `ENV_SETUP.md` with
       comprehensive steps for local, dev, and prod environments.
   - Included step-by-step instructions for cloning and initial setup
-    (`npm install`, `npx convex dev`).
+    (`pnpm install`, `npx convex dev`).
   - Detailed Google OAuth redirect URI patterns for all environments.
   - Added a troubleshooting section for common auth issues (corrupted keys,
     mismatched URLs).
@@ -672,10 +672,10 @@ All audit issues fixed in a single session. Summary of changes made:
 - **Automated Workflow**: Created `.github/workflows/ci.yml` to automate quality
   checks on push and PR to `main`.
 - **Validation Steps**:
-  - `npm ci` for clean dependency installs.
-  - `npm run lint` to enforce formatting and best practices.
-  - `npm run test:coverage` to verify logic and prevent coverage regression.
-  - `npm run build` to validate type safety and bundle creation.
+  - `pnpm install` for clean dependency installs.
+  - `pnpm run lint` to enforce formatting and best practices.
+  - `pnpm run test:coverage` to verify logic and prevent coverage regression.
+  - `pnpm run build` to validate type safety and bundle creation.
 - **Reporting**: Configured artifact uploads for coverage results to facilitate
   remote review.
 
@@ -701,7 +701,7 @@ All audit issues fixed in a single session. Summary of changes made:
 - **Project-wide Formatting**:
   - Executed a full-codebase Prettier pass to ensure all files comply with the
     new style guide.
-- **Verification**: Verified that `npm run lint` and `npm test` pass with the
+- **Verification**: Verified that `pnpm run lint` and `pnpm test` pass with the
   stricter rules.
 
 ### End-to-End (E2E) Testing (Phase 17E Completed)
@@ -727,7 +727,7 @@ All audit issues fixed in a single session. Summary of changes made:
     web servers.
   - Consolidated the Convex backend and Vite frontend into a single `webServer`
     entry in `playwright.config.ts`.
-  - Used `npx convex dev --run-sh "npm run dev"` to ensure the backend is fully
+  - Used `npx convex dev --run-sh "pnpm run dev"` to ensure the backend is fully
     prepared and environment variables are injected before the frontend starts.
   - Increased the `webServer` timeout to 180s to account for binary downloads in
     CI environments.
