@@ -123,17 +123,10 @@ When prompted for `SITE_URL`, enter `http://localhost:5173`.
 
 ### 3.4 Google OAuth (Optional for local, required for staging/prod)
 
-See [ENV_SETUP.md § Google OAuth](./ENV_SETUP.md#-2-google-oauth-configuration)
-for step-by-step Google Cloud Console setup. TL;DR:
-
-| Env        | Authorized Redirect URI                                             |
-| ---------- | ------------------------------------------------------------------- |
-| Local      | `http://127.0.0.1:3211/api/auth/callback/google`                    |
-| Staging    | `https://combative-mouse-848.convex.site/api/auth/callback/google`  |
-| Production | `https://fearless-axolotl-554.convex.site/api/auth/callback/google` |
-
-Add `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` to the appropriate Convex
-deployment via:
+Pingo uses a **single Google OAuth client** across all environments. See
+[ENV_SETUP.md § Google OAuth](./ENV_SETUP.md#-2-google-oauth-configuration)
+for the full redirect URI list. The same `AUTH_GOOGLE_ID` and
+`AUTH_GOOGLE_SECRET` are set on every Convex deployment:
 
 ```powershell
 npx convex env set AUTH_GOOGLE_ID <your-client-id>
@@ -575,8 +568,8 @@ npx convex deploy --preview-create combative-mouse-848 --cmd "npm run build" --c
 | -------------------- | ----------------------- | ------------------------------------------ | ------------------------------------------- |
 | `VITE_CONVEX_URL`    | `http://localhost:3210` | `https://combative-mouse-848.convex.cloud` | `https://fearless-axolotl-554.convex.cloud` |
 | `SITE_URL` (Convex)  | `http://localhost:5173` | `https://staging.pingo-31m.pages.dev`      | `https://pingo.bouncybison.click`           |
-| `AUTH_GOOGLE_ID`     | Local client ID         | Staging client ID                          | Prod client ID                              |
-| `AUTH_GOOGLE_SECRET` | Local secret            | Staging secret                             | Prod secret                                 |
+| `AUTH_GOOGLE_ID`     | _(shared single client)_ | _(shared single client)_                   | _(shared single client)_                    |
+| `AUTH_GOOGLE_SECRET` | _(shared single secret)_ | _(shared single secret)_                   | _(shared single secret)_                    |
 
 ### 9.5 Production URLs
 
