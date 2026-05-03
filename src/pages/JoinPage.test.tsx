@@ -149,7 +149,7 @@ describe('JoinPage', () => {
     expect(localStorage.getItem('pingo_player_game-123')).toBe('player-xyz');
   });
 
-  it('uses authenticated profile nickname automatically', () => {
+  it('uses authenticated profile nickname automatically', async () => {
     vi.mocked(usePingoAuth).mockReturnValue({
       user: { email: 'a@b.com' } as Record<string, unknown> as any,
       profile: { id: 'usr', nickname: 'ProGamer', avatar_url: null } as any,
@@ -167,7 +167,9 @@ describe('JoinPage', () => {
     const nickInput = screen.getByLabelText(
       /Your Nickname/i
     ) as HTMLInputElement;
-    expect(nickInput.value).toBe('ProGamer');
+    await waitFor(() => {
+      expect(nickInput.value).toBe('ProGamer');
+    });
     expect(localStorage.getItem('pingo_nickname')).toBe('ProGamer');
   });
 
@@ -220,7 +222,7 @@ describe('JoinPage', () => {
     });
   });
 
-  it('pre-fills nickname from localStorage if no profile', () => {
+  it('pre-fills nickname from localStorage if no profile', async () => {
     localStorage.setItem('pingo_nickname', 'OldNick');
 
     render(
@@ -232,7 +234,9 @@ describe('JoinPage', () => {
     const nickInput = screen.getByLabelText(
       /Your Nickname/i
     ) as HTMLInputElement;
-    expect(nickInput.value).toBe('OldNick');
+    await waitFor(() => {
+      expect(nickInput.value).toBe('OldNick');
+    });
   });
 
   it('join button stays disabled when code is shorter than 6 characters', () => {
